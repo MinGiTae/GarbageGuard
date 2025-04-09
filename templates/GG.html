@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Garbage Guard</title>
+  <style>
+    body {
+      background-color: #1f1f1f;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+
+    .input-container {
+      display: flex;
+      gap: 30px;
+      align-items: flex-end;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .input-box label {
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    .input-box input {
+      padding: 10px 40px 10px 12px;
+      border-radius: 10px;
+      border: none;
+      background-color: #333;
+      color: white;
+      font-size: 14px;
+      outline: none;
+      width: 230px;
+    }
+
+    .input-box input[type="date"] {
+      padding-right: 12px;
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 12px;
+      top: 37px;
+      color: gray;
+      pointer-events: none;
+    }
+
+    /* 사진 업로드 + 대시보드 레이아웃 */
+    .main-section {
+      display: flex;
+      gap: 40px;
+      margin-top: 60px;
+      align-items: flex-start;
+    }
+
+    /* 사진 업로드 박스 */
+    .upload-wrapper {
+      width: 1800px;
+      height: 500px;
+      background-color: #eaeaea;
+      border-radius: 20px;
+      border: 2px dashed #ccc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      color: #333;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .upload-wrapper:hover {
+      background-color: #f3f3f3;
+    }
+
+    .upload-wrapper img {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+
+    .upload-wrapper p {
+      margin: 8px 0;
+      color: #555;
+      font-size: 16px;
+    }
+
+    .upload-wrapper input[type="file"] {
+      display: none;
+    }
+
+    .upload-btn {
+      background-color: #d9d9d9;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 24px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    .upload-btn:hover {
+      background-color: #bfbfbf;
+    }
+
+    /* 오른쪽 대시보드 */
+
+
+    .dashboard {
+      background-color: #2a2a2a;
+      padding: 24px;
+      border-radius: 20px;
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      margin-left: 300px;
+    }
+
+    .dashboard h3 {
+      margin: 0;
+      font-size: 20px;
+      color: #ffd700;
+    }
+
+    .dashboard-item {
+      background-color: #3a3a3a;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+
+    .dashboard-item span {
+      font-weight: bold;
+      color: #fff;
+    }
+  .ranking-table {
+  width: 65%;
+  color: white;
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.header {
+  font-weight: bold;
+  border-bottom: 1px solid #444;
+  padding-bottom: 12px;
+}
+
+.bar-container {
+  background-color: #444;
+  width: 200px;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 16px;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 4px;
+}
+
+
+
+.tag {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: white;
+}
+
+.orange { background-color: #a6783d; }
+.cyan { background-color: #3da6a6; }
+.blue { background-color: #3582d3; }
+.purple { background-color: #aa78c3; }
+
+<!--    막대 그래프 -->
+
+    .waste-bar-graph-box {
+  background-color: #2a2a2a;
+  padding: 24px;
+  border-radius: 20px;
+  width: 700px;
+  margin: 60px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: white;
+}
+
+.waste-graph-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff68f;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.waste-bar-chart {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 180px;
+}
+
+.waste-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.waste-bar {
+  width: 36px;
+  background-color: #fff68f;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.waste-bar span {
+  position: absolute;
+  top: -22px;
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+}
+
+.waste-bar-item p {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <!-- 입력 필드 -->
+  <div class="input-container">
+    <!-- 건설현장 검색 -->
+    <div class="input-box">
+      <label for="site-search">건설현장이름 검색</label>
+      <input type="text" id="site-search" placeholder="Enter network name">
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <!-- 날짜 선택 -->
+    <div class="input-box">
+      <label for="site-date">날짜 선택</label>
+      <input type="date" id="site-date">
+    </div>
+  </div>
+
+  <!-- 사진 업로드 + 대시보드 -->
+  <div class="main-section">
+    <!-- 사진 업로드 -->
+    <div class="upload-wrapper" onclick="document.getElementById('fileInput').click();">
+      <img src="https://img.icons8.com/ios-filled/100/upload-to-cloud.png" alt="Upload Icon">
+      <p>jpg, png image</p>
+      <button class="upload-btn">Upload</button>
+      <input type="file" accept="image/*" id="fileInput">
+    </div>
+
+    <!-- 대시보드 -->
+    <div class="dashboard">
+      <h3>현장 정보</h3>
+      <div class="dashboard-item"><span>건설현장명:</span> 삼성물산 래미안 3차</div>
+      <div class="dashboard-item"><span>전체 배출량:</span> 1,250kg</div>
+      <div class="dashboard-item"><span>위험 폐기물:</span> 300kg</div>
+      <div class="dashboard-item"><span>재활용 탄소 배출량:</span> 150kg CO₂</div>
+    </div>
+  </div>
+<div class="ranking-table">
+  <div class="row header">
+    <div>#</div>
+    <div>Name</div>
+    <div>Popularity</div>
+    <div>Ratio</div>
+  </div>
+
+  <div class="row">
+    <div>01</div>
+    <div>플라스틱</div>
+    <div class="bar-container">
+      <div class="bar orange" style="width: 85%"></div>
+    </div>
+    <div><span class="tag orange">46%</span></div>
+  </div>
+
+  <div class="row">
+    <div>02</div>
+    <div>석고</div>
+    <div class="bar-container">
+      <div class="bar cyan" style="width: 60%"></div>
+    </div>
+    <div><span class="tag cyan">17%</span></div>
+  </div>
+
+  <div class="row">
+    <div>03</div>
+    <div>타일</div>
+    <div class="bar-container">
+      <div class="bar blue" style="width: 65%"></div>
+    </div>
+    <div><span class="tag blue">19%</span></div>
+  </div>
+
+  <div class="row">
+    <div>04</div>
+    <div>유리</div>
+    <div class="bar-container">
+      <div class="bar purple" style="width: 50%"></div>
+    </div>
+    <div><span class="tag purple">28%</span></div>
+  </div>
+</div>
+
+
+
+<!--막대 그래프-->
+<div class="waste-bar-graph-box">
+  <h3 class="waste-graph-title">폐기물 종류 비율</h3>
+  <div class="waste-bar-chart">
+    <div class="waste-bar-item">
+      <div class="waste-bar" style="height: 85%"><span>24.3%</span></div>
+      <p>플라스틱</p>
+    </div>
+    <div class="waste-bar-item">
+      <div class="waste-bar" style="height: 70%"><span>20.5%</span></div>
+      <p>벽돌</p>
+    </div>
+    <div class="waste-bar-item">
+      <div class="waste-bar" style="height: 60%"><span>18.7%</span></div>
+      <p>유리</p>
+    </div>
+    <div class="waste-bar-item">
+      <div class="waste-bar" style="height: 50%"><span>12.4%</span></div>
+      <p>콘크리트</p>
+    </div>
+    <div class="waste-bar-item">
+      <div class="waste-bar" style="height: 40%"><span>8.1%</span></div>
+      <p>석고</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+

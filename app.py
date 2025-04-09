@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 import os
-
 from services.upload_service import handle_upload
 from db.db_manager import get_connection
 

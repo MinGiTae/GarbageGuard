@@ -27,3 +27,14 @@ def analyze_image(filepath):
     except Exception as e:
         print(f"[오류] 이미지 분석 실패: {str(e)}")
         return "분석 실패", 0.0
+
+# 테스트
+if __name__ == "__main__":
+    test_img_path = "garbage.jpg"
+
+    if os.path.exists(test_img_path):
+        print("[테스트 시작]")
+        analyze_image(test_img_path)
+        print("[테스트 종료]")
+    else:
+        print(f"[오류] 파일 없음: {test_img_path}")
