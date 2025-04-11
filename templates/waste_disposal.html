@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Garbage Guard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/waste_disposal.css') }}">
+  <script src="{{ url_for('static', filename='js/waste_disposal.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- 네비게이션 바 -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="/">Main</a></li>
+      <li><a href="/waste_disposal">Waste Disposal</a></li>
+      <li><a href="/construction_site_registration">Site Registration</a></li>
+    </ul>
+  </nav>
+
+  <div class="input-container">
+    <div class="input-box">
+      <label for="site-search">건설현장이름 검색</label>
+      <input type="text" id="site-search" placeholder="Enter network name">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="input-box">
+      <label for="site-date">날짜 선택</label>
+      <input type="date" id="site-date">
+    </div>
+  </div>
+
+  <!-- 사진 업로드 + 대시보드 -->
+  <div id="div1">
+    <div class="upload-wrapper" onclick="document.getElementById('fileInput').click();">
+      <img src="https://img.icons8.com/ios-filled/100/upload-to-cloud.png" alt="Upload Icon">
+      <p>jpg, png image</p>
+      <button class="upload-btn">Upload</button>
+      <input type="file" accept="image/*" id="fileInput">
+    </div>
+  </div>
+
+  <div id="div2" class="dashboard-container">
+    <h2 class="dashboard-title">계룡건설 유성구</h2>
+    <div class="dashboard-grid">
+      <div class="data-box">
+        <p class="label">전체 배출량</p>
+        <p class="value" id="totalEmission">7,265</p>
+        <p class="change up" id="totalEmissionChange">+11.01%</p>
+      </div>
+      <div class="data-box">
+        <p class="label">위험 폐기물</p>
+        <p class="value" id="hazardousWaste">3,671</p>
+        <p class="change down" id="hazardousWasteChange">-0.03%</p>
+      </div>
+      <div class="data-box">
+        <p class="label">재활용 가능량</p>
+        <p class="value" id="recyclable">256</p>
+        <p class="change up" id="recyclableChange">+15.03%</p>
+      </div>
+      <div class="data-box">
+        <p class="label">탄소 배출량</p>
+        <p class="value" id="carbonEmission">2,318</p>
+        <p class="change up" id="carbonEmissionChange">+6.08%</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- div3: 자원별 폐기물 그래프 -->
+  <div id="div3">
+    <div class="bar-chart" id="bar-chart-container"></div>
+  </div>
+
+  <!-- div4: 탐지된 객체 리스트 -->
+  <div id="div4">
+    <div class="detected-objects-container" id="detected-list-container">
+      <h3 class="section-title">탐지된 객체</h3>
+    </div>
+  </div>
+
+  <!-- div5: 탄소 배출 순위 -->
+  <div id="div5">
+    <div class="carbon-chart-wrapper">
+      <h3 class="carbon-title">탄소 배출 순위</h3>
+      <canvas id="carbon-rank-canvas" width="600" height="300"></canvas>
+    </div>
+  </div>
+
+  <!-- div6: 월별 폐기물량 그래프 -->
+  <div id="div6">
+    <div class="monthly-bar-chart">
+      <div class="chart-title">월별 폐기물량 비교</div>
+      <canvas id="monthly-line-chart"></canvas>
+    </div>
+  </div>
+
+</body>
+</html>

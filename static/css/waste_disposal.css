@@ -1,0 +1,481 @@
+#div1{
+      display:inline-block;
+      position:abolute;
+      left:700px ;
+      top: 300px;
+}
+
+#div2
+{
+  display:inline-block;
+  position: absolute;
+  left:1300px;
+  top: 50px;
+
+}
+
+#div3
+{
+  display: inline-block;
+  position: absolute;
+  left: 1300px;
+  top: 520px;
+  width: 500px;
+}
+
+#div4
+{
+  display:block;
+  position: absolute;
+  left:1300px;
+  top: 770px;
+  width: 400px;
+}
+
+#div5 {
+  position: absolute;
+  top: 670px;  /* div1 바로 아래 */
+  left: 50px;  /* 왼쪽 고정 */
+  width: 500px;
+}
+
+#div6 {
+  display: inline-block;
+  position: absolute;
+  left: 650px;
+  top: 650px;
+}
+
+
+body {
+ background-color: #1f1f1f;
+  color: white;
+  font-family: Arial, sans-serif;
+  padding: 40px;
+}
+
+.main-section {
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.input-container {
+  display: flex;
+  gap: 30px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.input-box label {
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.input-box input {
+  padding: 10px 40px 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background-color: #333;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  width: 230px;
+}
+
+.input-box input[type="date"] {
+  padding-right: 12px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 37px;
+  color: gray;
+  pointer-events: none;
+}
+
+/* ✅ 반응형 업로드 박스 */
+.upload-wrapper {
+  width: 1200px;
+  height: 500px;
+  background-color: #eaeaea;
+  border-radius: 20px;
+  border: 2px dashed #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 20px auto;
+}
+
+.upload-wrapper:hover {
+  background-color: #f3f3f3;
+}
+
+.upload-wrapper img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.upload-wrapper p {
+  margin: 8px 0;
+  color: #555;
+  font-size: 16px;
+}
+
+.upload-wrapper input[type="file"] {
+  display: none;
+}
+
+.upload-btn {
+  background-color: #d9d9d9;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+
+.upload-btn:hover {
+  background-color: #bfbfbf;
+}
+
+.dashboard-container {
+  margin-top: 60px;
+  color: white;
+  text-align: center;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+.data-box {
+  background: linear-gradient(to bottom, #333, #1f1f1f);
+  border-radius: 20px;
+  padding: 20px;
+  width: 220px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.label {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.change {
+  font-size: 14px;
+  color: #00d09c;
+  }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열 */
+  gap: 20px;
+  justify-items: center;
+}
+
+.bar-chart {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 250px;
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto;
+  background: #2a2a2a;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+}
+
+.bar {
+  width: 40px;
+  background-color: #ffd54f;
+  border-radius: 12px 12px 0 0;
+  transition: height 0.5s ease;
+  position: relative;
+}
+
+.bar::after {
+  content: attr(data-value);
+  position: absolute;
+  top: -22px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.label {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #fff;
+}
+
+.detected-objects-container {
+  background-color: #2a2a2a;
+  border-radius: 20px;
+  padding: 20px;
+  width: 100%;
+  margin: 40px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.detected-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffff99;
+  border-radius: 16px;
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: black;
+  transition: all 0.3s ease;
+}
+
+.detected-item:nth-child(even) {
+  background-color: #fffbe6;
+}
+
+.detected-icon {
+  margin-right: 8px;
+}
+
+
+
+.carbon-chart-wrapper {
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.carbon-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.carbon-bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.carbon-bar-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.carbon-label {
+  width: 100px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.carbon-bar {
+  flex: 1;
+  height: 16px;
+  background-color: #4caf50;
+  border-radius: 8px;
+  margin-left: 10px;
+  position: relative;
+}
+
+.carbon-bar span {
+  position: absolute;
+  right: 8px;
+  top: 20px;
+  font-size: 12px;
+  color: #fff;
+}
+
+
+.monthly-bar-chart {
+  background-color: #2a2a2a;
+  padding: 24px;
+  border-radius: 20px;
+  width: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: white;
+  margin: 20px auto;
+}
+
+.chart-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+#monthly-bar-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 180px;
+}
+
+.month-bar {
+  width: 40px;
+  background-color: #ffd54f;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.month-bar span {
+  position: absolute;
+  top: -24px;
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+}
+
+.month-label {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #ccc;
+  text-align: center;
+}
+
+
+/*추가한 부분*/
+/*.monthly-bar-chart {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}*/
+.monthly-bar-chart {
+  background-color: #2a2a2a;
+  padding: 24px;
+  border-radius: 20px;
+  width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: white;
+  margin: 20px auto;
+}
+
+.monthly-bar-chart canvas {
+  width: 100% !important;
+  height: 300px !important;
+}
+
+.chart-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.carbon-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1e1e1e;
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.carbon-table thead {
+  background-color: #2c2c2c;
+}
+
+.carbon-table th, .carbon-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.bar-container {
+  background-color: #333;
+  width: 200px;
+  height: 10px;
+  border-radius: 4px;
+  margin-top: 6px;
+}
+
+.carbon-bar {
+  height: 10px;
+  border-radius: 4px;
+  background-color: #4caf50;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+
+#carbon-rank-chart {
+ width: 550px;
+  margin: 20px 0;
+  padding: 10px;
+  left: 50px;
+  top: 680px;
+
+}
+
+
+#carbon-rank-canvas {
+  width: 100% !important;
+  height: 300px !important;
+}
+
+
