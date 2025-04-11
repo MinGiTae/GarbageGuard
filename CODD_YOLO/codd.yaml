@@ -1,0 +1,8 @@
+# C:\Users\minhw\PycharmProjects\GG_project\CODD_YOLO\codd.yaml
+
+path: C:/Users/minhw/PycharmProjects/GG_project/CODD_YOLO
+train: images/train
+val: images/val
+
+nc: 10
+names: ['brick', 'concrete', 'tile', 'wood', 'pipe', 'plastic', 'metal', 'glass', 'styrofoam', 'other']
