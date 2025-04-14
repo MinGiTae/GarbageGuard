@@ -4,13 +4,14 @@
   <title>GarbageGuard - AI 기반 건설 폐기물 관리 서비스</title>
   <meta charset="utf-8">
   <meta name="author" content="GarbageGuardMain">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/MainCSS.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
 
+  <!-- 네비게이션 -->
   <nav id="menubar">
     <div id="logo">
-      <a href="#">
+      <a href="/">
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="150" />
       </a>
     </div>
@@ -19,9 +20,9 @@
       <ul>
         <li><a href="/">Main</a></li>
         <li class="menu-waste">
-          <a href="#">Waste disposal</a>
+          <a href="/waste_disposal">Waste disposal</a>
           <div class="submenu">
-            <a href="#">Construction site registration</a>
+            <a href="/construction_site_registration">Construction site registration</a>
             <a href="#">2</a>
           </div>
         </li>
@@ -33,6 +34,7 @@
 
   <div id="character">✨</div>
 
+  <!-- 인트로 텍스트 -->
   <h1 class="scroll-text" id="scrollText1" style="font-size: 150px; color: #f8f858; line-height: 0.9;">
     Garbage<br>Guard
   </h1>
@@ -49,6 +51,7 @@
   <h3 class="scroll-text5" id="scrollText5" style="font-size: 30px; color: white;">
     건설 산업의 폐기물과 탄소 문제, 지금 해결해야 할 때입니다.
   </h3>
+
   <img class="scroll-text6" id="scrollText6" src="{{ url_for('static', filename='img/why.PNG') }}" alt="Why">
   <h3 class="scroll-text7" id="scrollText7" style="font-size: 30px; color: white;">
     전 세계 폐기물의 38%는 건설현장에서 발생합니다. <br>
@@ -56,14 +59,16 @@
     저희 Garbage Guard는 지속 가능한 건설 산업을 만들어가는데 기여하고자 합니다.
   </h3>
 
-  <!-- ❗ 3P.png가 img 폴더에 없으면 아래 줄 주석 처리하거나 이미지 파일 추가 필요 -->
+  <!-- 스크롤 이미지 -->
   <img id="scrollImage" src="{{ url_for('static', filename='img/3P.png') }}" alt="New Image"
        style="opacity: 0; transition: opacity 1s ease; position: fixed; z-index: 20; top: 15%; left: 0%;">
 
-  <button id="Button1">사진 업로드 시작</button>
-  <button id="Button2">현장 등록하기</button>
+  <!-- 페이지 이동 버튼 -->
+  <button id="Button1" onclick="location.href='/waste_disposal'">사진 업로드 시작</button>
+  <button id="Button2" onclick="location.href='/construction_site_registration'">현장 등록하기</button>
 
-  <script type="text/javascript" src="{{ url_for('static', filename='js/MainJS.js') }}"></script>
+  <!-- JS 연결 -->
+  <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
   <header align="center"></header>
   <footer>만든이 : 권태희</footer>

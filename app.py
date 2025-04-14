@@ -15,41 +15,18 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# 홈 페이지
+# 메인 화면
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('main.html')
 
-# 업로드 페이지
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_image():
-    if request.method == 'POST':
-        if 'image' not in request.files:
-            return "이미지 파일이 없습니다."
-        file = request.files['image']
-        if file.filename == '':
-            return "파일이 선택되지 않았습니다."
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+@app.route('/waste_disposal')
+def upload_photo():
+    return render_template('waste_disposal.html')
 
-            # OpenCV/YOLO 분석 및 DB 저장
-            handle_upload(filepath, filename)
-
-            return redirect(url_for('show_image', filename=filename))
-        return "❌ 허용되지 않는 파일 형식입니다."
-    return render_template('upload.html')
-
-# 업로드 이미지 보기
-@app.route('/show/<filename>')
-def show_image(filename):
-    return render_template('show.html', filename=filename)
-
-# 업로드된 파일 제공
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+@app.route('/construction_site_registration')
+def registration():
+    return render_template('construction_site_registration.html')
 
 # DB 연결 확인용
 @app.route('/db-check')
