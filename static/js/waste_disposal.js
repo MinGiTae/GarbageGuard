@@ -1,221 +1,336 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 📌 1. 자원별 폐기물 그래프
-  const wasteData = [
-    { type: "콘크리트", value: 3200 },
-    { type: "철근/금속", value: 4500 },
-    { type: "목재", value: 2800 },
-    { type: "유리", value: 5100 },
-    { type: "플라스틱", value: 3900 },
-    { type: "석면", value: 1200 }
-  ];
+      drawMonthlyBarChart();
+      drawMonthlyLineChart();
+//      drawPopularitySalesChart();
+      drawWasteChart();
+    });
 
-  const maxWaste = Math.max(...wasteData.map(d => d.value));
-  const barContainer = document.getElementById("bar-chart-container");
-  barContainer.innerHTML = "";
+    function drawMonthlyBarChart() {
+      const monthlyData = [
+        { month: "1월", value: 120 },
+        { month: "2월", value: 140 },
+        { month: "3월", value: 100 },
+        { month: "4월", value: 180 },
+        { month: "5월", value: 160 },
+        { month: "6월", value: 200 }
+      ];
+      const container = document.getElementById("monthly-bar-container");
+      container.innerHTML = "";
 
-  wasteData.forEach(item => {
-    const itemBox = document.createElement("div");
-    itemBox.className = "bar-item";
+      monthlyData.forEach(item => {
+        const barWrap = document.createElement("div");
+        barWrap.style.display = "flex";
+        barWrap.style.flexDirection = "column";
+        barWrap.style.alignItems = "center";
 
-    itemBox.innerHTML = `
-      <div class="bar" style="height: ${(item.value / maxWaste) * 100}%" data-value="${item.value}"></div>
-      <span class="label">${item.type}</span>
-    `;
+        barWrap.innerHTML = `
+          <div class="month-bar" style="height: ${item.value}px;"><span>${item.value}</span></div>
+          <div class="month-label">${item.month}</div>
+        `;
+        container.appendChild(barWrap);
+      });
+    }
 
-    barContainer.appendChild(itemBox);
+    function drawMonthlyLineChart() {
+      const ctx = document.getElementById("monthly-line-chart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+          datasets: [
+            {
+              label: "예상 폐기물량",
+              data: [120, 140, 110, 150, 130, 160],
+              borderColor: "#ffd54f",
+              backgroundColor: "rgba(255, 213, 79, 0.2)",
+              fill: true,
+              tension: 0.3,
+            },
+            {
+              label: "실제 폐기물량",
+              data: [100, 130, 95, 180, 145, 155],
+              borderColor: "#4caf50",
+              backgroundColor: "rgba(76, 175, 80, 0.2)",
+              fill: true,
+              tension: 0.3,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "폐기물량 (kg)"
+              }
+            }
+          }
+        }
+      });
+    }
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const wasteCtx = document.getElementById('wasteChart').getContext('2d');
+
+    new Chart(wasteCtx, {
+      type: 'bar',
+      data: {
+        labels: ['콘크리트', '철근/금속', '목재', '유리', '플라스틱', '석면'],
+        datasets: [{
+          label: '비율',
+          data: [180000, 200000, 220000, 243000, 210000, 100000],
+          backgroundColor: '#ffff99',
+          borderRadius: 10,
+          barPercentage: 0.6,
+          categoryPercentage: 0.7
+        }]
+      },
+      options: {
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.raw;
+                return `${(value / 1000).toFixed(0)}K`;
+              }
+            }
+          },
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: 'white',
+              font: { size: 12 }
+            },
+            grid: {
+              display: false
+            }
+          },
+          y: {
+            ticks: {
+              color: 'white',
+              callback: function(value) {
+                return value / 1000 + 'K';
+              }
+            },
+            grid: {
+              color: '#444'
+            }
+          }
+        }
+      }
+    });
   });
 
-  // 📌 2. 탐지된 객체 리스트
-  const detected = ["목재", "철근", "벽돌", "섬유", "플라스틱", "유리"];
-  const detectedContainer = document.getElementById("detected-list-container");
-  detected.forEach(obj => {
-    const item = document.createElement("div");
-    item.className = "detected-item";
-    item.innerHTML = `<span>📌 ${obj}</span><span class="badge"></span>`;
-    detectedContainer.appendChild(item);
-  });
 
-  // 📌 3. 탄소 배출 순위
-  const carbonData = [
-    { label: '콘크리트', value: 1200 },
-    { label: '플라스틱', value: 950 },
-    { label: '유리', value: 700 },
-    { label: '목재', value: 530 },
-    { label: '철근', value: 310 },
-    { label: '석면', value: 180 }
-  ];
-  carbonData.sort((a, b) => b.value - a.value);
-  const maxCarbon = carbonData[0].value;
 
-  const carbonChart = document.getElementById("carbon-rank-chart");
-  carbonChart.innerHTML = "";
 
-  carbonData.forEach(item => {
-    const itemBox = document.createElement("div");
-    itemBox.className = "carbon-bar-item";
+    function drawPopularitySalesChart() {
+      const ctx = document.getElementById('carbon-rank-canvas').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['플라스틱', '석고', '섬유', '유리'],
+          datasets: [
+            {
+              label: 'Popularity',
+              data: [100, 65, 60, 35],
+              backgroundColor: '#f9a825'
+            },
+            {
+              label: 'Sales (%)',
+              data: [46, 17, 19, 29],
+              backgroundColor: '#26c6da'
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: '#fff'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => `${ctx.dataset.label}: ${ctx.raw}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: { color: '#fff' },
+              grid: { color: '#444' }
+            },
+            y: {
+              ticks: { color: '#fff' },
+              grid: { color: '#444' }
+            }
+          }
+        }
+      });
+    }
 
-    itemBox.innerHTML = `
-      <span class="carbon-label">${item.label}</span>
-      <div class="carbon-bar" style="width: ${(item.value / maxCarbon) * 100}%;"><span>${item.value}g</span></div>
-    `;
+// 샘플 데이터: AI에서 인식한 객체 리스트 (종류, 수량)
+//const detectedObjects = [
+//  { name: "목재", count: 3 },
+//  { name: "철근", count: 5 },
+//  { name: "벽돌", count: 2 },
+//  { name: "섬유", count: 4 },
+//  { name: "플라스틱", count: 3 },
+//  { name: "유리", count: 6 }
+//];
+//
+//// DOMContentLoaded 이벤트로 렌더링 보장
+//document.addEventListener("DOMContentLoaded", () => {
+//  const listContainer = document.getElementById("detected-list");
+//  listContainer.innerHTML = ""; // 기존 내용 초기화
+//
+//  detectedObjects.forEach(obj => {
+//    const item = document.createElement("div");
+//    item.className = "detected-item";
+//    item.innerHTML = `
+//      <span>${obj.name}</span>
+//      <span>${obj.count}개</span>
+//    `;
+//    listContainer.appendChild(item);
+//  });
+//});
 
-    carbonChart.appendChild(itemBox);
-  });
-
-  // 📌 4. 월별 폐기물 그래프
-  const monthlyData = [
-    { month: "1월", value: 120 },
-    { month: "2월", value: 140 },
-    { month: "3월", value: 100 },
-    { month: "4월", value: 180 },
-    { month: "5월", value: 160 },
-    { month: "6월", value: 200 }
-  ];
-  const monthlyChart = document.getElementById("monthly-bar-container");
-  monthlyChart.innerHTML = "";
-
-  monthlyData.forEach(item => {
-    const barWrap = document.createElement("div");
-    barWrap.style.display = "flex";
-    barWrap.style.flexDirection = "column";
-    barWrap.style.alignItems = "center";
-
-    barWrap.innerHTML = `
-      <div class="month-bar" style="height: ${item.value}px;"><span>${item.value}</span></div>
-      <div class="month-label">${item.month}</div>
-    `;
-
-    monthlyChart.appendChild(barWrap);
-  });
-});
+const detectedObjects = {
+  "목재": 1,
+  "철근": 1,
+  "벽돌": 1,
+  "섬유": 1,
+  "플라스틱": 1,
+  "유리": 1
+};
 
 document.addEventListener("DOMContentLoaded", () => {
-  const ctx = document.getElementById("monthly-line-chart").getContext("2d");
+   const objectList = document.getElementById('objectList');
 
-  const chart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
-      datasets: [
-        {
-          label: "예상 폐기물량",
-          data: [120, 140, 110, 150, 130, 160],
-          borderColor: "#ffd54f",
-          backgroundColor: "rgba(255, 213, 79, 0.2)",
-          fill: true,
-          tension: 0.3,
-        },
-        {
-          label: "실제 폐기물량",
-          data: [100, 130, 95, 180, 145, 155],
-          borderColor: "#4caf50",
-          backgroundColor: "rgba(76, 175, 80, 0.2)",
-          fill: true,
-          tension: 0.3,
-        },
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: "폐기물량 (kg)"
-          }
-        }
-      }
+   if (!objectList) {
+    console.error("❌ objectList 요소를 찾을 수 없습니다!");
+    return;
+   }
+
+    const mockDetectedObjects = ['목재', '철근', '벽돌', '섬유', '플라스틱', '유리'];
+    let index = 0;
+
+    function addDetectedObject(name) {
+    const item = document.createElement("li");
+    item.textContent = `🔍 ${name}`;
+    objectList.appendChild(item);
+  }
+
+    setInterval(() => {
+    if (index < mockDetectedObjects.length) {
+      const name = mockDetectedObjects[index++];
+      addDetectedObject(name);
     }
+  }, 2000);
+
+});
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const objectList = document.getElementById("objectList");
+
+  const detectedObjects = ["목재", "철근", "벽돌", "섬유", "플라스틱", "유리"];
+
+  objectList.innerHTML = ""; // 기존 항목 제거
+
+  detectedObjects.forEach((name, index) => {
+    const li = document.createElement("li");
+    li.className = `object-item ${index % 2 === 0 ? "light" : "yellow"}`;
+    li.textContent = `🔹 ${name}`;
+    objectList.appendChild(li);
   });
 });
 
 
-const carbonData = [
-  { name: '플라스틱', value: 460 },
-  { name: '석면', value: 170 },
-  { name: '콘크리트', value: 190 },
-  { name: '유리', value: 280 }
-];
-
-const maxValue = Math.max(...carbonData.map(d => d.value));
-const tbody = document.getElementById("carbon-table-body");
-
-carbonData.forEach((item, index) => {
-  const percent = ((item.value / maxValue) * 100).toFixed(0);
-  const row = document.createElement("tr");
-
-  row.innerHTML = `
-    <td>0${index + 1}</td>
-    <td>${item.name}</td>
-    <td>
-      <div class="bar-container">
-        <div class="carbon-bar" style="width: ${percent}%; background-color: ${getColor(index)};"></div>
-      </div>
-    </td>
-    <td><span class="badge" style="background-color: ${getColor(index)};">${percent}%</span></td>
-  `;
-
-  tbody.appendChild(row);
-});
-
-function getColor(index) {
-  const colors = ["#ff9800", "#80deea", "#42a5f5", "#ce93d8"];
-  return colors[index % colors.length];
-}
 
 
 
 
-function renderCarbonChart() {
-  const ctx = document.getElementById("carbon-rank-canvas").getContext("2d");
 
-  const carbonData = {
-    labels: ['콘크리트', '플라스틱', '유리', '목재', '철근', '석면'],
-    datasets: [{
-      label: '탄소 배출량 (g)',
-      data: [1200, 950, 700, 530, 310, 180],
-      backgroundColor: [
-        '#ff9800', '#4caf50', '#2196f3',
-        '#9c27b0', '#f44336', '#607d8b'
-      ],
-      borderRadius: 8,
-    }]
-  };
 
-  const config = {
-    type: 'bar',
-    data: carbonData,
-    options: {
-      indexAxis: 'y', // 수평 바 차트
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: context => `${context.raw}g`
-          }
-        }
-      },
-      scales: {
-        x: {
-          beginAtZero: true,
-          ticks: { color: '#fff' },
-          title: {
-            display: true,
-            text: 'g',
-            color: '#ccc'
-          },
-          grid: { color: '#444' }
-        },
-        y: {
-          ticks: { color: '#fff' },
-          grid: { color: '#444' }
-        }
-      }
-    }
-  };
 
-  new Chart(ctx, config);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//function displayObjectList(data) {
+//  const objectList = document.getElementById("objectList");
+//  if (!listElement) {
+//  console.warn("🔍 objectList 요소를 찾지 못했습니다.");
+//  return;
+//  }
+//
+//  listElement.innerHTML = ''; // 초기화
+//  for (const [object, count] of Object.entries(data)) {
+//    const listItem = document.createElement("li");
+//    listItem.textContent = `${object}: ${count}개`;
+//    listElement.appendChild(li);
+//  }
+//}
+//
+//
+//document.addEventListener("DOMContentLoaded", () => {
+//  const objectList = document.getElementById('objectList');
+//
+//  if (!objectList) {
+//    console.error("❌ objectList 요소를 찾을 수 없습니다!");
+//    return;
+//  }
+//
+//  const mockDetectedObjects = ['목재', '철근', '벽돌', '섬유', '플라스틱', '유리'];
+//  let index = 0;
+//
+//  function addDetectedObject(name) {
+//    const item = document.createElement("li");
+//    item.textContent = `🔍 ${name}`;
+//    objectList.appendChild(item);
+//  }
+//
+//  setInterval(() => {
+//    if (index < mockDetectedObjects.length) {
+//      const name = mockDetectedObjects[index++];
+//      addDetectedObject(name);
+//    }
+//  }, 2000);
+//});
+//
+//
 

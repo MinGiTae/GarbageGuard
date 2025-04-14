@@ -2,35 +2,33 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="csr.css">
+    <link rel="stylesheet" href="/static/css/waste_disposal.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- ✅ 앱 키 앞 공백 제거됨 -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=30b3dfc1e244b48dfa1c16cec788c438&autoload=true"></script>
+<!--    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=30b3dfc1e244b48dfa1c16cec788c438&autoload=false"></script>-->
+
     <title>건설현장 관리</title>
+
+    <style>
+
+    </style>
 </head>
 <body>
-
 <header>
-    <nav>메뉴바 자리</nav>
 </header>
+<div id="map" style="width:500px;height:400px;"></div>
 
-<div id="div1">
 
-    <h2>건설현장 찾기</h2>
-    <input type="text" placeholder="Search">
-    <div id="map" style="width:500px;height:400px;"></div>
+<!-- ✅ 추가된 JS (기존 코드 수정 없이 추가만 함) -->
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=30b3dfc1e244b48dfa1c16cec788c438"></script>
+<script>
+    var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+    var options = { //지도를 생성할 때 필요한 기본 옵션
+        center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+        level: 3 //지도의 레벨(확대, 축소 정도)
+    };
 
-<!-- ✅ DOMContentLoaded 위치도 OK -->
-   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var container = document.getElementById('map');
-        var options = {
-            center: new kakao.maps.LatLng(33.450701, 126.570667),
-            level: 3
-        };
-        var map = new kakao.maps.Map(container, options);
-    });
-   </script>
- </div>
+    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+</script>
+
 </body>
 </html>
