@@ -26,7 +26,11 @@ def upload_photo():
 
 @app.route('/construction_site_registration')
 def registration():
-    return render_template('construction_site_registration.html')
+    return render_template('Csr.html')
+
+@app.route('/Create_lift')
+def create_lift():
+    return render_template('Createlift.html')
 
 # DB 연결 확인용
 @app.route('/db-check')
