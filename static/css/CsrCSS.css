@@ -54,7 +54,7 @@ footer{width: 100%;height: 5%;clear: both;background-color:;}
 .submenu {
   display: block;
   position: absolute;
-  top: 70%;
+  top: 60%;
   left: -370%;
   background-color: #333;
   padding: 10px 0;
@@ -99,6 +99,7 @@ footer{width: 100%;height: 5%;clear: both;background-color:;}
 
 .container {
   width: 400px;
+  padding-left: 20px;
 }
 
 
