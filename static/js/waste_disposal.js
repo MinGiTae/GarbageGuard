@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
       drawMonthlyBarChart();
       drawMonthlyLineChart();
-//      drawPopularitySalesChart();
+      drawPopularitySalesChart();
       drawWasteChart();
     });
 
@@ -129,59 +129,118 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-
-
-
-    function drawPopularitySalesChart() {
-      const ctx = document.getElementById('carbon-rank-canvas').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['플라스틱', '석고', '섬유', '유리'],
-          datasets: [
-            {
-              label: 'Popularity',
-              data: [100, 65, 60, 35],
-              backgroundColor: '#f9a825'
-            },
-            {
-              label: 'Sales (%)',
-              data: [46, 17, 19, 29],
-              backgroundColor: '#26c6da'
-            }
-          ]
-        },
-        options: {
-          indexAxis: 'y',
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'top',
-              labels: {
-                color: '#fff'
-              }
-            },
-            tooltip: {
-              callbacks: {
-                label: ctx => `${ctx.dataset.label}: ${ctx.raw}`
-              }
-            }
-          },
-          scales: {
-            x: {
-              beginAtZero: true,
-              ticks: { color: '#fff' },
-              grid: { color: '#444' }
-            },
-            y: {
-              ticks: { color: '#fff' },
-              grid: { color: '#444' }
-            }
+function drawPopularitySalesChart() {
+  const ctx = document.getElementById('carbon-rank-canvas').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['플라스틱', '석유', '철류', '콘크리트'],
+      datasets: [
+        {
+          label: '탄소배출 비율',
+          data: [46, 17, 19, 29],
+          backgroundColor: ['#ffa726', '#80deea', '#4f6781', '#d1a9ec'],
+          borderRadius: 20,
+          barPercentage: 0.5,
+          categoryPercentage: 0.5
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: false,              // ✅ 자동 리사이즈 방지
+      maintainAspectRatio: false,    // ✅ 비율 유지 끔
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.raw}%`
           }
         }
-      });
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          max: 100,
+          ticks: { color: '#fff' },
+          grid: { color: '#444' }
+        },
+        y: {
+          ticks: { color: '#fff' },
+          grid: { display: false }
+        }
+      }
     }
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    function drawPopularitySalesChart() {
+//      const ctx = document.getElementById('carbon-rank-canvas').getContext('2d');
+//      new Chart(ctx, {
+//        type: 'bar',
+//        data: {
+//          labels: ['플라스틱', '석고', '섬유', '유리'],
+//          datasets: [
+//            {
+//              label: 'Popularity',
+//              data: [100, 65, 60, 35],
+//              backgroundColor: '#f9a825'
+//            },
+//            {
+//              label: 'Sales (%)',
+//              data: [46, 17, 19, 29],
+//              backgroundColor: '#26c6da'
+//            }
+//          ]
+//        },
+//        options: {
+//          indexAxis: 'y',
+//          responsive: true,
+//          maintainAspectRatio: false,
+//          plugins: {
+//            legend: {
+//              position: 'top',
+//              labels: {
+//                color: '#fff'
+//              }
+//            },
+//            tooltip: {
+//              callbacks: {
+//                label: ctx => `${ctx.dataset.label}: ${ctx.raw}`
+//              }
+//            }
+//          },
+//          scales: {
+//            x: {
+//              beginAtZero: true,
+//              ticks: { color: '#fff' },
+//              grid: { color: '#444' }
+//            },
+//            y: {
+//              ticks: { color: '#fff' },
+//              grid: { color: '#444' }
+//            }
+//          }
+//        }
+//      });
+//    }
 
 // 샘플 데이터: AI에서 인식한 객체 리스트 (종류, 수량)
 //const detectedObjects = [

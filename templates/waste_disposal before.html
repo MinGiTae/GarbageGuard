@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Garbage Guard</title>
+  <link rel="stylesheet" href="/static/css/waste_disposal.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+</head>
+<body>
+  <!-- 네비게이션 바 -->
+<header>
+  <nav id="menubar">
+    <div id="logo">
+      <a href="#">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="150" />
+      </a>
+    </div>
+
+    <div id="menu1">
+      <ul>
+        <li><a href="/">Main</a></li>
+        <li class="menu-waste">
+          <a href="#">Waste disposal</a>
+          <div class="submenu">
+            <a href="#">Construction site registration</a>
+            <a href="#">2</a>
+          </div>
+        </li>
+        <li id="STORE"><a href="#">Analytics and Statistics</a></li>
+        <li id="RESPONSIBILITY"><a href="#">Create lift</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+    <div class="input-box">
+      <label for="site-search">건설현장이름 검색</label>
+      <input type="text" id="site-search" placeholder="Enter network name">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="input-box">
+      <label for="site-date">날짜 선택</label>
+      <input type="date" id="site-date">
+    </div>
+  </div>
+<div class="layout-flex">
+  <!-- div1: 업로드 박스 -->
+  <div id="div1">
+    <div class="upload-wrapper" onclick="document.getElementById('fileInput').click();">
+      <img src="https://img.icons8.com/ios-filled/100/upload-to-cloud.png" alt="Upload Icon">
+      <p>jpg, png image</p>
+      <button class="upload-btn">Upload</button>
+      <input type="file" accept="image/*" id="fileInput">
+    </div>
+  </div>
+
+  <!-- div2: 대시보드 -->
+<!--  <div id="rightColumn">-->
+
+  <div class="dashboard-container">
+    <h2 class="dashboard-title">계룡건설 유성구</h2>
+    <div class="dashboard-grid">
+      <div class="data-box">
+        <div class="icon">📊</div>
+        <p class="label">전체 배출량</p>
+        <p class="value" id="totalEmission">0</p>
+        <p class="change up" id="totalEmissionChange"></p>
+      </div>
+      <div class="data-box">
+        <div class="icon">📊</div>
+        <p class="label">위험 폐기물</p>
+        <p class="value" id="hazardousWaste"></p>
+        <p class="change down" id="hazardousWasteChange"></p>
+      </div>
+      <div class="data-box">
+        <div class="icon">📊</div>
+        <p class="label">재활용 가능량</p>
+        <p class="value" id="recyclable"></p>
+        <p class="change up" id="recyclableChange"></p>
+      </div>
+      <div class="data-box">
+        <div class="icon">📊</div>
+        <p class="label">탄소 배출량</p>
+        <p class="value" id="carbonEmission">0</p>
+        <p class="change up" id="carbonEmissionChange"></p>
+      </div>
+    </div>
+<!--  </div>-->
+
+   <div id="div3">
+     <div class="chart-title">폐기물 종류 비율</div>
+     <canvas id="wasteChart" width="400" height="200"></canvas>
+   </div>
+     <div id="div4">
+    <h3 class="section-title">탐지된 객체</h3>
+    <ul id="objectList" class="object-list">
+      <li class="object-item light">🔹 목재</li>
+      <li class="object-item yellow">🔹 철근</li>
+      <li class="object-item light">🔹 벽돌</li>
+      <li class="object-item yellow">🔹 섬유</li>
+      <li class="object-item light">🔹 플라스틱</li>
+     <li class="object-item yellow">🔹 유리</li>
+    </ul>
+   </div>
+  </div>
+</div>
+
+  <!-- div5: 탄소 배출 순위 -->
+  <div id="div5">
+    <div class="carbon-chart-wrapper">
+      <h3 class="carbon-title">탄소 배출 순위</h3>
+      <canvas id="carbon-rank-canvas"></canvas>
+    </div>
+  </div>
+
+<!--   div6: 월별 폐기물량 그래프 -->
+  <div id="div6">
+    <div class="monthly-bar-chart">
+      <div class="chart-title">월별 폐기물량 비교</div>
+      <canvas id="monthly-line-chart"></canvas>
+
+    </div>
+  </div>
+
+  <!-- 스크립트: 차트 로딩 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+<!--      drawMonthlyBarChart();-->
+      drawMonthlyLineChart();
+      drawPopularitySalesChart();
+      drawWasteChart();
+
+
+    });
+
+    function drawMonthlyBarChart() {
+      const monthlyData = [
+        { month: "1월", value: 120 },
+        { month: "2월", value: 140 },
+        { month: "3월", value: 100 },
+        { month: "4월", value: 180 },
+        { month: "5월", value: 160 },
+        { month: "6월", value: 200 }
+      ];
+      const container = document.getElementById("monthly-bar-container");
+      container.innerHTML = "";
+
+      monthlyData.forEach(item => {
+        const barWrap = document.createElement("div");
+        barWrap.style.display = "flex";
+        barWrap.style.flexDirection = "column";
+        barWrap.style.alignItems = "center";
+
+        barWrap.innerHTML = `
+          <div class="month-bar" style="height: ${item.value}px;"><span>${item.value}</span></div>
+          <div class="month-label">${item.month}</div>
+        `;
+        container.appendChild(barWrap);
+      });
+    }
+
+    function drawMonthlyLineChart() {
+      const ctx = document.getElementById("monthly-line-chart").getContext("2d");
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+          datasets: [
+            {
+              label: "예상 폐기물량",
+              data: [120, 140, 110, 150, 130, 160],
+              borderColor: "#ffd54f",
+              backgroundColor: "rgba(255, 213, 79, 0.2)",
+              fill: true,
+              tension: 0.3,
+            },
+            {
+              label: "실제 폐기물량",
+              data: [100, 130, 95, 180, 145, 155],
+              borderColor: "#4caf50",
+              backgroundColor: "rgba(76, 175, 80, 0.2)",
+              fill: true,
+              tension: 0.3,
+            },
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: "폐기물량 (kg)"
+              }
+            }
+          }
+        }
+      });
+    }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const ctx = document.getElementById("carbon-rank-canvas").getContext("2d");
+
+  const labels = ['플라스틱', '석유', '철류', '콘크리트'];
+  const popularity = [46, 17, 19, 29]; // 막대 길이
+  const colors = ['#f4a261', '#a8dadc', '#457b9d', '#cdb4db'];
+  const sales = ['46%', '17%', '19%', '29%']; // 퍼센트 텍스트
+
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: '탄소 배출량',
+      data: popularity,
+      backgroundColor: colors,
+      borderRadius: 10,
+      barThickness: 24,
+    }]
+  };
+
+  const options = {
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        enabled: false // 툴팁 제거
+      },
+      datalabels: {
+        align: 'end',
+        anchor: 'end',
+        color: '#fff',
+        font: {
+          weight: 'bold',
+          size: 14
+        },
+        formatter: (value, context) => sales[context.dataIndex]
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        display: false // 축 숨김
+      },
+      y: {
+        ticks: {
+          color: '#fff',
+          font: {
+            size: 14
+          }
+        },
+        grid: {
+          display: false
+        }
+      }
+    }
+  };
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: options,
+    plugins: [ChartDataLabels] // 퍼센트 텍스트용 플러그인
+  });
+});
+
+
+
+
+  const objectList = document.getElementById('object-list');
+
+  // 예시: 실시간 데이터 수신 (여기선 2초마다 모의 데이터 추가)
+  const mockDetectedObjects = ['목재', '철근', '벽돌', '섬유', '플라스틱', '유리'];
+  let index = 0;
+
+  setInterval(() => {
+    if (index < mockDetectedObjects.length) {
+      const name = mockDetectedObjects[index++];
+      addDetectedObject(name);
+    }
+  }, 2000); // 2초마다 하나씩 추가
+
+  function addDetectedObject(name) {
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.innerHTML = `🔍 ${name}`;
+    objectList.appendChild(item);
+  }
+
+    document.addEventListener('DOMContentLoaded', () => {
+  const wasteCtx = document.getElementById('wasteChart').getContext('2d');
+
+  new Chart(wasteCtx, {
+    type: 'bar',
+    data: {
+      labels: ['콘크리트', '철근/금속', '목재', '유리', '플라스틱', '석면'],
+      datasets: [{
+        label: '비율',
+        data: [180000, 200000, 220000, 243000, 210000, 100000],
+        backgroundColor: '#ffff99',
+        borderRadius: 10,
+        barPercentage: 0.6,
+        categoryPercentage: 0.7
+      }]
+    },
+    options: {
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const value = context.raw;
+              return `${(value / 1000).toFixed(0)}K`;
+            }
+          }
+        },
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: 'white',
+            font: { size: 12 }
+          },
+          grid: {
+            display: false
+          }
+        },
+        y: {
+          ticks: {
+            color: 'white',
+            callback: function(value) {
+              return value / 1000 + 'K';
+            }
+          },
+          grid: {
+            color: '#444'
+          }
+        }
+      }
+    }
+  });
+});
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const data = {
+      totalEmission: { value: 7265, change: 11.01 },
+      hazardousWaste: { value: 3671, change: -0.03 },
+      recyclable: { value: 256, change: 15.03 },
+      carbonEmission: { value: 2318, change: 6.08 }
+    };
+
+    for (const key in data) {
+      const valueEl = document.getElementById(key);
+      const changeEl = document.getElementById(`${key}Change`);
+
+      if (valueEl && changeEl) {
+        const value = data[key].value.toLocaleString();
+        const change = data[key].change;
+        const changeText = (change > 0 ? "+" : "") + change.toFixed(2) + "%";
+
+        valueEl.textContent = value;
+        changeEl.textContent = changeText;
+        changeEl.classList.add(change >= 0 ? "up" : "down");
+      }
+    }
+  });
+</script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
