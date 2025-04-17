@@ -1,23 +1,14 @@
-# from ultralytics import YOLO
-#
-# model = YOLO('yolov8n.pt')
-#
-# model.train(
-#     data='C:/Users/minhw/PycharmProjects/GG_project/CODD_YOLO/codd.yaml',
-#     epochs=50,
-#     imgsz=640,
-#     batch=16,
-#     name='train_codd',
-#     project='runs/detect'
-# )
+import os
+from collections import Counter
 
-from ultralytics import YOLO
+label_dir = 'C:/Users/minhw/PycharmProjects/GG_project/CODD_YOLO/labels/train'
+class_ids = []
 
-model = YOLO('yolov8n.pt')
+for file in os.listdir(label_dir):
+    with open(os.path.join(label_dir, file), 'r') as f:
+        for line in f:
+            class_id = int(line.split()[0])
+            class_ids.append(class_id)
 
-model.train(
-    data='CW3_YOLO/cw3.yaml',
-    epochs=50,
-    imgsz=640,
-    name='cw3_experiment'
-)
+print("전체 클래스 ID 분포:", Counter(class_ids))
+print("총 클래스 수:", len(set(class_ids)))
