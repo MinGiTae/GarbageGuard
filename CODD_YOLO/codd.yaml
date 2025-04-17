@@ -1,8 +1,11 @@
-# C:\Users\minhw\PycharmProjects\GG_project\CODD_YOLO\codd.yaml
-
 path: C:/Users/minhw/PycharmProjects/GG_project/CODD_YOLO
 train: images/train
 val: images/val
 
-nc: 10
-names: ['brick', 'concrete', 'tile', 'wood', 'pipe', 'plastic', 'metal', 'glass', 'styrofoam', 'other']
+names:
+  0: brick
+  1: concrete
+  2: tile
+  3: wood
+  4: missing_class  # 이건 실제 없음
+  5: plastic
