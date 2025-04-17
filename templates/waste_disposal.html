@@ -1,163 +1,149 @@
+<!-- templates/waste_disposal.html -->
 <!DOCTYPE html>
 <html>
 <head>
   <title>GarbageGuard - AI 기반 건설 폐기물 관리 서비스</title>
-  <meta charset="utf-8">
-  <meta name="author" content="GarbageGuardMain">
-  <link rel="stylesheet" href="/static/css/Waste_disposalCSS.css"/>
+  <meta charset="utf-8" />
+  <meta name="author" content="GarbageGuardMain" />
+  <link rel="stylesheet" href="/static/css/Waste_disposalCSS.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 <body>
 
   <!-- 메뉴바 -->
   <nav id="menubar">
     <div id="logo">
-      <a href="">
-        <img src="logo.png" alt="Logo" width="150"/>
-      </a>
+      <a href=""><img src="logo.png" alt="Logo" width="150" /></a>
     </div>
-
     <div id="menu1">
       <ul>
         <li><a href="Main.html">Main</a></li>
         <li class="menu-waste">
           <a href="#">Waste disposal</a>
           <div class="submenu">
-            <a href=".html">Construction site registration</a>
+            <a href="construction_site_registration.html">Construction site registration</a>
             <a href="#">2</a>
           </div>
         </li>
-        <li id="STORE"><a href="">Analytics and Statistics</a></li>
-        <li id="RESPONSIBILITY"><a href="Createlift.html">Create lift</a></li>
+        <li><a href="">Analytics and Statistics</a></li>
+        <li><a href="Createlift.html">Create lift</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- 따라다니는 이펙트 -->
+  <!-- 마우스 따라다니는 캐릭터 -->
   <div id="character">✨</div>
 
-  <!-- JS 연결 -->
-<br>
-  <br>
-  <br>
-  <br>
-  <br>
+  <div class="main-wrapper">
 
-  <div class="container-1">
-  <div class="input_container">
-    <div class="input-box1">
-      <label for="site-search">건설현장이름 검색</label>
-      <input type="text" id="site-search" placeholder="Enter network name">
-      <span class="search-icon">🔍</span>
+  <!-- 상단 검색/날짜/저장 -->
+  <div class="top-bar">
+    <!-- 검색 + 날짜 그룹 -->
+    <div class="search-date-group">
+      <div class="input-box1">
+        <label for="site-search">건설현장이름 검색</label>
+        <div class="input-with-icon">
+          <input type="text" id="site-search" placeholder="Enter site name" />
+          <span class="search-icon">🔍</span>
+        </div>
+      </div>
+      <div class="input-box2">
+        <label for="site-date">날짜 선택</label>
+        <div class="input-with-icon">
+          <input type="date" id="site-date" />
+          <span class="date-icon">📅</span>
+        </div>
+      </div>
     </div>
-	<div class="input-box2">
-      <label for="site-date">날짜 선택</label><br>
-      <input type="date" id="site-date">
+
+    <!-- 저장 버튼은 우측 끝으로 -->
+    <div class="button-box">
+      <button class="save-button">저장</button>
     </div>
+
+    <!-- 검색 결과 표시 -->
+    <div class="search-result" id="searchDisplay"></div>
   </div>
- </div>
 
-<div class = "container-2">
- <div class="upload-wrapper" onclick="document.getElementById('fileInput').click();">
-   <img src="https://img.icons8.com/ios-filled/100/upload-to-cloud.png" alt="Upload Icon">
-   <p>jpg, png image</p>
-<!--  <button class="upload-btn">Upload</button>-->
-   <input type="file" accept="image/*" id="fileInput">
- </div>
+    <!-- 본문 영역 -->
+    <div class="content-row">
 
-
-
-
- <div class="container-3">
-  <div class="dashboard-container">
-	<h2 id="dashboard-title">계룡건설 유성구</h2>
-	<div class ="dashboard-grid">
-	  <div class="data-box">
-		  <div class="icon">📊</div>
-		  <p class="label">전체 배출량</p>
-		  <p class="value" id="totalEmission">0</p>
-		  <p class="change up" id="totalEmissionChange"></p>
-	  </div>
-
-      <div class="data-box">
-		  <div class="icon">📊<</div>
-		  <p class="label">위험 폐기물</p>
-		  <p class="value" id="hazardousWaste"></p>
-		  <p class="change down" id="hazardousWasteChange"></p>
-      </div>
-      <div class="data-box">
-		  <div class="icon">📊</div>
-		  <p class="label">재활용 가능량</p>
-		  <p class="value" id="recyclable"></p>
-		  <p class="change up" id="recyclableChange"></p>
+      <!-- 왼쪽 패널 -->
+      <div class="left-panel">
+        <div class="upload-wrapper" onclick="document.getElementById('fileInput').click();">
+          <div class="upload-placeholder" id="placeholder">
+            <img src="https://img.icons8.com/ios-filled/100/upload-to-cloud.png" alt="Upload Icon">
+            <p>jpg, png image</p>
+          </div>
+          <img id="preview" src="" alt="Preview" style="display:none; object-fit: contain;">
+          <img id="detectionResult" src="" alt="Detection Result" style="display:none; object-fit: contain;">
+          <input type="file" accept="image/*" id="fileInput" style="display:none;" onchange="previewImage(event)">
+        </div>
       </div>
 
-      <div class="data-box">
-			<div class="icon">📊</div>
-			<p class="label">탄소 배출량</p>
-			<p class="value" id="carbonEmission"></p>
-			<p class="change up" id="carbonEmissionChange"></p>
-      </div>
-	</div>
-</div>
-<!--폐기물 종류 비율-->
-<div class="waste-container">
-	<div class="chart-title">폐기물 종류 비율</div>
-	<canvas id="wasteChart" width="400" height="200"></canvas>
-</div>
+      <!-- 오른쪽 패널 -->
+      <div class="right-panel">
+        <div class="site-info-box">
+          <h2 id="site-name-display">계룡건설 유성구</h2>
+        </div>
 
-<div class="object">
-	<h3 class="section-title">탐지된 객체</h3>
-    <ul id="objectList" class="object-list">
-      <li class="object-item light">🔹 목재</li>
-      <li class="object-item yellow">🔹 철근</li>
-      <li class="object-item light">🔹 벽돌</li>
-      <li class="object-item yellow">🔹 섬유</li>
-      <li class="object-item light">🔹 플라스틱</li>
-     <li class="object-item yellow">🔹 유리</li>
-    </ul>
+        <div class="dashboard-container">
+          <div class="dashboard-grid">
+            <div class="data-box">
+              <div class="icon">📊</div>
+              <p class="label">전체 객체 수</p>
+              <p class="value" id="totalObjects">0</p>
+            </div>
+            <div class="data-box">
+              <div class="icon">⚠️</div>
+              <p class="label">위험 폐기물</p>
+              <p class="value" id="hazardousCount">0</p>
+            </div>
+            <div class="data-box">
+              <div class="icon">♻️</div>
+              <p class="label">재활용 가능</p>
+              <p class="value" id="recyclableCount">0</p>
+            </div>
+            <div class="data-box">
+              <div class="icon">🌡️</div>
+              <p class="label">탄소 배출량 추정</p>
+              <p class="value" id="carbonEmission">0 kg</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="waste-container">
+          <div class="chart-title">폐기물 종류 비율</div>
+          <canvas id="wasteChart"></canvas>
+        </div>
+
+        <div class="object">
+          <h3 class="section-title">탐지된 객체</h3>
+          <div class="object-scroll">
+            <ul class="object-list"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-stats">
+      <div class="top-carbon-table" id="carbonTableWrapper">
+        <h3>Top Carbon Emission</h3>
+        <table id="carbonTable">
+          <thead>
+            <tr><th>#</th><th>Name</th><th>Count</th><th>Carbon(kg)</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="carbon-chart-section">
+        <h3>월별 폐기물 배출량 비교</h3>
+        <canvas id="carbonChart"></canvas>
+      </div>
+    </div>
+
   </div>
- </div>
-</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- <script type="text/javascript" src="/static/js/Waste_disposalJS.js"></script>
+  <script src="/static/js/Waste_disposalJS.js"></script>
 </body>
 </html>
