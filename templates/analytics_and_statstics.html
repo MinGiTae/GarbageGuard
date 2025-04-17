@@ -34,12 +34,14 @@
   </nav>
 
   <div id="character">✨</div>
-
 <div class="container-1">
- <h3>📊 폐기물별 탄소 배출량</h3>
-  <div class="chartContainer">
-    <canvas id="wasteChart" width="300" height="300"></canvas>
-    <div class="chart-legend">
+    <div class="chartContainer">
+        <h3>📊 폐기물별 탄소 배출량</h3>
+    <canvas id="wasteChart"></canvas>
+
+
+
+      <div class="chart-legend">
     <div class="legend-item"><div class="legend-color" style="background-color:#3f51b5;"></div>플라스틱</div>
     <div class="legend-item"><div class="legend-color" style="background-color:#ffeb3b;"></div>벽돌</div>
     <div class="legend-item"><div class="legend-color" style="background-color:#ff5722;"></div>목재</div>
@@ -72,13 +74,13 @@
 
   <div class="chart-container2">
     <div class="chart-title2">계열사별 탄소 배출 순위</div>
-    <canvas id="carbonLineChart" height="280"></canvas>
+    <canvas id="carbonLineChart"  width="900" height="280"></canvas>
   </div>
 
    <div class="chart-box3">
     <div class="title">미래건설</div>
     <div class="center-label">70%</div>
-    <canvas id="progressChart"></canvas>
+    <canvas id="progressChart" width="204" height="189" ></canvas>
     <div class="legend">
       <div class="legend-color"></div>
        <div>탄소 배출량</div>
@@ -86,10 +88,26 @@
    </div>
 </div>
 
+<div class = "container-4">
+  <div class="map-container">
+    <img src ="/static/img/south-korea.svg" alt="대한민국 지도" >
 
+    <!-- 여기에 svg 파일 안의 모든 <path d="…"/> 요소들이 들어갑니다 -->
+ </div>
+<div class="container-4-1">
+<div class="carbon-emissions">
+    <div class = "carbon-title">현장 탄소 배출량</div>
+    <canvas id="siteCarbonChart" width="600" height="300"></canvas>
+</div>
 
-
-
+ <div class="waste-popularity">
+      <h3 class="carbon-title">폐기물 종류별 Popularity</h3>
+    <div class="popularity-chart-wrapper">
+    <canvas id="popularityChart"></canvas>
+  </div>
+ </div>
+ </div>
+</div>
 
 
 
