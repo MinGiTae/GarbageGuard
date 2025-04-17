@@ -22,3 +22,10 @@ var options = { //지도를 생성할 때 필요한 기본 옵션
 };
 
 var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+
+//delete 눌렀을 때 필드값 삭제하는 필드명
+function clearFields() {
+  document.getElementById("search-input1").value = "";
+  document.getElementById("search-input2").value = "";
+  document.getElementById("search-input3").value = "";
+}

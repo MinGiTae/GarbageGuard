@@ -3,6 +3,9 @@ from werkzeug.utils import secure_filename
 import os
 from services.upload_service import handle_upload
 from db.db_manager import get_connection
+from db.db_manager import upload_construction_site
+from db.db_manager import delete_construction_site
+
 
 app = Flask(__name__)
 
@@ -35,8 +38,55 @@ def create_lift():
 # DB 연결 확인용
 @app.route('/db-check')
 def db_check():
-    result = get_connection()
-    return result
+
+    # result = get_connection()
+    # return result
+    try:
+        conn = get_connection()
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT 1")  # ✅ DB 응답만 확인
+            result = cursor.fetchone()
+        conn.close()
+        return f"✅ DB 연결 성공! 결과: {result}"
+    except Exception as e:
+        return f"❌ DB 연결 실패: {e}"
+
+
+# @app.route('/insert-site', methods=['POST'])
+# def insert_site():
+#     site_name = request.form['site_name']
+#     address = request.form['address']
+#     manager_name = request.form['manager_name']
+#
+#     upload_construction_site(site_name, address, manager_name)  # DB 저장
+#
+#     return "✅ 등록 완료!"
+#
+# @app.route('/delete-site', methods=['POST'])
+# def delete_site():
+#     if request.form['action'] == 'delete':
+#         site_name = request.form['site_name']
+#         address = request.form['address']
+#         manager_name = request.form['manager_name']
+#         delete_construction_site(site_name, address, manager_name)
+#         return "삭제 완료"
+
+@app.route('/insert-site', methods=['POST'])
+def handle_site():
+    action = request.form['action']
+    site_name = request.form['site_name']
+    address = request.form['address']
+    manager_name = request.form['manager_name']
+
+    if action == "insert":
+        upload_construction_site(site_name, address, manager_name)
+        return "✅ 등록 완료!"
+    elif action == "delete":
+        delete_construction_site(site_name, address, manager_name)
+        return "🗑️ 삭제 완료!"
+    else:
+        return "❌ 알 수 없는 요청"
+
 
 # 서버 실행
 if __name__ == '__main__':

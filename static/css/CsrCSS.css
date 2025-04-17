@@ -142,7 +142,7 @@ footer{width: 100%;height: 5%;clear: both;background-color:;}
 
 
 
-#search-input {
+#search-input1 {
 
   margin-bottom: 10px;
   width: 300px;
@@ -152,15 +152,25 @@ footer{width: 100%;height: 5%;clear: both;background-color:;}
   border-radius: 10px;
 }
 
+#search-input2 {
 
+  margin-bottom: 10px;
+  width: 300px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
 
+#search-input3 {
 
-
-
-
-
-
-
+  margin-bottom: 10px;
+  width: 300px;
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
 
 
 
@@ -233,6 +243,22 @@ footer{width: 100%;height: 5%;clear: both;background-color:;}
     background-color: #E6B864;
   }     
 
+
+
+
+#Button5 {
+  padding: 10px 30px;
+  background-color: #ffcc00;
+  color: #212121;
+  border-color: #ffcc00;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  }
+
+  #Button5:hover {
+    background-color: #E6B864;
+  }
 
 
 
