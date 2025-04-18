@@ -9,10 +9,11 @@
 <body>
 
   <!-- 네비게이션 -->
-  <nav id="menubar">
+<nav id="menubar">
+  <div class="center-box">
     <div id="logo">
-      <a href="/">
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="150" />
+      <a href="">
+        <img src="logo.png" alt="Logo" width="150" />
       </a>
     </div>
 
@@ -23,16 +24,19 @@
           <a href="/waste_disposal">Waste disposal</a>
           <div class="submenu">
             <a href="/construction_site_registration">Construction site registration</a>
-            <a href="#">2</a>
           </div>
         </li>
-        <li id="STORE"><a href="#">Analytics and Statistics</a></li>
+        <li id="STORE"><a href="">Analytics and Statistics</a></li>
         <li id="RESPONSIBILITY"><a href="Create_lift">Create lift</a></li>
       </ul>
     </div>
-  </nav>
+  </div>
+</nav>
 
   <div id="character">✨</div>
+
+
+  <img id="crain" src="{{ url_for('static', filename='img/crain.PNG') }}" alt="crain"/>
 
   <!-- 인트로 텍스트 -->
   <h1 class="scroll-text" id="scrollText1" style="font-size: 150px; color: #f8f858; line-height: 0.9;">
@@ -59,9 +63,10 @@
     저희 Garbage Guard는 지속 가능한 건설 산업을 만들어가는데 기여하고자 합니다.
   </h3>
 
+
+
   <!-- 스크롤 이미지 -->
-  <img id="scrollImage" src="{{ url_for('static', filename='img/3P.png') }}" alt="New Image"
-       style="opacity: 0; transition: opacity 1s ease; position: fixed; z-index: 20; top: 15%; left: 0%;">
+  <img id="scrollImage" src="{{ url_for('static', filename='img/3P2.png') }}" alt="New Image">
 
   <!-- 페이지 이동 버튼 -->
   <button id="Button1" onclick="location.href='/waste_disposal'">사진 업로드 시작</button>
