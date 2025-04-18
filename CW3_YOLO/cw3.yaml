@@ -1,6 +1,0 @@
-train: C:/Users/minhw/PycharmProjects/GG_project/CW3_YOLO/train/images
-val: C:/Users/minhw/PycharmProjects/GG_project/CW3_YOLO/valid/images
-test: C:/Users/minhw/PycharmProjects/GG_project/CW3_YOLO/test/images
-
-nc: 3
-names: ['plastic', 'rock', 'wood']

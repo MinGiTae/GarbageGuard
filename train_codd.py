@@ -1,14 +1,14 @@
-import os
-from collections import Counter
+from ultralytics import YOLO
 
-label_dir = 'C:/Users/minhw/PycharmProjects/GG_project/CODD_YOLO/labels/train'
-class_ids = []
+# ✅ 사전 학습된 경량 모델 로드 (필요시 yolov8s.pt, yolov8m.pt 로 바꿔도 됨)
+model = YOLO("yolov8n.pt")
 
-for file in os.listdir(label_dir):
-    with open(os.path.join(label_dir, file), 'r') as f:
-        for line in f:
-            class_id = int(line.split()[0])
-            class_ids.append(class_id)
-
-print("전체 클래스 ID 분포:", Counter(class_ids))
-print("총 클래스 수:", len(set(class_ids)))
+# ✅ 학습 시작
+model.train(
+    data="codd.yaml",         # yaml 설정 파일
+    epochs=50,                # 학습 epoch 수
+    imgsz=640,                # 이미지 입력 사이즈
+    batch=16,                 # 배치 사이즈
+    name="train_codd_final",  # 저장 폴더 이름
+    device=0                  # ✅ GPU 사용!
+)
