@@ -1,389 +1,131 @@
-html, body{margin: 0;padding: 0;background-color: #212121; height: 300vh; scrollbar-width: none;-ms-overflow-style: none;}
-body::-webkit-scrollbar {display: none;}
-header{width: 100%;height: 0%;background-color: #474747;}
-nav{width: 100%;height: 10%;float: left;background-color: #474747;position: fixed; z-index:9999;}
-section{width: 100%;height: 100%;float: left;background-color: ;}
-footer{width: 100%;height: 5%;clear: both;background-color:;}
+/* static/css/analytics_and_statistics.css */
 
-#logo {display: inline-block; position: absolute; left:10px; top: 0px;}
-
-#menubar div{display: inline-block; margin-left: 450px; margin-top: 20px;}
-#menubar ul{display: inline-block;}
-
-#menubar ul{margin: 0; padding: 0; width: 1000px}
-#menubar ul li{display: inline-block; list-style-type: none; padding: 15px;}
-#menubar ul li a{text-decoration: none; color:black}
-
-
-#menu1 ul li a:hover{color: yellow; background-color: #333333}
-#menu1 ul li:hover{background-color: #333333;position: relative;}
-
-#menu1 {padding-left: 280px}
-
-#menu1 ul li:hover .pan{visibility: visible }
-#menu1 ul li .pan {
-  position: absolute;
-  display: none;
-  background: #46400C;
-  width: 100%;
-  margin-top: 30px;
-  margin-left: -570px;
+:root {
+  --bg: #212121;
+  --card-bg: #1f1f1f;
+  --text: #fff;
+  --gap: 20px;
+  --radius: 12px;
+  --navbar-height: 60px;
 }
 
-body {
-      background-color: #1f1f1f;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-
-#menubar ul li {
-  display: inline-block;
-  list-style-type: none;
-  padding: 15px;
-  position: relative;
-  z-index: 1000;
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-.submenu {
-  display: block;
-  position: absolute;
-  top: 70%;
-  left: -370%;
-  background-color: #333;
-  padding: 10px 0;
-  border-radius: 5px;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(0);
-  transition: all 0.3s ease;
-  min-width: 160px;
-  z-index:100;
-}
-
-.submenu a {
-  display: block;
-  color: white;
-  padding: 5px 20px;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.submenu a:hover {
-  background-color: #444;
-}
-
-.menu-waste:hover .submenu {
-  opacity: 1;
-  visibility: visible;
-}
-
-#character {
+/* ── 네비게이션 ───────────────────────────────── */
+.navbar {
   position: fixed;
-  top: 0;
-  left: 0;
-  font-size: 40px;
-  pointer-events: none;
-  transition: transform 0.1s linear;
-  z-index: 9999;S
+  top: 0; left: 0; right: 0;
+  height: var(--navbar-height);
+  background: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
 }
-
-
-.chartContainer{
- display: flex;
-  flex-direction: column;
-  align-items: center; ✅ 가운데 정렬
-  gap: 12px;                     /* 도넛↔범례 간격 */
-  padding: 10px;                 /* 안쪽 여백 */
-  background-color: #1f1f1f;     /* 카드 배경색 */
-  border-radius: 16px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.5);
-  width: 300px;           /* 내용물에 맞춰 너비 자동 */
-  margin: 0 auto;
-
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 24px;
 }
-
-.chartContainer canvas {
-  width: 100% !important;
-  height: auto !important;  /* 필요하면 고정 높이도 지정 가능 */
+.nav-menu li a {
+  color: #bbb;
+  text-decoration: none;
 }
-
-
-
-.chart-legend {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-      background-color:#191917;
-
-    }
-
-
-.legend-item {
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-
-}
-
-.legend-color {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-right: 8px;
-      background-color:#191917;
-}
-
-.chart-box {
-  width: 100%;
-  max-width: none;
-  height: 450px;
-  margin: 0 auto;
-  background-color:#191917;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 0 10px rgba(255,255,255,0.05);
-
-
-
-
-}
-
-.chart-title {
-      font-size: 16px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      text-align: left;
- }
-
-
-.container-1{
-
- display:flex;
-
-
-
-}
-
-.container-2{
-
- display:flex;
-
-}
-
-.container-3{
-
- display:flex;
-
-}
-
-.container-4{
-
- display:flex;
-
-}
-
-
-.chart-box2 {
-      background-color: #191917;
-      border-radius: 20px;
-      padding: 30px;
-      width: 1083px;
-      height :519px;
-      margin: auto;
-}
-
-.chart-title2 {
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 20px;
-}
-
-
-.chart-container {
-      width: 694px;
-      height: 513px;
-      background-color: #191917;;
-      border-radius: 20px;
-      padding: 20px 30px;
-      margin: auto;
-    }
-
-.chart-title3 {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-}
-
-.profile-img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-}
-/*계열사*/
-.chart-container2 {
-      width: 1209px;
-      height : 399px;
-      margin: auto;
-      background-color: #191917;
-      padding: 20px;
-      border-radius: 20px;
-
-}
-
-.chart-title2 {
-   font-weight: bold;
-   font-size: 16px;
-   margin-bottom: 20px;
-}
-
-.chart-box3 {
-     position: relative;
-      background-color:#191917;
-      width: 280px;
-      height: auto;
-       padding-top: 140px; /* canvas 높이(280px의 절반)을 padding-top으로 확보 */
-      background-color: #1f1f1f;
-  border-radius: 16px;
-  margin: 40px auto;
-}
-
-.chart-box3 canvas {
-      width: 100% !important;
-      height: 100% !important;
-}
-
-.center-label {
-      position: absolute;
-      top: 20px + 70px;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 22px;
-      font-weight: bold;
-      color: white;
-    }
-
-.title {
-      font-size: 28px;
-      font-weight: bold;
-      margin-top: 20px;
-      text-align: center;
-    }
-.legend2 {
-      display: flex;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-.legend-color {
-      width: 16px;
-      height: 16px;
-      background-color: #ffc107;
-      border-radius: 4px;
-      margin-right: 8px;
-}
-
-#progressChart {
-  position: absolute;
-  top: 20px;        /* chart-box3 padding-top과 맞춰줌 */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 240px;     /* 약간 여유 두고 */
-  height: 140px !important;  /* 반원 높이(가로의 절반) */
-}
-
-#korea-map {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 20px auto;
-}
-/* 모든 경로(path) 기본 & 호버 스타일 */
-#korea-map path {
-  fill: #777;
-  stroke: #fff;
-  stroke-width: 1;
-  transition: fill 0.3s;
-  cursor: pointer;
-}
-#korea-map path:hover {
-  fill: #ff9800;
-}
-
-.map-container {
-
-width: 500px;
-display:block;
-margin : 50px auto;
-
-}
-.carbon-emissions{
- width: 600px;
- height: 300px;
- margin: 40px auto;
- background: #1f1f1f;
- padding: 20px;
- border-radius: 16px;
-
-}
-
-.carbon-title{
-color: #fff;
-font-size: 18px;
-font-weight: bold;
-margin-bottom: 12px;
- text-align: left;
- border-bottom: 2px solid #4fc3f7;
- display: inline-block;
-
-}
-
-.carbon-emissions canvas {
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.waste-popularity{
- width: 600px;
-  height: 240px;          /* 원하는 높이 지정 */
-  margin: 40px auto;
-  background: #1f1f1f;
-  padding: 20px;
-  border-radius: 16px;
+.nav-menu li.active a,
+.nav-menu li a:hover {
   color: #fff;
 }
- .carbon-title {
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 12px;
-      border-bottom: 2px solid #4fc3f7;
-      display: inline-block;
-    }
+.settings-icon {
+  font-size: 20px;
+  cursor: pointer;
+}
 
-    .popularity-chart-wrapper {
-      width: 100%;
-      height: 240px;
-      margin-top: 16px;
-    }
+/* ── 대시보드 래퍼 ───────────────────────────────── */
+.dashboard {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: calc(var(--navbar-height) + 20px) var(--gap) 40px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
 
-    .popularity-chart-wrapper canvas {
-      width: 100% !important;
-      height: 100% !important;
-    }
+/* ── 각 행(row): 높이 고정 해제, wrap만 유지 ───────── */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+}
+/* .row-1 ~ .row-4 높이 설정 모두 삭제 */
 
-.container-1,
-.container-2,
-.container-3,
-.container-4 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
+/* ── 카드 기본 ───────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  /* 두 개씩 줄 맞춤 */
+  flex: 1 1 calc(48% - var(--gap));
+  min-width: 280px;
+  height: auto; /* 자동 높이 */
+  overflow: visible;
+}
+.card h3 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+/* ── 캔버스/이미지 크기 고정 ───────────────────── */
+.card canvas,
+.card img {
+  width: 100% !important;
+  height: 180px !important;
+  object-fit: contain;
+  flex: none;
+}
+
+/* ── wide/narrow 비율 유지 ─────────────────────── */
+.row-2 .wide,
+.row-3 .wide,
+.row-4 .map-card {
+  flex: 2 1 calc(66% - var(--gap));
+}
+.row-2 .narrow,
+.row-3 .narrow,
+.row-4 .stack {
+  flex: 1 1 calc(32% - var(--gap));
+}
+
+/* ── stack (4행 우측) ─────────────────────────── */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* ── 반응형: 모바일(≤768px) 한 열로, 더 작게 ───── */
+@media (max-width: 768px) {
+  .card {
+    flex: 1 1 100%;
+  }
+  .card canvas,
+  .card img {
+    height: 140px !important;
+  }
 }

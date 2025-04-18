@@ -1,5 +1,7 @@
 # 🛠 GarbageGuard
 
+읽으세요 ^^
+
 ISO 14001 기반 건설 현장 폐기물 관리 시스템
 
 ---
@@ -55,3 +57,4 @@ GarbageGuard/
 - HTML 파일은 `templates/` 폴더에
 - CSS/JS 파일은 `static/css`, `static/js` 폴더에
 - 커밋 메시지는 기능 단위로 작성 (예: `feat: 로그인 화면 구현`)
+- 프론트 구현시 파일앞에 프레임번호를 붙힐것. (요구사항 명세서 참조/ 예: GG_001_main )

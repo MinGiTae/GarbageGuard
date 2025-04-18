@@ -1,129 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <title>GarbageGuard - AI 기반 건설 폐기물 관리 서비스</title>
-  <meta charset="utf-8">
-  <meta name="author" content="GarbageGuardMain">
-  <link rel="stylesheet" href="/static/css/analytics_and_statistics.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GarbageGuard – Analytics & Statistics</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../static/css/analytics_and_statistics.css" />
+
+  <!-- Chart.js & DataLabels 플러그인 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 </head>
 <body>
-
-  <nav id="menubar">
-    <div id="logo">
-      <a href="#">
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="150" />
-      </a>
-    </div>
-
-    <div id="menu1">
-      <ul>
-        <li><a href="/">Main</a></li>
-        <li class="menu-waste">
-          <a href="#">Waste disposal</a>
-          <div class="submenu">
-            <a href="#">Construction site registration</a>
-            <a href="#">2</a>
-          </div>
-        </li>
-        <li id="STORE"><a href="#">Analytics and Statistics</a></li>
-        <li id="RESPONSIBILITY"><a href="#">Create lift</a></li>
-      </ul>
-    </div>
+  <!-- 상단 네비게이션 (fixed) -->
+  <nav class="navbar">
+    <div class="logo">WORLD DATA RANK</div>
+    <ul class="nav-menu">
+      <li><a href="#">Main</a></li>
+      <li><a href="#">Waste disposal</a></li>
+      <li class="active"><a href="#">Analytics &amp; Statistics</a></li>
+      <li><a href="#">Create lift</a></li>
+    </ul>
+    <div class="settings-icon">⚙️</div>
   </nav>
 
-  <div id="character">✨</div>
-<div class="container-1">
-    <div class="chartContainer">
-        <h3>📊 폐기물별 탄소 배출량</h3>
-    <canvas id="wasteChart"></canvas>
+  <!-- 본문: 네비 아래 스크롤 영역 -->
+  <div class="dashboard">
+    <!-- 1행: 도넛 / 세로 막대 -->
+    <div class="row row-1">
+      <div class="card">
+        <h3>폐기물별 탄소 배출량</h3>
+        <canvas id="wasteChart"></canvas>
+      </div>
+      <div class="card">
+        <h3>폐기물 종류별 배출량</h3>
+        <canvas id="wasteTypeChart"></canvas>
+      </div>
+    </div>
 
+    <!-- 2행: 월별 비교(넓게) / 3월 순위(좁게) -->
+    <div class="row row-2">
+      <div class="card wide">
+        <h3>월별 탄소량과 폐기물량 비교</h3>
+        <canvas id="monthlyCompareChart"></canvas>
+      </div>
+      <div class="card narrow">
+        <h3>3월 폐기물 배출 순위</h3>
+        <canvas id="rankChart"></canvas>
+      </div>
+    </div>
 
+    <!-- 3행: 계열사 순위(넓게) / 미래건설 프로그레스(좁게) -->
+    <div class="row row-3">
+      <div class="card wide">
+        <h3>계열사별 탄소 배출 순위</h3>
+        <canvas id="carbonLineChart"></canvas>
+      </div>
+      <div class="card narrow progress-card">
+        <h3>미래건설</h3>
+        <div class="progress-wrapper">
+          <canvas id="progressChart"></canvas>
+          <div class="progress-label">70%</div>
+        </div>
+      </div>
+    </div>
 
-      <div class="chart-legend">
-    <div class="legend-item"><div class="legend-color" style="background-color:#3f51b5;"></div>플라스틱</div>
-    <div class="legend-item"><div class="legend-color" style="background-color:#ffeb3b;"></div>벽돌</div>
-    <div class="legend-item"><div class="legend-color" style="background-color:#ff5722;"></div>목재</div>
-    <div class="legend-item"><div class="legend-color" style="background-color:#00bcd4;"></div>콘크리트</div>
+    <!-- 4행: 지도(넓게) / 현장 & 인기(좁게 스택) -->
+    <div class="row row-4">
+      <div class="card wide map-card">
+        <h3>지역별 건설 현장 현황</h3>
+        <img src="../static/img/south-korea.svg" alt="대한민국 지도" />
+      </div>
+      <div class="stack">
+        <div class="card">
+          <h3>현장 탄소 배출량</h3>
+          <canvas id="siteCarbonChart"></canvas>
+        </div>
+        <div class="card">
+          <h3>폐기물 종류별 Popularity</h3>
+          <canvas id="popularityChart"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 
- <div class="chart-box">
-    <div class="chart-title">📊 폐기물 종류별 배출량</div>
-    <canvas id="wasteTypeChart"></canvas>
- </div>
-</div>
-
-<div class="container-2">
-
-
-  <div class="chart-box2">
-    <div class="chart-title2">월별 탄소량과 폐기물량 비교</div>
-    <canvas id="monthlyCompareChart" width="600" height="300"></canvas>
-  </div>
-
-
-  <div class="chart-container">
-    <div class="chart-title">3월 폐기물 배출량 순위</div>
-    <canvas id="rankChart" height="300"></canvas>
-  </div>
-</div>
-
-<div class="container-3">
-
-  <div class="chart-container2">
-    <div class="chart-title2">계열사별 탄소 배출 순위</div>
-    <canvas id="carbonLineChart"  width="900" height="280"></canvas>
-  </div>
-
-   <div class="chart-box3">
-    <div class="title">미래건설</div>
-    <div class="center-label">70%</div>
-    <canvas id="progressChart" width="204" height="189" ></canvas>
-    <div class="legend">
-      <div class="legend-color"></div>
-       <div>탄소 배출량</div>
-     </div>
-   </div>
-</div>
-
-<div class = "container-4">
-  <div class="map-container">
-    <img src ="/static/img/south-korea.svg" alt="대한민국 지도" >
-
-    <!-- 여기에 svg 파일 안의 모든 <path d="…"/> 요소들이 들어갑니다 -->
- </div>
-<div class="container-4-1">
-<div class="carbon-emissions">
-    <div class = "carbon-title">현장 탄소 배출량</div>
-    <canvas id="siteCarbonChart" width="600" height="300"></canvas>
-</div>
-
- <div class="waste-popularity">
-      <h3 class="carbon-title">폐기물 종류별 Popularity</h3>
-    <div class="popularity-chart-wrapper">
-    <canvas id="popularityChart"></canvas>
-  </div>
- </div>
- </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script src="/static/js/analytics_and_statistics.js"></script>
+  <!-- JS (defer) -->
+  <script src="../static/js/analytics_and_statistics.js" defer></script>
 </body>
 </html>
