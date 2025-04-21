@@ -1,77 +1,65 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from werkzeug.utils import secure_filename
-import os
-from db.db_manager import get_connection, upload_construction_site, delete_construction_site
-# from utils.image_analysis import analyze_image  # ⬅️ YOLO 분석 함수
+import os, uuid
+from services.predict_yolo import run_yolo_and_save_result
 
 app = Flask(__name__)
-
-# 업로드 설정
 UPLOAD_FOLDER = os.path.join(app.root_path, 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# 메인 화면
 @app.route('/')
 def home():
     return render_template('main.html')
 
-# YOLO 분석 포함된 waste_disposal 라우터
 @app.route('/waste_disposal', methods=['GET', 'POST'])
-def upload_photo():
+def waste_disposal():
+    result_img = None
+    detected_objects_dict = {}
+
     if request.method == 'POST':
-        file = request.files['photo']
+        file = request.files.get('photo')
+        site_name = request.form.get('site_name', 'default_site').strip().replace(' ', '_')
+        date_str = request.form.get('site_date', 'uploaded_image')
+        print("[📥 file 객체 수신됨]", file)
+
         if file and allowed_file(file.filename):
+            print("  ✅ 확장자 통과됨 → 저장 및 YOLO 분석")
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
+            print(f"  ✅ 저장 완료: {filepath}")
 
-            # 이미지 분석 수행
-            result_img, detected_objects = analyze_image(filepath)
+            save_dir = os.path.join("runs", "detect", site_name)
+            save_name = f"{date_str}.jpg"
 
-            return render_template('waste_disposal.html',
-                                   result_img=result_img,
-                                   detected_objects=detected_objects)
-    return render_template('waste_disposal.html')
+            result_img, detected_objects_dict = run_yolo_and_save_result(
+                input_img_path=filepath,
+                save_dir=save_dir,
+                save_name=save_name
+            )
 
-@app.route('/construction_site_registration')
-def registration():
-    return render_template('Csr.html')
+            if result_img:
+                result_img = os.path.join(site_name, save_name).replace('\\', '/')
+        else:
+            print("  ❌ 유효하지 않은 파일 또는 파일 없음")
 
-@app.route('/Create_lift')
-def create_lift():
-    return render_template('Createlift.html')
+    print("[🌐 템플릿 전달값]")
+    print("  📷 result_img =", result_img)
+    print("  🧾 detected_objects_dict =", detected_objects_dict)
+    print("------------------------------------------------\n")
 
-@app.route('/db-check')
-def db_check():
-    try:
-        conn = get_connection()
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT 1")
-            result = cursor.fetchone()
-        conn.close()
-        return f"✅ DB 연결 성공! 결과: {result}"
-    except Exception as e:
-        return f"❌ DB 연결 실패: {e}"
+    return render_template('waste_disposal.html',
+                           result_img=result_img,
+                           detected_objects_dict=detected_objects_dict)
 
-@app.route('/insert-site', methods=['POST'])
-def handle_site():
-    action = request.form['action']
-    site_name = request.form['site_name']
-    address = request.form['address']
-    manager_name = request.form['manager_name']
-
-    if action == "insert":
-        upload_construction_site(site_name, address, manager_name)
-        return "✅ 등록 완료!"
-    elif action == "delete":
-        delete_construction_site(site_name, address, manager_name)
-        return "🗑️ 삭제 완료!"
-    else:
-        return "❌ 알 수 없는 요청"
+@app.route('/result/<path:filename>')
+def result_file(filename):
+    return send_from_directory('runs/detect', filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
