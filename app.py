@@ -61,5 +61,24 @@ def waste_disposal():
 def result_file(filename):
     return send_from_directory('runs/detect', filename)
 
+# @app.route('/gallery')
+# def gallery():
+#     base_path = os.path.join("runs", "detect")
+#     galleries = {}
+#
+#     if os.path.exists(base_path):
+#         for site_name in os.listdir(base_path):
+#             site_path = os.path.join(base_path, site_name)
+#             if os.path.isdir(site_path):
+#                 images = []
+#                 for img in os.listdir(site_path):
+#                     if img.lower().endswith(('.png', '.jpg', '.jpeg')):
+#                         images.append(f"{site_name}/{img}")
+#                 if images:
+#                     galleries[site_name] = sorted(images, reverse=True)
+#
+#     return render_template('gallery.html', galleries=galleries)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
