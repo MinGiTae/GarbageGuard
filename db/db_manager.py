@@ -39,5 +39,5 @@ def delete_construction_site(site_name,address,manager_name):
     conn.close()
 
 
-
+# 현장 탄소 배출량 / 폐기물 종류량 db 연결하는 함수
 

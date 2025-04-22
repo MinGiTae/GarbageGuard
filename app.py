@@ -80,5 +80,43 @@ def result_file(filename):
 #     return render_template('gallery.html', galleries=galleries)
 
 
+
+# 현장별,폐기물 종류 불러오는 함수
+@app.route('/region-data/<region_name>')
+def get_region_data(region_name):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        sql = """
+            SELECT 
+                wm.waste_type,
+                SUM(wm.waste_amount) AS total_waste,
+                SUM(wm.carbon_emission) AS total_emission
+            FROM waste_management wm
+            JOIN construction_sites cs ON wm.site_id = cs.site_id
+            WHERE cs.address LIKE %s
+            GROUP BY wm.waste_type
+        """
+        # LIKE 검색으로 서울특별시, 경기도 수원시 등 포함 가능
+        cursor.execute(sql, (f"%{region_name}%",))
+        result = cursor.fetchall()
+    conn.close()
+
+    # 결과 정리해서 JSON 응답
+    data = [
+        {
+            "waste_type": row[0],
+            "total_waste": float(row[1]),
+            "total_emission": float(row[2])
+        }
+        for row in result
+    ]
+
+    return jsonify(data)
+
+
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
