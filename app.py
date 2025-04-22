@@ -1,6 +1,8 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 import os, uuid
+
+from db.db_manager import get_connection
 from services.predict_yolo import run_yolo_and_save_result
 
 app = Flask(__name__)
@@ -112,11 +114,6 @@ def get_region_data(region_name):
     ]
 
     return jsonify(data)
-
-
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
