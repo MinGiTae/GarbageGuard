@@ -28,6 +28,19 @@ h1 {
   margin-bottom: 20px;
 }
 
+.gallery-controls form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gallery-controls label {
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+.gallery-controls input[type="text"],
+.gallery-controls input[type="date"],
 .gallery-controls select {
   padding: 8px 12px;
   border-radius: 6px;
@@ -35,6 +48,21 @@ h1 {
   background: #333;
   color: white;
   font-size: 14px;
+}
+
+.gallery-controls button {
+  padding: 8px 14px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.gallery-controls button:hover {
+  background-color: #45a049;
 }
 
 .gallery-grid {

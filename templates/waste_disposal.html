@@ -4,19 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>GarbageGuard – 폐기물 관리</title>
-  <link rel="stylesheet" href="/static/css/Waste_disposalCSS.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/Waste_disposalCSS.css') }}" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
 </head>
 <body>
+
+  <!-- 사이트 ID를 JS에서 참조하기 위한 전역 변수 -->
+  <script>
+    const CURRENT_SITE_ID = {{ site_id or "null" }};
+  </script>
+
   <nav id="menubar">
     <div class="center-box">
-      <div id="logo"><a href="/"><img src="/static/logo.png" alt="Logo" width="150"/></a></div>
+      <div id="logo">
+        <a href="/"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="150"/></a>
+      </div>
       <div id="menu1">
         <ul>
           <li><a href="/">Main</a></li>
           <li class="menu-waste">
-            <a href="/waste_disposal">Waste disposal</a>
+            <a href="/upload/waste_disposal">Waste disposal</a>
             <div class="submenu">
               <a href="/construction_site_registration">Site registration</a>
             </div>
@@ -29,32 +37,47 @@
   <div id="character">✨</div>
 
   <div class="main-wrapper">
+    <!-- 상단 바 -->
     <div class="top-bar">
       <div class="search-date-group">
         <div class="input-box1">
           <label for="site-search">현장 검색</label>
           <div class="input-with-icon">
-            <input type="text" id="site-search" placeholder="현장명 입력"/>
+            <input
+              type="text"
+              id="site-search"
+              name="site_name"
+              placeholder="현장명 입력"
+              value="{{ prefilled_site_name or '' }}"
+            />
             <span class="search-icon">🔍</span>
           </div>
         </div>
         <div class="input-box2">
           <label for="site-date">날짜</label>
           <div class="input-with-icon">
-            <input type="date" id="site-date"/>
+            <input
+              type="date"
+              id="site-date"
+              name="site_date"
+              value="{{ prefilled_date or '' }}"
+            />
             <span class="date-icon">📅</span>
           </div>
         </div>
       </div>
-      <div class="button-box"><button class="save-button">저장</button></div>
+      <div class="button-box">
+        <button class="save-button">저장</button>
+      </div>
     </div>
 
+    <!-- 콘텐츠 행 -->
     <div class="content-row">
+      <!-- 좌측: 업로드 & 분석 -->
       <div class="left-panel">
-        <form method="POST" action="/waste_disposal" enctype="multipart/form-data">
-          <!-- 🔁 hidden input 추가 -->
+        <form method="POST" action="/upload/waste_disposal" enctype="multipart/form-data">
           <input type="hidden" name="site_name" id="hidden-site-name">
-          <input type="hidden" name="site_date" id="hidden-site-date">
+          <input type="hidden" name="site_date"  id="hidden-site-date">
 
           <div class="upload-wrapper" id="uploadArea">
             <div class="upload-placeholder" id="placeholder">
@@ -64,28 +87,61 @@
 
             <img id="preview" src="" alt="Preview" style="display:none;" />
 
-            <div id="zoom-container" style="width: 100%; height: 100%; overflow: hidden; position: relative; display: {{ 'block' if result_img else 'none' }};">
-              <img id="detectionResult"
-                   src="{{ url_for('result_file', filename=result_img) if result_img else '' }}"
-                   alt="Detection Result"
-                   style="width: 100%; height: 100%; object-fit: contain;" />
+            <div
+              id="zoom-container"
+              style="
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                position: relative;
+                display: {{ 'block' if result_img else 'none' }};
+              "
+            >
+              <img
+                id="detectionResult"
+                src="{{ url_for('main_bp.result_file', filename=result_img) if result_img else '' }}"
+                alt="Detection Result"
+                style="width: 100%; height: 100%; object-fit: contain;"
+              />
               <button type="button" id="resetZoom">🔄 초기화</button>
               <button type="button" id="reuploadBtn">📤 재업로드</button>
             </div>
 
-            <input type="file" name="photo" id="fileInput" accept="image/*" style="display:none;" onchange="previewImage(event)">
+            <input
+              type="file"
+              name="photo"
+              id="fileInput"
+              accept="image/*"
+              style="display:none;"
+              onchange="previewImage(event)"
+            >
           </div>
         </form>
       </div>
 
+      <!-- 우측: 통계 대시보드 -->
       <div class="right-panel">
-        <div class="site-info-box"><h2 id="site-name-display">계룡건설 유성구</h2></div>
+        <div class="site-info-box">
+          <h2 id="site-name-display">{{ prefilled_site_name or '현장명 없음' }}</h2>
+        </div>
         <div class="dashboard-container">
           <div class="dashboard-grid">
-            <div class="data-box"><div class="icon">📊</div><div><p class="label">전체 객체 수</p><p class="value" id="totalObjects">0</p></div></div>
-            <div class="data-box"><div class="icon">⚠️</div><div><p class="label">위험 폐기물</p><p class="value" id="hazardousCount">0</p></div></div>
-            <div class="data-box"><div class="icon">♻️</div><div><p class="label">재활용 가능</p><p class="value" id="recyclableCount">0</p></div></div>
-            <div class="data-box"><div class="icon">🌡️</div><div><p class="label">탄소 배출량 추정</p><p class="value" id="carbonEmission">0 kg</p></div></div>
+            <div class="data-box">
+              <div class="icon">📊</div>
+              <div><p class="label">전체 객체 수</p><p class="value" id="totalObjects">0</p></div>
+            </div>
+            <div class="data-box">
+              <div class="icon">⚠️</div>
+              <div><p class="label">위험 폐기물</p><p class="value" id="hazardousCount">0</p></div>
+            </div>
+            <div class="data-box">
+              <div class="icon">♻️</div>
+              <div><p class="label">재활용 가능</p><p class="value" id="recyclableCount">0</p></div>
+            </div>
+            <div class="data-box">
+              <div class="icon">🌡️</div>
+              <div><p class="label">탄소 배출량 추정</p><p class="value" id="carbonEmission">0 kg</p></div>
+            </div>
           </div>
         </div>
         <div class="waste-container">
@@ -101,6 +157,7 @@
       </div>
     </div>
 
+    <!-- 하단: Top Carbon & 월별 차트 -->
     <div class="bottom-stats">
       <div class="top-carbon-table">
         <h3>Top Carbon Emission</h3>
@@ -119,9 +176,11 @@
   </div>
 
   {% if detected_objects_dict %}
-  <script>const detectedCounts = {{ detected_objects_dict | tojson }};</script>
+    <script>
+      const detectedCounts = {{ detected_objects_dict | tojson }};
+    </script>
   {% endif %}
 
-  <script src="/static/js/Waste_disposalJS.js"></script>
+  <script src="{{ url_for('static', filename='js/Waste_disposalJS.js') }}"></script>
 </body>
 </html>
