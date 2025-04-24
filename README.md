@@ -154,6 +154,91 @@ Flask에서 기능별로 라우트를 분리해 관리할 수 있는 모듈 단�
 - **API 문서**: `docs/api.md`
 - **화면 흐름도**: `docs/wireframe/`
 
+___
+## 📄 새 페이지 만드는 방법 (base.html 레이아웃 상속 방식)
+
+`GarbageGuard` 프로젝트에서는 **모든 페이지가 공통 레이아웃(`base.html`)을 상속**받아 만들어집니다.  
+이 구조를 사용하면 **헤더(navbar), 푸터, 공통 CSS**는 자동으로 들어가고,  
+각 페이지는 **본문 내용만 작성하면 됩니다.**
+
+---
+
+### ✅ 1. 새 HTML 파일 만들기
+
+`templates/` 폴더 아래 새 HTML 파일을 만듭니다.  
+예: `templates/GG_007_test.html`
+
+```html
+{% extends 'base.html' %}
+
+{% block title %}Test 페이지{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/GG_007_test.css') }}">
+{% endblock %}
+
+{% block content %}
+  <h1>이건 테스트 페이지입니다</h1>
+  <p>공통 헤더와 푸터는 자동 포함됩니다.</p>
+{% endblock %}
+```
+
+---
+
+### ✅ 2. CSS 파일 만들기
+
+`static/css/` 폴더 아래에 해당 페이지용 CSS 파일을 만듭니다.  
+예: `static/css/GG_007_test.css`
+
+```css
+h1 {
+  color: yellow;
+  text-align: center;
+  margin-top: 100px;
+}
+```
+
+---
+
+### ✅ 3. 라우트 파일 생성
+
+`routes/` 폴더에 해당 페이지를 위한 Blueprint 라우트를 만듭니다.  
+예: `routes/test_routes.py`
+
+```python
+from flask import Blueprint, render_template
+
+test_bp = Blueprint('test', __name__)
+
+@test_bp.route('/test')
+def show_test():
+    return render_template('GG_007_test.html')
+```
+
+---
+
+### ✅ 4. app.py에 Blueprint 등록
+
+`app.py`에 아래 줄을 추가합니다:
+
+```python
+from routes.test_routes import test_bp
+app.register_blueprint(test_bp)
+```
+
+---
+
+### ✅ 5. 브라우저에서 확인
+
+서버를 실행한 뒤 아래 주소에 접속:
+
+```
+http://localhost:5000/test
+```
+
+✨ 공통 레이아웃이 자동으로 적용된 새 페이지가 뜨면 성공입니다!
+
+
 ---
 
 > README를 참고해 구조·개념을 이해하고, 새로운 페이지나 기능을 Blueprint 패턴에 맞춰 추가하세요. 감사합니다!
