@@ -4,7 +4,7 @@
   <title>GarbageGuard - AI 기반 건설 폐기물 관리 서비스</title>
   <meta charset="utf-8">
   <meta name="author" content="GarbageGuardMain">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/GG_001_main.css') }}">
 </head>
 <body>
 
@@ -13,7 +13,7 @@
   <div class="center-box">
     <div id="logo">
       <a href="/">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" width="150" />
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="150"/>
       </a>
     </div>
 
@@ -23,11 +23,12 @@
         <li class="menu-waste">
           <a href="/upload/waste_disposal">Waste disposal</a>
           <div class="submenu">
-            <a href="/construction_site_registration">Construction site registration</a>
+            <a href="{{ url_for('csr.show_csr') }}">Construction site registration</a>
           </div>
         </li>
-        <li id="STORE"><a href="#">Analytics and Statistics</a></li>
+        <li id="STORE"><a href="/analytics">Analytics and Statistics</a></li>
         <li id="RESPONSIBILITY"><a href="/Create_lift">Create lift</a></li>
+        <li><a href="/gallery">Gallery</a></li>
       </ul>
     </div>
   </div>
@@ -67,10 +68,13 @@
 
 <!-- 페이지 이동 버튼 -->
 <button id="Button1" onclick="location.href='/upload/waste_disposal'">사진 업로드 시작</button>
-<button id="Button2" onclick="location.href='/construction_site_registration'">현장 등록하기</button>
+<button id="Button2" onclick="location.href='{{ url_for('csr.show_csr') }}'">현장 등록하기</button>
+<button id="Button3" onclick="location.href='/analytics'">탄소 통계 보기</button>
+<button id="Button4" onclick="location.href='/Create_lift'">자동 보고서 만들기</button>
+<button id="Button5" onclick="location.href='/gallery'">결과 이미지 모아보기</button>
 
 <!-- JS 연결 -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/GG_001_main.js') }}"></script>
 
 <header align="center"></header>
 <footer>만든이 : 권태희</footer>

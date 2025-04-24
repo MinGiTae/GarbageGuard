@@ -5,7 +5,7 @@ main_bp = Blueprint('main_bp', __name__)
 
 @main_bp.route('/')
 def home():
-    return render_template('main.html')
+    return render_template('GG_001_main.html')
 
 @main_bp.route('/result/<path:filename>')
 def result_file(filename):

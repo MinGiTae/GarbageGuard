@@ -97,7 +97,7 @@ def waste_disposal():
 
     # ─── 3) 템플릿 렌더링 ───
     return render_template(
-        'waste_disposal.html',
+        'GG_002_waste_disposal.html',
         result_img=result_img,
         detected_objects_dict=detected_objects_dict,
         prefilled_site_name=prefilled_site_name,

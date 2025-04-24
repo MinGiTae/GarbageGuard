@@ -5,6 +5,7 @@ from routes.upload_routes import upload_bp
 from routes.stats_routes import stats_bp
 from routes.gallery_routes import gallery_bp
 from routes.predict_routes import predict_bp
+from routes.csr_routes import csr_bp
 
 app = Flask(__name__)
 app.secret_key = 'go_home'
@@ -15,6 +16,7 @@ app.register_blueprint(upload_bp, url_prefix='/upload')    # /upload/*
 app.register_blueprint(stats_bp)                           # /region-data/*
 app.register_blueprint(gallery_bp)                         # /gallery
 app.register_blueprint(predict_bp)                         # /input_waste
+app.register_blueprint(csr_bp)                             # /csr
 
 if __name__ == '__main__':
     app.run(debug=True)

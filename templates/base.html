@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}GarbageGuard{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav id="menubar">
+  <div class="center-box">
+    <div id="logo">
+      <a href="/">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="GarbageGuard Logo" />
+      </a>
+    </div>
+    <div id="menu1">
+      <ul>
+        <li><a href="/">Main</a></li>
+        <li class="menu-waste">
+          <a href="/upload/waste_disposal">Waste</a>
+          <div class="submenu">
+            <a href="{{ url_for('csr.show_csr') }}">Site Registration</a>
+            <a href="/gallery">Detection Gallery</a>
+          </div>
+        </li>
+        <li><a href="/analytics">Statistics</a></li>
+        <li><a href="/Create_lift">Report</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  만든이 : 박민환, 권태희, 송기윤
+</footer>
+
+</body>
+</html>
