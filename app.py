@@ -19,5 +19,7 @@ app.register_blueprint(predict_bp)                         # /input_waste
 app.register_blueprint(csr_bp)                             # /csr
 app.register_blueprint(createlift_bp)                      # /Create_lift  ← 🔹 추가됨
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+

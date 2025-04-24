@@ -1,10 +1,8 @@
-# db/db_manager.py
-
 import pymysql
 import pymysql.cursors
 from datetime import datetime
 
-# ✅ DB 연결 함수 (모든 함수가 이걸 사용)
+# ✅ DB 연결 함수 (공통)
 def get_connection():
     return pymysql.connect(
         host="localhost",
@@ -39,6 +37,27 @@ def delete_construction_site(site_name, address, manager_name):
         conn.commit()
     conn.close()
 
+# ✅ 회사 등록
+def insert_company(company_name, address, ceo_name, contact):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        sql = """
+            INSERT INTO companies (company_name, address, ceo_name, contact)
+            VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(sql, (company_name, address, ceo_name, contact))
+        conn.commit()
+    conn.close()
+
+# ✅ 회사 목록 조회
+def get_all_companies():
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.execute("SELECT company_id, company_name FROM companies ORDER BY company_name")
+        companies = cursor.fetchall()
+    conn.close()
+    return companies
+
 # ✅ YOLO 결과 저장
 def insert_waste_photo(site_id, object_id, image_filename, detection_summary, uploaded_at=None):
     conn = get_connection()
@@ -54,13 +73,24 @@ def insert_waste_photo(site_id, object_id, image_filename, detection_summary, up
             VALUES (%s, %s, %s, %s, %s)
         """
         if uploaded_at is None:
-            cursor.execute(sql_simple,
-                           (site_id, object_id, image_filename, detection_summary, True))
+            cursor.execute(sql_simple, (site_id, object_id, image_filename, detection_summary, True))
         else:
-            cursor.execute(sql_full,
-                           (site_id, object_id, image_filename, detection_summary, uploaded_at, True))
+            cursor.execute(sql_full, (site_id, object_id, image_filename, detection_summary, uploaded_at, True))
         conn.commit()
     conn.close()
+
+# ✅ detection_summary 조회 추가
+def get_detection_summary(site_id, image_filename):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            SELECT detection_summary
+              FROM waste_photos
+             WHERE site_id=%s AND image_filename=%s
+        """, (site_id, image_filename))
+        result = cursor.fetchone()
+    conn.close()
+    return result['detection_summary'] if result else None
 
 # ✅ 특정 날짜의 현장 이미지 조회
 def get_photos_by_site_and_date(site_id, date):
@@ -134,62 +164,8 @@ def get_object_id_by_name(object_name):
     conn.close()
     return obj_id
 
-# db/db_manager.py
-
+# ✅ 월별 통계
 def get_monthly_stats(site_id=None):
-    """
-    site_id를 지정하면 그 현장만, 지정하지 않으면 전체를
-    월별(YYYY-MM) 합계로 가져옵니다.
-    """
-    conn = get_connection()
-    with conn.cursor() as cursor:
-        if site_id:
-            sql = """
-                SELECT 
-                  DATE_FORMAT(disposal_date, '%%Y-%%m') AS month,
-                  SUM(waste_amount)     AS total_waste,
-                  SUM(carbon_emission)  AS total_emission
-                FROM waste_management wm
-                WHERE wm.site_id = %s
-                GROUP BY month
-                ORDER BY month
-            """
-            cursor.execute(sql, (site_id,))
-        else:
-            sql = """
-                SELECT 
-                  DATE_FORMAT(disposal_date, '%%Y-%%m') AS month,
-                  SUM(waste_amount)     AS total_waste,
-                  SUM(carbon_emission)  AS total_emission
-                FROM waste_management
-                GROUP BY month
-                ORDER BY month
-            """
-            cursor.execute(sql)
-        rows = cursor.fetchall()
-    conn.close()
-    return rows
-
-def insert_waste_management(site_id, waste_type, waste_amount, carbon_emission, disposal_date):
-    """
-    사진 저장 시점에, 해당 폐기물 종류·수량·탄소·날짜를
-    monthly 차트를 위해 waste_management에 함께 저장합니다.
-    """
-    conn = get_connection()
-    with conn.cursor() as cursor:
-        cursor.execute("""
-            INSERT INTO waste_management
-              (site_id, waste_type, waste_amount, carbon_emission, disposal_date)
-            VALUES (%s,%s,%s,%s,%s)
-        """, (site_id, waste_type, waste_amount, carbon_emission, disposal_date))
-        conn.commit()
-    conn.close()
-
-def get_monthly_stats(site_id=None):
-    """
-    site_id 지정 시 해당 현장만, 없으면 전체.
-    YYYY-MM 단위로 waste/ emission 합계를 가져옵니다.
-    """
     conn = get_connection()
     with conn.cursor() as cursor:
         if site_id:
@@ -214,3 +190,37 @@ def get_monthly_stats(site_id=None):
         rows = cursor.fetchall()
     conn.close()
     return rows
+
+# ✅ 월별 통계용 폐기물 저장
+def insert_waste_management(site_id, waste_type, waste_amount, carbon_emission, disposal_date):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            INSERT INTO waste_management
+              (site_id, waste_type, waste_amount, carbon_emission, disposal_date)
+            VALUES (%s,%s,%s,%s,%s)
+        """, (site_id, waste_type, waste_amount, carbon_emission, disposal_date))
+        conn.commit()
+    conn.close()
+
+# ✅ 위도·경도 및 회사ID 포함 건설 현장 등록 함수
+def upload_construction_site(site_name, address, manager_name, latitude, longitude, company_id):
+    """
+    새로운 건설 현장을 데이터베이스에 저장합니다.
+
+    :param site_name: 현장 이름
+    :param address: 주소
+    :param manager_name: 담당자 이름
+    :param latitude: 위도
+    :param longitude: 경도
+    :param company_id: 소속 회사 ID
+    """
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        sql = """
+            INSERT INTO construction_sites (site_name, address, manager_name, latitude, longitude, company_id)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(sql, (site_name, address, manager_name, latitude, longitude, company_id))
+        conn.commit()
+    conn.close()

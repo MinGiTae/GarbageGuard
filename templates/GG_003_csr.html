@@ -8,73 +8,97 @@
 
 {% block content %}
 
-
-
-
-
+<!-- ✅ 플래시 메시지 출력 -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-message-wrapper">
+      {% for category, message in messages %}
+        <div class="flash-message {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 
 <div id="character">✨</div>
 
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-
-
 <div class="flex-wrapper">
 
-<div id="map" style="width:1100px;height:750px;display: flex; background-color: white;"></div>
-<input id="search-input4" placeholder="현장명 검색" />
-	<div id="autocomplete-results" style="display: none; position: absolute; z-index: 100; background-color: white; border: 1px solid #ccc; max-height: 150px; overflow-y: auto;"></div>
+  <div id="map" style="width:1100px;height:750px;display: flex; background-color: white;">
+    <input id="search-input4" placeholder="현장명 검색" />
+    <div id="autocomplete-results" style="display: none; position: absolute; z-index: 100; background-color: white; border: 1px solid #ccc; max-height: 150px; overflow-y: auto;"></div>
+    <button id="Button5">현장으로 이동</button>
+  </div>
 
-<button id="Button5">현장으로 이동</button>
+  <div class="container">
+    <div class="title-container">
+      <h1 style="color: white;">건설 현장 등록</h1>
+    </div>
 
+    <div class="div1">
+      <form method="POST" action="/csr/register_site">
+        <div id="search-box">
+          <a>현장명</a>
+          <input type="text" name="site_name" id="search-input1" placeholder="건설현장이름을 입력하세요" required /><br>
+          <a>주소</a>
+          <input type="text" name="address" id="search-input2" placeholder="건설현장주소를 입력하세요" required /><br>
+          <a>담당자명</a>
+          <input type="text" name="manager_name" id="search-input3" placeholder="담당자를 입력하세요" required /><br>
 
+          <input type="hidden" name="latitude" id="latitude">
+          <input type="hidden" name="longitude" id="longitude">
 
+          <a>회사 선택</a>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <select name="company_id" id="companySelect">
+              {% for company in companies %}
+                <option value="{{ company.company_id }}">{{ company.company_name }}</option>
+              {% endfor %}
+            </select>
+            <button type="button" id="openCompanyModal">+ 회사 추가</button>
+          </div>
+        </div>
 
+        <div class="div2">
+          <h2 style="color: white;">자재등록</h2>
+          <div class="excel-upload">
+            <label for="excelInput" class="excel-btn">📁 엑셀 파일 업로드</label>
+            <input type="file" id="excelInput" accept=".xlsx,.xls" style="display: none;" />
+          </div>
+        </div>
 
-
-
-<div class="container">
-<div class="title-container">
-  <h1 style="color: white;">건설 현장 등록</h1>
+        <button type="submit" id="Button1">Create</button>
+        <button type="button" id="Button4">Update</button>
+        <button type="button" id="ButtonDelete">Delete</button>
+      </form>
+    </div>
+  </div>
 </div>
 
-
-
-<div class="div1">
-	<div id="search-box">
-		<a>현장명</a>
-		<br>
-		<input type="text" id="search-input1" placeholder="건설현장이름을 입력하세요" />
-		<br>
-		<a>주소</a>
-		<br>
-		<input type="text" id="search-input2" placeholder="건설현장주소를 입력하세요" />
-		<br>
-		<a>담당자명</a>
-		<input type="text" id="search-input3" placeholder="담당자를 입력하세요" />
-	</div>
-	<div class="div2">
-		<h2 style="color: white;">자재등록</h2>
-		<div class="excel-upload">
-		  <label for="excelInput" class="excel-btn">📁 엑셀 파일 업로드</label>
-		  <input type="file" id="excelInput" accept=".xlsx,.xls" style="display: none;" />
-		</div>
-	</div>
-
-	<button id="Button1">Create</button>
-	<button id="Button4">Update</button>
-	<button id="ButtonDelete">Delete</button>
-
-</div>
-</div>
+<!-- 회사 등록 모달 -->
+<div id="companyModal" class="modal" style="display:none;">
+  <form method="POST" action="/csr/register_company">
+    <h2>회사 등록</h2>
+    <label>회사명</label><br>
+    <input type="text" name="company_name" required><br><br>
+    <label>주소</label><br>
+    <input type="text" name="address"><br><br>
+    <label>대표자명</label><br>
+    <input type="text" name="ceo_name"><br><br>
+    <label>연락처</label><br>
+    <input type="text" name="contact"><br><br>
+    <div style="text-align: right;">
+      <button type="submit">등록</button>
+      <button type="button" onclick="document.getElementById('companyModal').style.display='none'">닫기</button>
+    </div>
+  </form>
 </div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=30b3dfc1e244b48dfa1c16cec788c438&libraries=services"></script>
 <script type="text/javascript" src="/static/js/GG_003_csr.js"></script>
+<script>
+  document.getElementById('openCompanyModal').onclick = function() {
+    document.getElementById('companyModal').style.display = 'block';
+  }
+</script>
 
 {% endblock %}

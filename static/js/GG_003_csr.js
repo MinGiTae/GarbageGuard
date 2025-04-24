@@ -4,12 +4,6 @@ window.addEventListener('mousemove', (e) => {
   character.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
 });
 
-
-
-
-
-
-
 let siteNames = [];
 
 var mapContainer = document.getElementById('map'),
@@ -40,6 +34,10 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
 
     document.getElementById('search-input1').value = '';
     document.getElementById('search-input3').value = '';
+
+    // 위도/경도 히든 필드에 저장
+    document.getElementById('latitude').value = clickedPosition.getLat();
+    document.getElementById('longitude').value = clickedPosition.getLng();
 
     if (tempMarker) tempMarker.setMap(null);
 
@@ -221,13 +219,11 @@ document.getElementById('search-input4').addEventListener('keydown', function(e)
     }
 });
 
-
 document.getElementById('Button5').addEventListener('click', function() {
     const inputName = document.getElementById('search-input4').value.trim();
     const markerData = markers.find(m => m.siteName === inputName);
 
     if (markerData) {
-        // 'Enter' 키가 눌렸을 때와 동일하게 동작
         map.setCenter(markerData.marker.getPosition());
 
         if (selectedMarker) {
@@ -249,6 +245,5 @@ document.getElementById('Button5').addEventListener('click', function() {
         alert("해당 이름의 현장을 찾을 수 없습니다.");
     }
 
-    // 자동완성 닫기
     document.getElementById('autocomplete-results').style.display = 'none';
 });
