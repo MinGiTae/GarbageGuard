@@ -1,85 +1,56 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>GarbageGuard - AI 기반 건설 폐기물 관리 서비스</title>
-  <meta charset="utf-8">
-  <meta name="author" content="GarbageGuardMain">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/GG_001_main.css') }}">
-</head>
-<body>
+{% extends 'base.html' %}
 
-<!-- 네비게이션 -->
-<!-- 네비게이션 -->
-<nav id="menubar">
-  <div class="center-box">
-    <div id="logo">
-      <a href="/">
-        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" width="150"/>
-      </a>
-    </div>
+{% block title %}Test 페이지{% endblock %}
 
-    <div id="menu1">
-      <ul>
-        <li><a href="/">Main</a></li>
-        <li class="menu-waste">
-          <a href="/upload/waste_disposal">Waste disposal</a>
-          <div class="submenu">
-            <a href="{{ url_for('csr.show_csr') }}">Construction site registration</a>
-          </div>
-        </li>
-        <li><a href="/analytics">Analytics and Statistics</a></li>
-        <li><a href="/Create_lift">Create lift</a></li>
-        <li><a href="/gallery">Gallery</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/GG_001_main.css') }}">
+
+{% endblock %}
+
+{% block content %}
+
 
 
 <div id="character">✨</div>
 
-<img id="crain" src="{{ url_for('static', filename='img/crain.PNG') }}" alt="crain" />
 
-<!-- 인트로 텍스트 -->
+
+
+
+
+<img id="crain" src="/static/img/crain.png" alt="crain"/>
+
 <h1 class="scroll-text" id="scrollText1" style="font-size: 150px; color: #f8f858; line-height: 0.9;">
   Garbage<br>Guard
 </h1>
-<h1 class="scroll-text2" id="scrollText2" style="font-size: 80px; color: white;">
-  건설현장 폐기물<br>똑똑하게 처리하자
-</h1>
-<h1 class="scroll-text3" id="scrollText3" style="font-size: 30px; color: white;">
-  AI가 인식하고 탄소를 계산해드립니다
-</h1>
+<h1 class="scroll-text2" id="scrollText2" style="font-size: 80px; color: white;">건설현장 폐기물<br>똑똑하게 처리하자</h1>
+<h1 class="scroll-text3" id="scrollText3" style="font-size: 30px; color: white;">AI가 인식하고 탄소를 계산해드립니다</h1>
 
-<h3 class="scroll-text4" id="scrollText4" style="font-size: 50px; color: yellow;">
-  <a style="font-size: 70px;">왜</a> 이 서비스가 필요한가요?
-</h3>
-<h3 class="scroll-text5" id="scrollText5" style="font-size: 30px; color: white;">
-  건설 산업의 폐기물과 탄소 문제, 지금 해결해야 할 때입니다.
-</h3>
 
-<img class="scroll-text6" id="scrollText6" src="{{ url_for('static', filename='img/why.PNG') }}" alt="Why">
-<h3 class="scroll-text7" id="scrollText7" style="font-size: 30px; color: white;">
-  전 세계 폐기물의 38%는 건설현장에서 발생합니다. <br>
-  그 중 상당수는 재활용되지 않고 매립 또는 소각되며 막대한 탄소를 배출합니다.<br>
-  저희 Garbage Guard는 지속 가능한 건설 산업을 만들어가는데 기여하고자 합니다.
-</h3>
 
-<!-- 스크롤 이미지 -->
-<img id="scrollImage" src="{{ url_for('static', filename='img/3P2.png') }}" alt="New Image">
 
-<!-- 페이지 이동 버튼 -->
-<button id="Button1" onclick="location.href='/upload/waste_disposal'">사진 업로드 시작</button>
-<button id="Button2" onclick="location.href='{{ url_for('csr.show_csr') }}'">현장 등록하기</button>
-<button id="Button3" onclick="location.href='/analytics'">탄소 통계 보기</button>
-<button id="Button4" onclick="location.href='/Create_lift'">자동 보고서 만들기</button>
-<button id="Button5" onclick="location.href='/gallery'">결과 이미지 모아보기</button>
+<h3 class="scroll-text4" id="scrollText4" style="font-size: 50px; color: yellow;"><a style="font-size: 70px;">왜</a> 이 서비스가 필요한가요?</h3>
+<h3 class="scroll-text5" id="scrollText5" style="font-size: 30px; color: white;">건설 산업의 폐기물과 탄소 문제, 지금 해결해야 할 때입니다.</h3>
+<img class="scroll-text6" id="scrollText6" src="/static/img/why.png" alt="why"/>
+<h3 class="scroll-text7" id="scrollText7" style="font-size: 30px; color: white;">전 세계 폐기물의 38%는 건설현장에서 발생합니다. <br>
+                                                                                그 중 상당수는 재활용되지 않고 매립 또는 소각되며 막대한 탄소를 배출합니다.<br>
+                                                                                저희 Garbage Guard는 지속 가능한 건설 산업을 만들어가는데 기여하고자 합니다.</h3>
+
+
+<img id="scrollImage" src="/static/img/3P2.png" alt="New Image" >
+
+
+<img id="scrollImage2" src="/static/img/3P3.png" alt="New Image" >
+
+
+
+<button id="Button1">사진 업로드 시작</button>
+<button id="Button2">현장 등록하기</button>
+
+<button id="Button3">사진 업로드 시작</button>
+<button id="Button4">현장 등록하기</button>
 
 <!-- JS 연결 -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/GG_001_main.js') }}"></script>
 
-<header align="center"></header>
-<footer>만든이 : 권태희</footer>
-
-</body>
-</html>
+{% endblock %}

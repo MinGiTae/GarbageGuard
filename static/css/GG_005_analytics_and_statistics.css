@@ -12,41 +12,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-html, body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-/* ── 네비게이션 ───────────────────────────────── */
-.navbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: var(--navbar-height);
-  background: #333;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  z-index: 100;
-}
-.nav-menu {
-  list-style: none;
-  display: flex;
-  gap: 24px;
-}
-.nav-menu li a {
-  color: #bbb;
-  text-decoration: none;
-}
-.nav-menu li.active a,
-.nav-menu li a:hover {
-  color: #fff;
-}
 .settings-icon {
   font-size: 20px;
   cursor: pointer;

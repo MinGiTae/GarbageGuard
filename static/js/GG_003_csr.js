@@ -1,3 +1,15 @@
+const character = document.getElementById('character');
+
+window.addEventListener('mousemove', (e) => {
+  character.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+});
+
+
+
+
+
+
+
 let siteNames = [];
 
 var mapContainer = document.getElementById('map'),

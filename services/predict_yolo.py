@@ -1,5 +1,5 @@
 import os
-from ultralytics import YOLO
+# from ultralytics import YOLO
 
 def run_yolo_and_save_result(input_img_path, save_dir, save_name):
     """

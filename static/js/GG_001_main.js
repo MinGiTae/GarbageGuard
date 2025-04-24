@@ -19,11 +19,9 @@ const scrollText3 = document.getElementById('scrollText6');
 const scrollText4 = document.getElementById('scrollText7');
 
 
-
-
 window.addEventListener('scroll', () => {
 const scrollY = window.scrollY;
-  
+
 text.style.transform = `translate(calc(-50% - ${scrollY}px), -50%)`;
 text.style.opacity = `${1 - scrollY / 500}`;
 
@@ -33,6 +31,10 @@ text2.style.opacity = `${1 - scrollY / 500}`;
 text3.style.transform = `translate(calc(-50% - ${scrollY}px), -50%)`;
 text3.style.opacity = `${1 - scrollY / 500}`;
 });
+
+
+
+
 
 
 
@@ -83,12 +85,35 @@ if (scrollY > triggerPoint) {
 
 
 window.addEventListener('scroll', function() {
-  const scrollImage = document.getElementById('scrollImage');
-  const scrollThreshold = 1100; // 원하는 위치(px)
+  const scrollImage2 = document.getElementById('scrollImage2');
+  const scrollThreshold = 1200; // 원하는 위치(px)
 
   if (window.scrollY > scrollThreshold) {
-    scrollImage.style.opacity = 1;
+    scrollImage2.style.opacity = 1;
   } else {
-    scrollImage.style.opacity = 0;
+    scrollImage2.style.opacity = 0;
+  }
+});
+
+
+window.addEventListener('scroll', function() {
+  const scrollbutton1 = document.getElementById('Button3');
+  const scrollThreshold = 1200; // 원하는 위치(px)
+
+  if (window.scrollY > scrollThreshold) {
+    scrollbutton1.style.opacity = 1;
+  } else {
+    scrollbutton1.style.opacity = 0;
+  }
+});
+
+window.addEventListener('scroll', function() {
+  const scrollbutton2 = document.getElementById('Button4');
+  const scrollThreshold = 1200; // 원하는 위치(px)
+
+  if (window.scrollY > scrollThreshold) {
+    scrollbutton2.style.opacity = 1;
+  } else {
+    scrollbutton2.style.opacity = 0;
   }
 });

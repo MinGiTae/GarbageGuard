@@ -1,42 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>GarbageGuard – Analytics & Statistics</title>
+{% extends 'base.html' %}
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="../static/css/GG_005_analytics_and_statistics.css"/>
+{% block title %}Test 페이지{% endblock %}
 
-    <!-- Chart.js & DataLabels 플러그인 -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-</head>
-<body>
-<!-- 상단 네비게이션 (fixed) -->
-<nav id="menubar">
-    <div class="center-box">
-        <div id="logo">
-            <a href="">
-                <img src="logo.png" alt="Logo" width="150"/>
-            </a>
-        </div>
+{% block extra_css %}
+<link rel="stylesheet" href="../static/css/GG_005_analytics_and_statistics.css"/>
+{% endblock %}
 
-        <div id="menu1">
-            <ul>
-                <li><a href="/">Main</a></li>
-                <li class="menu-waste">
-                    <a href="/waste_disposal">Waste disposal</a>
-                    <div class="submenu">
-                        <a href="/construction_site_registration">Construction site registration</a>
-                    </div>
-                </li>
-                <li id="STORE"><a href="">Analytics and Statistics</a></li>
-                <li id="RESPONSIBILITY"><a href="Create_lift">Create lift</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+{% block content %}
+
+
 
 <!-- 본문: 네비 아래 스크롤 영역 -->
 <div class="dashboard">
@@ -183,5 +155,10 @@
 
 <!-- JS (defer) -->
 <script src="../static/js/GG_005_analytics_and_statstics.js" defer></script>
-</body>
-</html>
+
+<!-- Chart.js & DataLabels 플러그인 -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+
+{% endblock %}

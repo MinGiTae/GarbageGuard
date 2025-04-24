@@ -1,11 +1,11 @@
 from flask import Flask
 from routes.main_routes import main_bp
-from routes.upload_routes import upload_bp
 from routes.stats_routes import stats_bp
 from routes.gallery_routes import gallery_bp
 from routes.predict_routes import predict_bp
 from routes.csr_routes import csr_bp
 from routes.createlift_routes import createlift_bp  # 🔹 Create Lift 라우트 추가
+from routes.upload_routes import upload_bp
 
 app = Flask(__name__)
 app.secret_key = 'go_home'

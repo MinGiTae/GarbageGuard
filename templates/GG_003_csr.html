@@ -1,59 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>GarbageGuard - AI 기반 건설 폐기물 관리 서비스</title>
-	<meta charset="utf-8">
-	<meta name="author" content="GarbageGuardCsr">
-	<link rel="stylesheet" href="/static/css/GG_003_csr.css" />
-</head>
-<body>
+{% extends 'base.html' %}
 
-<nav id="menubar">
-  <div class="center-box">
-    <div id="logo">
-      <a href="">
-        <img src="logo.png" alt="Logo" width="150" />
-      </a>
-    </div>
+{% block title %}Test 페이지{% endblock %}
 
-    <div id="menu1">
-      <ul>
-        <li><a href="/">Main</a></li>
-        <li class="menu-waste">
-          <a href="/waste_disposal">Waste disposal</a>
-          <div class="submenu">
-            <a href="/construction_site_registration">Construction site registration</a>
-          </div>
-        </li>
-        <li id="STORE"><a href="">Analytics and Statistics</a></li>
-        <li id="RESPONSIBILITY"><a href="Create_lift">Create lift</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/GG_003_csr.css" />
+{% endblock %}
+
+{% block content %}
 
 
 
 
 
-	<div id="character">✨</div>
+
+<div id="character">✨</div>
 
 
 
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
-	<div class="flex-wrapper">
+<div class="flex-wrapper">
 
-	<div id="map" style="width:1100px;height:750px;display: flex; background-color: white;"></div>
-	<input id="search-input4" placeholder="현장명 검색" />
-		<div id="autocomplete-results" style="display: none; position: absolute; z-index: 100; background-color: white; border: 1px solid #ccc; max-height: 150px; overflow-y: auto;"></div>
+<div id="map" style="width:1100px;height:750px;display: flex; background-color: white;"></div>
+<input id="search-input4" placeholder="현장명 검색" />
+	<div id="autocomplete-results" style="display: none; position: absolute; z-index: 100; background-color: white; border: 1px solid #ccc; max-height: 150px; overflow-y: auto;"></div>
 
-  	<button id="Button5">현장으로 이동</button>
+<button id="Button5">현장으로 이동</button>
 
 
 
@@ -61,51 +38,43 @@
 
 
 
-	<div class="container">
-	<div class="title-container">
-	  <h1 style="color: white;">건설 현장 등록</h1>
+<div class="container">
+<div class="title-container">
+  <h1 style="color: white;">건설 현장 등록</h1>
+</div>
+
+
+
+<div class="div1">
+	<div id="search-box">
+		<a>현장명</a>
+		<br>
+		<input type="text" id="search-input1" placeholder="건설현장이름을 입력하세요" />
+		<br>
+		<a>주소</a>
+		<br>
+		<input type="text" id="search-input2" placeholder="건설현장주소를 입력하세요" />
+		<br>
+		<a>담당자명</a>
+		<input type="text" id="search-input3" placeholder="담당자를 입력하세요" />
 	</div>
-
-
-
-	<div class="div1">
-		<div id="search-box">
-			<a>현장명</a>
-			<br>
-		    <input type="text" id="search-input1" placeholder="건설현장이름을 입력하세요" />
-		    <br>
-		    <a>주소</a>
-		    <br>
-		    <input type="text" id="search-input2" placeholder="건설현장주소를 입력하세요" />
-		    <br>
-		    <a>담당자명</a>
-		    <input type="text" id="search-input3" placeholder="담당자를 입력하세요" />
+	<div class="div2">
+		<h2 style="color: white;">자재등록</h2>
+		<div class="excel-upload">
+		  <label for="excelInput" class="excel-btn">📁 엑셀 파일 업로드</label>
+		  <input type="file" id="excelInput" accept=".xlsx,.xls" style="display: none;" />
 		</div>
-		<div class="div2">
-			<h2 style="color: white;">자재등록</h2>
-			<div class="excel-upload">
-			  <label for="excelInput" class="excel-btn">📁 엑셀 파일 업로드</label>
-			  <input type="file" id="excelInput" accept=".xlsx,.xls" style="display: none;" />
-			</div>
-		</div>
+	</div>
 
-		<button id="Button1">Create</button>
-		<button id="Button4">Update</button>
-		<button id="ButtonDelete">Delete</button>
+	<button id="Button1">Create</button>
+	<button id="Button4">Update</button>
+	<button id="ButtonDelete">Delete</button>
 
-	</div>
-	</div>
-	</div>
+</div>
+</div>
+</div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=30b3dfc1e244b48dfa1c16cec788c438&libraries=services"></script>
-  <script type="text/javascript" src="/static/js/GG_003_csr.js"></script>
+<script type="text/javascript" src="/static/js/GG_003_csr.js"></script>
 
-	<header align="center">
-	</header>
-
-
-	<footer>만든이 : 권태희</footer>
-
-</body>
-
-</html>
+{% endblock %}
