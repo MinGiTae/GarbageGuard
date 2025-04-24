@@ -11,7 +11,7 @@ app.secret_key = 'go_home'
 
 # ✅ Blueprint 등록 (URL prefix도 함께)
 app.register_blueprint(main_bp)                            # /
-app.register_blueprint(upload_bp, url_prefix='/upload')    # /upload/*
+# app.register_blueprint(upload_bp, url_prefix='/upload')    # /upload/*
 app.register_blueprint(stats_bp)                           # /region-data/*
 app.register_blueprint(gallery_bp)                         # /gallery
 app.register_blueprint(predict_bp)                         # /input_waste
