@@ -3,6 +3,7 @@
 {% block title %}Test 페이지{% endblock %}
 
 {% block extra_css %}
+
 <link rel="stylesheet" href="/static/css/GG_006_createlift.css" />
 {% endblock %}
 
@@ -15,7 +16,100 @@
 
 
 
-<div id="character">✨</div>
+	<div id="character">✨</div>
+
+
+
+
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+
+	<div id="container">
+
+	<div id="search-box">
+	    <input type="text" id="search-input" placeholder="건설현장이름을 입력하세요" />
+	    <button id="search-button">검색</button>
+	</div>
+	<div id="search-results">sdfdsfs</div>
+
+
+	<!-- <button id="check-all-button">모두 체크하기</button> -->
+
+
+	<div class="table-container0">
+	<div class="table-container">
+    <div class="table-column">
+      <div class="header">ISO 적합여부</div>
+      <div class="row">1.조직은 자사의 환경 측면(영향 요인)을 식별하였는가?<input type="checkbox" class="arrow-target"></div>
+      <div class="row">2.중대한 환경 측면을 평가하고 우선순위를 매겼는가?<input type="checkbox" class="arrow-target"></div>
+      <div class="row">3.환경성과를 측정하고 있으며 관련 데이터를 기록하는가? <input type="checkbox" class="arrow-target"></div>
+      <div class="row">4.법적 요구사항 준수를 주기적으로 점검하고 있는가? <input type="checkbox" class="arrow-target"></div>
+      <div class="row">5.환경 관련 기록을 적절히 보존하고 있는가?<input type="checkbox" class="arrow-target"></div>
+      <div class="row">6. 최고경영진은 환경경영체계에 대한 정기적인 검토를 수행하는가? <input type="checkbox" class="arrow-target"></div>
+      <div class="row">7. 검토 결과에 따른 개선 조치가 문서화되어 실행되었는가? <input type="checkbox" class="arrow-target"></div>
+<!--      <div class="row">8. 적합 기준 <input type="checkbox" class="arrow-target"></div>-->
+<!--      <div class="row">9. 적합 기준 <input type="checkbox" class="arrow-target"></div>-->
+<!--      <div class="row">10. 적합 기준 <input type="checkbox" class="arrow-target"></div>-->
+    </div>
+    <div class="table-column">
+      <div class="header">건설폐기물 법 적합여부</div>
+      <div class="row">1.현장별 폐기물 처리 계획서를 수립했는가?<input type="checkbox" class="arrow-target"></div>
+      <div class="row">2.폐기물 처리 계획이 관할 지자체에 신고되었는가? <input type="checkbox" class="arrow-target"></div>
+      <div class="row">3.폐기물을 종류별(콘크리트, 목재, 금속 등)로 분리배출하고 있는가?<input type="checkbox" class="arrow-target"></div>
+      <div class="row">4.현장 내 분리배출 장소 및 표지판이 설치되어 있는가? <input type="checkbox" class="arrow-target"></div>
+      <div class="row">5.등록된 건설폐기물 수집·운반·처리업체와 계약을 체결했는가?<input type="checkbox" class="arrow-target"></div>
+      <div class="row">6.폐기물 처리 내역이 적정하게 관리되고 있는가? <input type="checkbox" class="arrow-target"></div>
+      <div class="row">7.폐기물 발생량, 처리량, 계약서 등의 기록을 보관하고 있는가?<input type="checkbox" class="arrow-target"></div>
+<!--      <div class="row">18. 적합 기준 <input type="checkbox" class="arrow-target"></div>-->
+<!--      <div class="row">19. 적합 기준 <input type="checkbox" class="arrow-target"></div>-->
+<!--      <div class="row">20. 적합 기준 <input type="checkbox" class="arrow-target"></div>-->
+	  <div class="complete-button-container">
+		<div><button id="Button3">완료</button></div>
+      </div>
+	 </div>
+	</div>
+
+		<div id ="arrow">➡️</div>
+
+
+	<div class="table-container2">
+	  <table border="0" id="result-table">
+	    <caption></caption>
+	    <thead>
+	      <tr>
+	        <th>No</th><th>항목</th><th>판단</th><th>부적합 사유</th><th>시간</th>
+	      </tr>
+	    </thead>
+	    <tbody></tbody>
+	  </table>
+	</div>
+
+
+	<div id="Button">
+		<button id="Button1">EXCEL 출력하기</button>
+		<button id="Button2">PDF 출력하기</button>
+	</div>
+	</div>
+
+	</div>
+
+
+
+
+
+
+
+	<div id="fixed">
+	  <img src="what.png" id="popup-btn" alt="info icon">
+	</div>
+
+	<div id="popup">
+	  <br>설명서
+	</div>
 
 
 
@@ -31,139 +125,10 @@
 
 
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
-<div id="container">
-
-<div id="search-box">
-	<input type="text" id="search-input" placeholder="건설현장이름을 입력하세요" />
-	<button id="search-button">검색</button>
-</div>
-<div id="search-results">sdfdsfs</div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <button id="check-all-button">모두 체크하기</button> -->
-
-
-<div class="table-container0">
-<div class="table-container">
-<div class="table-column">
-  <div class="header">적합여부</div>
-  <div class="row">1. 적합 기준 <input type="checkbox"></div>
-  <div class="row">2. 적합 기준 <input type="checkbox"></div>
-  <div class="row">3. 적합 기준 <input type="checkbox"></div>
-  <div class="row">4. 적합 기준 <input type="checkbox"></div>
-  <div class="row">5. 적합 기준 <input type="checkbox"></div>
-  <div class="row">6. 적합 기준 <input type="checkbox"></div>
-  <div class="row">7. 적합 기준 <input type="checkbox"></div>
-  <div class="row">8. 적합 기준 <input type="checkbox"></div>
-  <div class="row">9. 적합 기준 <input type="checkbox"></div>
-  <div class="row">0. 적합 기준 <input type="checkbox"></div>
-</div>
-<div class="table-column">
-  <div class="header">적합여부</div>
-  <div class="row">1. 적합 기준 <input type="checkbox"></div>
-  <div class="row">2. 적합 기준 <input type="checkbox"></div>
-  <div class="row">3. 적합 기준 <input type="checkbox"></div>
-  <div class="row">4. 적합 기준 <input type="checkbox"></div>
-  <div class="row">5. 적합 기준 <input type="checkbox"></div>
-  <div class="row">6. 적합 기준 <input type="checkbox"></div>
-  <div class="row">7. 적합 기준 <input type="checkbox"></div>
-  <div class="row">8. 적합 기준 <input type="checkbox"></div>
-  <div class="row">9. 적합 기준 <input type="checkbox"></div>
-  <div class="row">0. 적합 기준 <input type="checkbox"></div>
-</div>
-<div class="table-column">
-  <div class="header">적합여부</div>
-  <div class="row">1. 적합 기준 <input type="checkbox"></div>
-  <div class="row">2. 적합 기준 <input type="checkbox"></div>
-  <div class="row">3. 적합 기준 <input type="checkbox"></div>
-  <div class="row">4. 적합 기준 <input type="checkbox"></div>
-  <div class="row">5. 적합 기준 <input type="checkbox"></div>
-  <div class="row">6. 적합 기준 <input type="checkbox"></div>
-  <div class="row">7. 적합 기준 <input type="checkbox"></div>
-  <div class="row">8. 적합 기준 <input type="checkbox"></div>
-  <div class="row">9. 적합 기준 <input type="checkbox"></div>
-  <div class="row">0. 적합 기준 <input type="checkbox"></div>
-</div>
-</div>
-
-
-<div class="table-container2">
-  <table border="0">
-	<caption></caption>
-	<thead>
-	  <tr>
-		<th>1</th><th>2</th><th>1</th><th>1</th><th>1</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  <tr><td>1번데이터</td><td>탄소배출량</td><td>1번데이터</td><td>1번데이터</td><td>1번데이터</td></tr>
-	  <tr><td>1번데이터</td><td>폐기물 종류 양</td><td>1번데이터</td><td>1번데이터</td><td>1번데이터</td></tr>
-	  <tr><td>1번데이터</td><td>2번데이터</td><td>1번데이터</td><td>1번데이터</td><td>1번데이터</td></tr>
-	  <tr><td>1번데이터</td><td>2번데이터</td><td>1번데이터</td><td>1번데이터</td><td>1번데이터</td></tr>
-	  <tr><td>1번데이터</td><td>2번데이터</td><td>1번데이터</td><td>1번데이터</td><td>1번데이터</td></tr>
-	  <tr><td>1번데이터</td><td>2번데이터</td><td>1번데이터</td><td>1번데이터</td><td>1번데이터</td></tr>
-	  <tr><td>1번데이터</td><td>2번데이터</td><td>1번데이터</td><td>1번데이터</td><td>1번데이터</td></tr>
-	</tbody>
-  </table>
-</div>
-
-
-<div id="Button">
-	<button id="Button1">EXCEL 출력하기</button>
-	<button id="Button2">PDF 출력하기</button>
-</div>
-</div>
-
-</div>
-
-
-
-
-
-
-
-<div id="fixed">
-  <img src="what.png" id="popup-btn" alt="info icon">
-</div>
-
-<div id="popup">
-  <br>설명서
-</div>
-
-
-
-
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script type="text/javascript" src="/static/js/GG_006_createlift.js">
 </script>
