@@ -4,7 +4,6 @@ body {
   padding: 0;
   background-color: #212121;
   font-family: 'Segoe UI', sans-serif;
-
 }
 
 #character {
@@ -171,8 +170,8 @@ body {
   background-color: #E6B864;
 }
 
-#Button4,
 #Button1,
+#ButtonUpdate,
 #ButtonDelete {
   padding: 10px 34px;
   background-color: #ffcc00;
@@ -184,8 +183,8 @@ body {
   margin-right: 8px;
 }
 
-#Button4:hover,
 #Button1:hover,
+#ButtonUpdate:hover,
 #ButtonDelete:hover {
   background-color: #E6B864;
 }

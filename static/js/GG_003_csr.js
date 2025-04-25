@@ -1,249 +1,221 @@
-const character = document.getElementById('character');
+window.addEventListener('DOMContentLoaded', () => {
+  // 캐릭터 따라다니기
+  const character = document.getElementById('character');
+  window.addEventListener('mousemove', e => {
+    character.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+  });
 
-window.addEventListener('mousemove', (e) => {
-  character.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-});
+  // 지도 초기화
+  const mapContainer = document.getElementById('map');
+  const map = new kakao.maps.Map(mapContainer, {
+    center: new kakao.maps.LatLng(36.348504088450035, 127.38215399734425),
+    level: 3
+  });
+  const geocoder = new kakao.maps.services.Geocoder();
 
-let siteNames = [];
+  // 입력 폼 요소
+  const inputSiteId    = document.getElementById('site_id');
+  const inputName      = document.getElementById('search-input1');
+  const inputAddress   = document.getElementById('search-input2');
+  const inputManager   = document.getElementById('search-input3');
+  const inputLatitude  = document.getElementById('latitude');
+  const inputLongitude = document.getElementById('longitude');
 
-var mapContainer = document.getElementById('map'),
-    mapOption = {
-        center: new kakao.maps.LatLng(36.348504088450035, 127.38215399734425),
-        level: 3
-    };
-var map = new kakao.maps.Map(mapContainer, mapOption);
-var geocoder = new kakao.maps.services.Geocoder();
+  // 마커 저장용
+  const markers     = [];
+  const infowindows = [];
+  let selectedMarker     = null;
+  let selectedInfowindow = null;
+  let tempMarker         = null;
+  let siteNames          = [];
 
-var clickedPosition = null;
-var tempMarker = null;
+  // 마커 클릭 시 폼 채우기
+  function openMarker(marker) {
+    const data = markers.find(m => m.marker === marker);
+    if (!data) return;
 
-var markers = [];
-var infowindows = [];
-
-var selectedMarker = null;
-var selectedInfowindow = null;
-
-kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-    clickedPosition = mouseEvent.latLng;
-
-    geocoder.coord2Address(clickedPosition.getLng(), clickedPosition.getLat(), function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            document.getElementById('search-input2').value = result[0].address.address_name;
-        }
-    });
-
-    document.getElementById('search-input1').value = '';
-    document.getElementById('search-input3').value = '';
-
-    // 위도/경도 히든 필드에 저장
-    document.getElementById('latitude').value = clickedPosition.getLat();
-    document.getElementById('longitude').value = clickedPosition.getLng();
-
-    if (tempMarker) tempMarker.setMap(null);
-
-    tempMarker = new kakao.maps.Marker({
-        position: clickedPosition,
-        map: map,
-        opacity: 0.5,
-        clickable: false
-    });
-});
-
-document.getElementById('Button1').addEventListener('click', function() {
-    var siteName = document.getElementById('search-input1').value || '건설현장';
-    var address = document.getElementById('search-input2').value;
-
-    if (!siteName || !address) {
-        alert("현장명과 주소를 입력해주세요.");
-        return;
-    }
-
-    geocoder.addressSearch(address, function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            if (markers.some(m => m.marker.getPosition().equals(coords))) {
-                alert("이미 등록된 위치입니다.");
-                return;
-            }
-
-            var markerImage = new kakao.maps.MarkerImage(
-                '/static/img/hammer.png',
-                new kakao.maps.Size(40, 40)
-            );
-
-            var marker = new kakao.maps.Marker({
-                position: coords,
-                map: map,
-                image: markerImage
-            });
-
-            var infowindow = new kakao.maps.InfoWindow({
-                content: '<div style="width:150px;text-align:center;padding:6px 0;">' + siteName + '</div>'
-            });
-            infowindow.open(map, marker);
-            infowindows.push(infowindow);
-
-            siteNames.push(siteName);
-
-            markers.push({
-                marker: marker,
-                siteName: siteName,
-                address: address
-            });
-
-            kakao.maps.event.addListener(marker, 'click', function() {
-                openMarker(marker);
-            });
-
-            map.setCenter(coords);
-
-            if (tempMarker) {
-                tempMarker.setMap(null);
-                tempMarker = null;
-            }
-
-            clickedPosition = null;
-            document.getElementById('search-input1').value = '';
-            document.getElementById('search-input2').value = '';
-        } else {
-            alert("주소를 찾을 수 없습니다.");
-        }
-    });
-});
-
-function openMarker(marker) {
-    var markerData = markers.find(m => m.marker === marker);
-    if (!markerData) return;
-
-    geocoder.coord2Address(marker.getPosition().getLng(), marker.getPosition().getLat(), function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            document.getElementById('search-input2').value = result[0].address.address_name;
-        }
-    });
-
-    document.getElementById('search-input1').value = markerData.siteName;
+    inputSiteId.value    = data.siteId;
+    inputName.value      = data.siteName;
+    inputAddress.value   = data.address;
+    inputManager.value   = data.managerName || '';
+    const pos = marker.getPosition();
+    inputLatitude.value  = pos.getLat();
+    inputLongitude.value = pos.getLng();
 
     if (selectedMarker) {
-        selectedMarker.setImage(new kakao.maps.MarkerImage(
-            '/static/img/hammer.png',
-            new kakao.maps.Size(40, 40)
-        ));
-        selectedInfowindow?.close();
+      selectedMarker.setImage(
+        new kakao.maps.MarkerImage('/static/img/hammer.png', new kakao.maps.Size(40, 40))
+      );
+      selectedInfowindow.close();
     }
 
     selectedMarker = marker;
-    selectedInfowindow = infowindows[markers.indexOf(markerData)];
-    marker.setImage(new kakao.maps.MarkerImage(
-        '/static/img/hammer.png',
-        new kakao.maps.Size(50, 50)
-    ));
+    selectedInfowindow = infowindows[markers.indexOf(data)];
+    selectedMarker.setImage(
+      new kakao.maps.MarkerImage('/static/img/hammer.png', new kakao.maps.Size(50, 50))
+    );
     selectedInfowindow.open(map, marker);
-}
+  }
 
-document.getElementById('ButtonDelete').addEventListener('click', function() {
-    if (selectedMarker) {
-        selectedMarker.setMap(null);
-        if (selectedInfowindow) selectedInfowindow.close();
-
-        var index = markers.findIndex(m => m.marker === selectedMarker);
-        if (index !== -1) {
-            markers.splice(index, 1);
-            infowindows.splice(index, 1);
-            siteNames.splice(index, 1);
-        }
-
-        selectedMarker = null;
-        selectedInfowindow = null;
-
-        alert("선택된 건설현장이 삭제되었습니다.");
-    } else {
-        alert("삭제할 건설현장을 선택하세요.");
-    }
-});
-
-document.getElementById('search-input4').addEventListener('input', function() {
-    const query = this.value.trim().toLowerCase();
-    const resultsContainer = document.getElementById('autocomplete-results');
-
-    if (query === '') {
-        resultsContainer.style.display = 'none';
-        return;
-    }
-
-    const filteredResults = siteNames.filter(siteName => siteName.toLowerCase().startsWith(query));
-
-    if (filteredResults.length > 0) {
-        resultsContainer.style.display = 'block';
-        resultsContainer.innerHTML = filteredResults.map(site => `<div class="autocomplete-item">${site}</div>`).join('');
-
-        document.querySelectorAll('.autocomplete-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.getElementById('search-input4').value = this.textContent;
-                resultsContainer.style.display = 'none';
-            });
+  // 1) DB에서 저장된 마커 불러오기
+  fetch('/csr/get_sites')
+    .then(res => res.json())
+    .then(list => {
+      list.forEach(site => {
+        const coords = new kakao.maps.LatLng(site.latitude, site.longitude);
+        const markerImage = new kakao.maps.MarkerImage('/static/img/hammer.png', new kakao.maps.Size(40, 40));
+        const marker = new kakao.maps.Marker({ position: coords, map, image: markerImage });
+        const iw = new kakao.maps.InfoWindow({
+          content: `<div style="width:150px;text-align:center;padding:6px 0;">${site.site_name}</div>`
         });
-    } else {
-        resultsContainer.style.display = 'none';
-    }
-});
+        iw.open(map, marker);
 
-document.getElementById('search-input4').addEventListener('keydown', function(e) {
+        markers.push({
+          marker,
+          siteId:      site.site_id,
+          siteName:    site.site_name,
+          address:     site.address,
+          managerName: site.manager_name
+        });
+        infowindows.push(iw);
+        siteNames.push(site.site_name);
+
+        kakao.maps.event.addListener(marker, 'click', () => openMarker(marker));
+      });
+    });
+
+  // 2) 지도 클릭 → 임시 마커, 주소/좌표 채우기
+  kakao.maps.event.addListener(map, 'click', e => {
+    const pos = e.latLng;
+    geocoder.coord2Address(pos.getLng(), pos.getLat(), (res, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        inputAddress.value = res[0].address.address_name;
+      }
+    });
+
+    inputSiteId.value    = '';
+    inputName.value      = '';
+    inputManager.value   = '';
+    inputLatitude.value  = pos.getLat();
+    inputLongitude.value = pos.getLng();
+
+    if (tempMarker) tempMarker.setMap(null);
+    tempMarker = new kakao.maps.Marker({
+      position: pos,
+      map,
+      opacity: 0.5,
+      clickable: false
+    });
+  });
+
+  // 3) 신규 현장 등록 (폼 submit)
+  //    - 버튼이 type="submit" 이므로 별도 JS 불필요
+
+  // 4) 현장 정보 수정
+  document.getElementById('ButtonUpdate').addEventListener('click', () => {
+    const siteId      = parseInt(inputSiteId.value);
+    const siteName    = inputName.value.trim();
+    const address     = inputAddress.value.trim();
+    const managerName = inputManager.value.trim();
+    if (!siteId || !siteName || !address || !managerName) {
+      alert("모든 정보를 입력해주세요.");
+      return;
+    }
+
+    fetch('/csr/update_site', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        site_id:      siteId,
+        site_name:    siteName,
+        address:      address,
+        manager_name: managerName
+      })
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        alert("✅ 현장 정보가 업데이트되었습니다.");
+        location.reload();
+      } else {
+        alert("❌ 업데이트 실패: " + res.error);
+      }
+    });
+  });
+
+  // 5) 현장 삭제
+  document.getElementById('ButtonDelete').addEventListener('click', () => {
+    const siteId = parseInt(inputSiteId.value);
+    if (!siteId) {
+      alert("삭제할 현장을 선택하세요.");
+      return;
+    }
+
+    fetch('/csr/delete_site', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ site_id: siteId })
+    })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        alert("✅ 현장이 삭제되었습니다.");
+        location.reload();
+      } else {
+        alert("❌ 삭제 실패: " + res.error);
+      }
+    });
+  });
+
+  // 6) 현장명 자동완성
+  const inputSearch4 = document.getElementById('search-input4');
+  const resultsBox  = document.getElementById('autocomplete-results');
+
+  inputSearch4.addEventListener('input', () => {
+    const q = inputSearch4.value.trim().toLowerCase();
+    if (!q) {
+      resultsBox.style.display = 'none';
+      return;
+    }
+    const filtered = siteNames.filter(name => name.toLowerCase().startsWith(q));
+    if (filtered.length) {
+      resultsBox.style.display = 'block';
+      resultsBox.innerHTML = filtered.map(name => `<div class="autocomplete-item">${name}</div>`).join('');
+      document.querySelectorAll('.autocomplete-item').forEach(item => {
+        item.addEventListener('click', () => {
+          inputSearch4.value = item.textContent;
+          resultsBox.style.display = 'none';
+        });
+      });
+    } else {
+      resultsBox.style.display = 'none';
+    }
+  });
+
+  inputSearch4.addEventListener('keydown', e => {
     if (e.key === 'Enter') {
-        const inputName = this.value.trim();
-        const markerData = markers.find(m => m.siteName === inputName);
-
-        if (markerData) {
-            map.setCenter(markerData.marker.getPosition());
-
-            if (selectedMarker) {
-                selectedMarker.setImage(new kakao.maps.MarkerImage(
-                    '/static/img/hammer.png',
-                    new kakao.maps.Size(40, 40)
-                ));
-                if (selectedInfowindow) selectedInfowindow.close();
-            }
-
-            selectedMarker = markerData.marker;
-            selectedInfowindow = infowindows[markers.indexOf(markerData)];
-            selectedMarker.setImage(new kakao.maps.MarkerImage(
-                '/static/img/hammer.png',
-                new kakao.maps.Size(50, 50)
-            ));
-            selectedInfowindow.open(map, selectedMarker);
-        } else {
-            alert("해당 이름의 현장을 찾을 수 없습니다.");
-        }
-
-        document.getElementById('autocomplete-results').style.display = 'none';
+      e.preventDefault();
+      const name = inputSearch4.value.trim();
+      const data = markers.find(m => m.siteName === name);
+      if (data) map.setCenter(data.marker.getPosition());
+      resultsBox.style.display = 'none';
     }
-});
+  });
 
-document.getElementById('Button5').addEventListener('click', function() {
-    const inputName = document.getElementById('search-input4').value.trim();
-    const markerData = markers.find(m => m.siteName === inputName);
-
-    if (markerData) {
-        map.setCenter(markerData.marker.getPosition());
-
-        if (selectedMarker) {
-            selectedMarker.setImage(new kakao.maps.MarkerImage(
-                '/static/img/hammer.png',
-                new kakao.maps.Size(40, 40)
-            ));
-            if (selectedInfowindow) selectedInfowindow.close();
-        }
-
-        selectedMarker = markerData.marker;
-        selectedInfowindow = infowindows[markers.indexOf(markerData)];
-        selectedMarker.setImage(new kakao.maps.MarkerImage(
-            '/static/img/hammer.png',
-            new kakao.maps.Size(50, 50)
-        ));
-        selectedInfowindow.open(map, selectedMarker);
+  // 7) 검색된 현장으로 이동
+  document.getElementById('Button5').addEventListener('click', () => {
+    const name = inputSearch4.value.trim();
+    const data = markers.find(m => m.siteName === name);
+    if (data) {
+      map.setCenter(data.marker.getPosition());
+      if (selectedMarker) {
+        selectedMarker.setImage(new kakao.maps.MarkerImage('/static/img/hammer.png', new kakao.maps.Size(40, 40)));
+        selectedInfowindow.close();
+      }
+      openMarker(data.marker);
     } else {
-        alert("해당 이름의 현장을 찾을 수 없습니다.");
+      alert("해당 현장을 찾을 수 없습니다.");
     }
-
-    document.getElementById('autocomplete-results').style.display = 'none';
+    resultsBox.style.display = 'none';
+  });
 });

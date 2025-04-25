@@ -2,8 +2,8 @@ from flask import Blueprint, render_template, request, jsonify
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
+from services.predict_yolo import run_yolo_and_save_result
 
-# from services.predict_yolo import run_yolo_and_save_result
 from db.db_manager import (
     get_site_id_by_name,
     get_object_id_by_name,
@@ -11,6 +11,7 @@ from db.db_manager import (
     insert_waste_management,
     get_detection_summary
 )
+from services.predict_yolo import run_yolo_and_save_result
 
 upload_bp = Blueprint('upload_bp', __name__)
 

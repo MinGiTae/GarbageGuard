@@ -224,3 +224,55 @@ def upload_construction_site(site_name, address, manager_name, latitude, longitu
         cursor.execute(sql, (site_name, address, manager_name, latitude, longitude, company_id))
         conn.commit()
     conn.close()
+
+
+def get_all_construction_sites():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT site_id, site_name, address, manager_name, latitude, longitude
+        FROM construction_sites
+        WHERE latitude IS NOT NULL AND longitude IS NOT NULL
+    """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+
+    # ✅ rows가 이미 dict 형태일 경우 그대로 사용
+    if isinstance(rows[0], dict):
+        results = rows
+    else:
+        columns = [desc[0] for desc in cursor.description]
+        results = [dict(zip(columns, row)) for row in rows]
+
+    print("✅ get_sites 결과:", results)
+
+    cursor.close()
+    conn.close()
+    return results
+
+def update_construction_site(site_id: int, site_name: str, address: str, manager_name: str):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE construction_sites
+           SET site_name    = %s,
+               address      = %s,
+               manager_name = %s
+         WHERE site_id      = %s
+    """, (site_name, address, manager_name, site_id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def delete_construction_site(site_id: int):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        DELETE FROM construction_sites
+         WHERE site_id = %s
+    """, (site_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
