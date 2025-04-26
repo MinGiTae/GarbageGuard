@@ -220,3 +220,6 @@ function updateCarbonTable(counts) {
       tbody.appendChild(tr);
     });
 }
+
+
+//.
