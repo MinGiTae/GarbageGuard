@@ -17,14 +17,21 @@
     </div>
     <div id="menu1">
       <ul>
+
         <li><a href="/">Main</a></li>
-        <li class="menu-waste">
-          <a href="/upload/waste_disposal">Waste</a>
-          <div class="submenu">
-            <a href="{{ url_for('csr.show_csr') }}">Site Registration</a>
-            <a href="/gallery">Detection Gallery</a>
-          </div>
-        </li>
+        <li><a href="/upload/waste_disposal">Waste Disposal</a></li>
+        <li><a href="{{ url_for('csr.show_csr') }}">Construction Site Registration</a></li>
+        <li><a href="/gallery">Detection Gallery</a></li>
+
+
+<!--        <li class="menu-waste">-->
+<!--          <a href="/upload/waste_disposal">Waste</a>-->
+<!--          <div class="submenu">-->
+<!--            <a href="{{ url_for('csr.show_csr') }}">Site Registration</a>-->
+<!--            <a href="/gallery">Detection Gallery</a>-->
+<!--          </div>-->
+<!--        </li>-->
+
         <li><a href="/analytics">Statistics</a></li>
         <li><a href="/Create_lift">Report</a></li>
       </ul>

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
-from services.predict_yolo import run_yolo_and_save_result
+# from services.predict_yolo import run_yolo_and_save_result
 
 from db.db_manager import (
     get_site_id_by_name,

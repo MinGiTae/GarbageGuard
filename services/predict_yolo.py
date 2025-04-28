@@ -1,6 +1,6 @@
 import os
 
-from ultralytics import YOLO
+# from ultralytics import YOLO
 
 
 # from ultralytics import YOLO

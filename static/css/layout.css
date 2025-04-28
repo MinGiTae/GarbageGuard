@@ -1,18 +1,19 @@
 html, body{margin: 0;padding: 0;background-color: #212121; height: 300vh; scrollbar-width: none;-ms-overflow-style: none;}
 body::-webkit-scrollbar {display: none;}
-header{width: 100%;height: 0%;background-color: #474747;}
-nav{width: 100%;height: 80px;float: left;background-color: #474747;position: fixed;}
+header{width: 100%;height: 0%;background-color: #2e2e2e;}
+nav{width: 100%;height: 30px;float: left;background-color: #2e2e2e;position: fixed;}
 section{width: 100%;height: 100%;float: left;background-color: ;}
 footer{width: 100%;height: 1%;clear: both;background-color:;}
 
-#logo {position: absolute;left: 0%;top: 50%;transform: translateY(-50%);}
+#logo {position: absolute;left: 0%;top: 50%;transform: translateY(-50%); height : 30px;}
 
-#menubar ul li{display: inline-block; list-style-type: none; padding: 15px;}
+#menubar ul li{display: inline-block; list-style-type: none; padding: 6px 15px;}
 #menubar ul li a{text-decoration: none; color:black;}
 
 #menu1 {display: flex;justify-content: center;}
 
-#menu1 ul {display: flex;gap: 20px;}
+#menu1 ul {display: flex;gap: 50px;}
+#menu1 ul li a {color : white;}
 #menu1 ul li a:hover{color: yellow; background-color: #333333}
 #menu1 ul li:hover{background-color: #333333;position: relative; border-radius: 20px;}
 
@@ -24,8 +25,8 @@ footer{width: 100%;height: 1%;clear: both;background-color:;}
   display: flex;
   justify-content: center; /* center-box를 가운데에 */
   align-items: center;
-  height: 80px;
-  background-color: #474747;
+  height: 40px;
+  background-color: #2e2e2e;
   position: fixed;
   width: 100%;
   z-index: 1000;
@@ -42,14 +43,14 @@ footer{width: 100%;height: 1%;clear: both;background-color:;}
 .submenu {
   display: block;
   position: absolute;
-  top: 100%;
+  top: calc(100% + 5px);
   left: 50%;
   background-color: #333;
   padding: 10px 0;
   border-radius: 5px;
   opacity: 0;
   visibility: hidden;
-  transform: translate(-50%, 0);
+  transform: translateX(-50%);
   transition: all 0.3s ease;
   min-width: 160px;
   z-index:100;
@@ -70,4 +71,8 @@ footer{width: 100%;height: 1%;clear: both;background-color:;}
 .menu-waste:hover .submenu {
   opacity: 1;
   visibility: visible;
+}
+
+.menu-waste {
+  position: relative;
 }
