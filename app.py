@@ -21,6 +21,7 @@ app.register_blueprint(createlift_bp)                      # /Create_lift  â† ğ
 
 
 if __name__ == '__main__':
-    import pprint
-    pprint.pprint(app.url_map.iter_rules())
-    app.run(debug=True)
+    # import pprint
+    # pprint.pprint(app.url_map.iter_rules())
+    # app.run(debug=True)
+    pass
