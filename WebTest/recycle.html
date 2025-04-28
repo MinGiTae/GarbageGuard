@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- 순환골재 시각화 페이지 기본 구조 -->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>순환골재 활용 시각화 (테스트용)</title>
+  <link rel="stylesheet" href="recycle.css">
+</head>
+<body>
+
+  <!-- 전체 컨테이너 -->
+  <div class="container">
+    <h1>순환골재 활용 시각화 (테스트용)</h1>
+
+    <!-- 무게 선택 버튼 -->
+    <div id="weightButtons">
+      <button data-weight="1000">1,000 kg</button>
+      <button data-weight="3500">3,500 kg</button>
+      <button data-weight="7000">7,000 kg</button>
+    </div>
+
+    <!-- 통계 카드 영역 -->
+    <div class="stats">
+      <div class="card">
+        <h3>총 중량</h3>
+        <p id="totalWeight">0 kg</p>
+      </div>
+      <div class="card">
+        <h3>활동 단위</h3>
+        <p id="totalCount">0 개</p>
+      </div>
+      <div class="card">
+        <h3>진행률</h3>
+        <div class="progress">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 추천 문구 표시 -->
+    <div id="suggestions"></div>
+
+    <!-- 메인 애니메이션 캔버스 -->
+    <canvas id="animationCanvas"></canvas>
+
+    <!-- 나무 애니메이션 캔버스 -->
+    <div class="tree-wrapper">
+      <canvas id="treeCanvas"></canvas>
+    </div>
+
+    <!-- 최종 결과 표시 -->
+    <div id="resultInfo"></div>
+  </div>
+
+  <!-- 기능 스크립트 연결 -->
+  <script src="recycle.js"></script>
+</body>
+</html>
