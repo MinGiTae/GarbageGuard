@@ -1,12 +1,4 @@
-/* 기본 설정 */
-body {
-  margin: 0;
-  padding: 20px;
-  background: #212121;
-  color: #e0e0e0;
-  font-family: Arial, sans-serif;
-  overflow-x: hidden;
-}
+
 
 /* 전체 레이아웃 컨테이너 */
 .container {

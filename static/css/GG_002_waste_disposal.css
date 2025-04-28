@@ -4,15 +4,6 @@
   margin: 0;
   padding: 0;
 }
-
-/* NAVBAR 고정 */
-nav#menubar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-}
 body {
   margin: 0;
   padding: 0;
@@ -20,7 +11,6 @@ body {
 
 /* 메인 컨테이너: 네비게이션 높이 고려 */
 .main-wrapper {
-  margin-top: 80px; /* 네비게이션 높이에 맞춰 조정 */
   padding: 20px 30px;
   display: flex;
   flex-direction: column;
@@ -60,8 +50,7 @@ body {
   gap: 8px;
 }
 .input-box1, .input-box2 {
-  flex: 1;
-  min-width: 0;
+  width : 250px;
 }
 .top-bar label {
   display: block;
@@ -311,7 +300,6 @@ body {
   width: 100%;
   border-collapse: collapse;
   color: white;
-  table-layout: fixed;
 }
 .top-carbon-table th,
 .top-carbon-table td {
