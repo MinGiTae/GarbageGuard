@@ -1,13 +1,5 @@
-/* Reset & 기본 박스 설정 */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  margin: 0;
-  padding: 0;
-}
+
+
 
 /* 메인 컨테이너: 네비게이션 높이 고려 */
 .main-wrapper {
@@ -63,7 +55,7 @@ body {
   position: relative;
 }
 .input-with-icon input {
-  width: 100%;
+  width: 80%;
   padding: 10px 36px 10px 12px;
   border-radius: 8px;
   border: none;
@@ -113,11 +105,9 @@ body {
 
 /* 좌측 패널 */
 .left-panel {
-  flex: 0 0 60%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
 }
 
 /* 우측 패널 */
@@ -135,7 +125,6 @@ body {
 
 /* 업로드 래퍼 */
 .upload-wrapper {
-  position: relative;
   width: 1000px;
   height: 700px;
   background: #eeeeee;
@@ -148,7 +137,6 @@ body {
   cursor: pointer;
 }
 .upload-placeholder {
-  position: absolute;
   width: 100%;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.5);
@@ -311,3 +299,5 @@ body {
   width: 100% !important;
   height: 240px;
 }
+
+
