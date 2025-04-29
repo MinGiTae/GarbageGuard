@@ -1,1075 +1,1180 @@
-////// analytics_and_statistics.js
-////
-////function getEmissionColor(emission) {
-////  if (emission > 22000) return "#e53935";   // 빨강
-////  if (emission > 18000) return "#fb8c00";   // 주황
-////  if (emission > 14000) return "#fdd835";   // 노랑
-////  if (emission > 10000) return "#43a047";   // 초록
-////  return "#1e88e5";                         // 파랑
-////}
-////
-////Chart.defaults.maintainAspectRatio = false;
-////Chart.register(ChartDataLabels);
-////
-////let siteCarbonChart;
-////
-////document.addEventListener("DOMContentLoaded", () => {
-////  // 1. 도넛 차트
-////  new Chart(
-////    document.getElementById("wasteChart").getContext("2d"),
-////    {
-////      type: "doughnut",
-////      data: {
-////        labels: ["플라스틱", "벽돌", "목재", "콘크리트"],
-////        datasets: [{
-////          data: [25,25,25,25],
-////          backgroundColor: ["#3f51b5","#ffeb3b","#ff5722","#00bcd4"],
-////          cutout: "70%",
-////          borderWidth: 0
-////        }]
-////      },
-////      options: {
-////        plugins: {
-////          legend: { display:false },
-////          tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}` } }
-////        }
-////      },
-////      plugins: [{
-////        id: "centerText",
-////        beforeDraw(chart) {
-////          const { width, height, ctx } = chart;
-////          ctx.restore();
-////          ctx.font = "bold 16px sans-serif";
-////          ctx.fillStyle = "#fff";
-////          ctx.textAlign = "center";
-////          ctx.textBaseline = "middle";
-////          ctx.fillText("Total", width/2, height/2 - 10);
-////          ctx.fillText("100",   width/2, height/2 + 15);
-////          ctx.save();
-////        }
-////      }]
-////    }
-////  );
-////
-////  // 2. 세로 막대 차트
-////  new Chart(
-////    document.getElementById("wasteTypeChart").getContext("2d"),
-////    {
-////      type: "bar",
-////      data: {
-////        labels: ["철근","플라스틱","목재","기타","석면","콘크리트"],
-////        datasets: [{
-////          data: [20,40,55,25,65,75],
-////          backgroundColor: "#ffeb3b",
-////          borderRadius: 10,
-////          barThickness: 30
-////        }]
-////      },
-////      options: {
-////        scales: {
-////          x: { ticks:{ color:"#fff" }, grid:{ display:false } },
-////          y: { beginAtZero:true, ticks:{ color:"#fff" }, grid:{ color:"rgba(255,255,255,0.1)" } }
-////        },
-////        plugins: {
-////          legend:{ display:false },
-////          tooltip:{ callbacks:{ label: ctx=>`${ctx.raw} kg` } }
-////        }
-////      }
-////    }
-////  );
-////
-////  // ✅ 🔧 수정된 부분 (닫는 대괄호, 중괄호 빠졌던 거 추가함)
-////  const ctx = document.getElementById("carbonLineChart").getContext("2d");
-////
-////  const data = {
-////    labels: ['계룡건설', '태영건설', '한화건설', 'GS건설', '현대건설'],
-////    datasets: [{
-////      label: '탄소 배출량 (톤)',
-////      data: [120, 95, 80, 60, 40],
-////      backgroundColor: ['#ff9800', '#4caf50', '#2196f3', '#9c27b0', '#f44336'],
-////      borderRadius: 8
-////    }]
-////  }; // ← 닫는 중괄호 추가
-////
-////  const config = {
-////    type: 'bar',
-////    data: data,
-////    options: {
-////      indexAxis: 'y',
-////      plugins: {
-////        legend: { display: false },
-////        tooltip: {
-////          callbacks: {
-////            label: context => `${context.raw}톤`
-////          }
-////        }
-////      },
-////      scales: {
-////        x: {
-////          beginAtZero: true
-////        }
-////      }
-////    }
-////  };
-////
-////  new Chart(ctx, config);
-////
-//// const ctx2 = document.getElementById('rankChart').getContext('2d');
-////
-//// new Chart(ctx2, {
-////  type: 'bar',
-////  data: {
-////    labels: ['플라스틱', '콘크리트', '목재', '벽돌'],
-////    datasets: [{
-////      label: '배출량 (%)',
-////      data: [48, 17, 19, 26],
-////      backgroundColor: ['#ffa726', '#80deea', '#42a5f5', '#ce93d8'], // 각 항목 색
-////      borderRadius: 10,
-////      barThickness: 20
-////    }]
-////  },
-////  options: {
-////    indexAxis: 'y', // 수평 막대
-////    responsive: true,
-////    maintainAspectRatio: false,
-////    scales: {
-////      x: {
-////        beginAtZero: true,
-////        max: 100, // 퍼센트 기준
-////        ticks: { color: "#fff", callback: val => `${val}%` },
-////        grid: { color: "rgba(255,255,255,0.1)" }
-////      },
-////      y: {
-////        ticks: { color: "#fff" },
-////        grid: { display: false }
-////      }
-////    },
-////    plugins: {
-////      legend: { display: false },
-////      tooltip: {
-////        callbacks: {
-////          label: context => `${context.label}: ${context.raw}%`
-////        }
-////      },
-////      datalabels: {
-////        anchor: 'end',
-////        align: 'right',
-////        color: '#fff',
-////        formatter: value => `${value}%`
-////      }
-////    }
-////  },
-////  plugins: [ChartDataLabels]
-////});
-////
-//// const ctx3 = document.getElementById('progressChart').getContext('2d');
-////
-//// new Chart(ctx3, {
-////  type: 'doughnut',
-////  data: {
-////    labels: ['탄소 배출량'],
-////    datasets: [{
-////      data: [70, 30], // 70% 차트, 나머지 30은 빈 공간
-////      backgroundColor: ['#ffcc00', '#222'], // 채운 부분, 나머지 회색
-////      borderWidth: 0,
-////      cutout: '75%' // 도넛 두께
-////    }]
-////  },
-////  options: {
-////    plugins: {
-////      legend: { display: false },
-////      tooltip: { enabled: false }
-////    }
-////  },
-////  plugins: [{
-////    id: 'centerText',
-////    beforeDraw(chart) {
-////      const { width, height, ctx } = chart;
-////      ctx.save();
-////      ctx.font = 'bold 24px sans-serif';
-////      ctx.fillStyle = '#fff';
-////      ctx.textAlign = 'center';
-////      ctx.textBaseline = 'middle';
-////      ctx.fillText('70%', width / 2, height / 2);
-////    }
-////  }]
-////});
-////
-////
-////
-////  // 3. 월별 비교 그룹형 막대
-////  new Chart(
-////    document.getElementById("monthlyCompareChart").getContext("2d"),
-////    {
-////      type: "bar",
-////      data: {
-////        labels: ["Nov","Dec","Jan","Feb","Mar","Apr"],
-////        datasets: [
-////          { label:"폐기물 배출량", data:[30,32,35,28,40,20], backgroundColor:"#ffeb3b" },
-////          { label:"탄소 배출량",   data:[28,30,33,26,38,18], backgroundColor:"#b388ff" }
-////        ]
-////      },
-////      options: {
-////        scales: {
-////          x: { ticks:{ color:"#fff" }, grid:{ display:false } },
-////          y: { beginAtZero:true, ticks:{ color:"#fff" }, grid:{ color:"rgba(255,255,255,0.1)" } }
-////        },
-////        plugins: {
-////          legend:{ labels:{ color:"#fff" } },
-////          tooltip:{ callbacks:{ label: ctx=>`${ctx.dataset.label}: ${ctx.raw}` } }
-////        }
-////      }
-////    }
-////  );
-////const ctx4 = document.getElementById("popularityChart").getContext("2d");
-////
-////new Chart(ctx4, {
-////  type: 'bar',
-////  data: {
-////    labels: ['플라스틱', '목재', '철근', '벽돌'],
-////    datasets: [{
-////      label: '퍼센트',
-////      data: [48, 17, 19, 29],
-////      backgroundColor: [
-////        '#f5a623', // 플라스틱 (주황)
-////        '#a3e6dc', // 목재 (민트)
-////        '#3a9bd9', // 철근 (파랑)
-////        '#d5a3e6'  // 벽돌 (보라)
-////      ],
-////      borderRadius: 8,
-////      barThickness: 14
-////    }]
-////  },
-////  options: {
-////    indexAxis: 'y', // 👉 수평 막대 그래프
-////    plugins: {
-////      legend: { display: false },
-////      tooltip: {
-////        callbacks: {
-////          label: ctx => `${ctx.raw}%`
-////        }
-////      }
-////    },
-////    scales: {
-////      x: {
-////        beginAtZero: true,
-////        max: 100,
-////        ticks: { color: "#ccc" },
-////        grid: { color: "rgba(255,255,255,0.05)" }
-////      },
-////      y: {
-////        ticks: { color: "#fff" },
-////        grid: { display: false }
-////      }
-////    }
-////  }
-////});
-////
-////
-////
-////  // ✅ 지역별 차트 초기화 (빈 차트 생성)
-////  const siteCarbonCanvas = document.getElementById("siteCarbonChart");
-////  siteCarbonCanvas.width = siteCarbonCanvas.offsetWidth;
-////  siteCarbonCanvas.height = 300;
-////
-////  siteCarbonChart = new Chart(
-////    siteCarbonCanvas.getContext("2d"),
-////    {
-////      type: "bar",
-////      data: {
-////        labels: [],
-////        datasets: [{
-////          label: "폐기물 비율",
-////          data: [],
-////          backgroundColor: "#4caf50"
-////        }]
-////      },
-////      options: {
-////        responsive: true,
-////        maintainAspectRatio: false,
-////        scales: {
-////          x: { ticks:{ color:"#fff" }, grid:{ display:false } },
-////          y: { beginAtZero:true, ticks:{ color:"#fff" }, grid:{ color:"rgba(255,255,255,0.1)" } }
-////        },
-////        plugins: {
-////          legend:{ display:false },
-////          tooltip:{ callbacks:{ label: ctx=>`${ctx.raw} kg` } }
-////        }
-////      }
-////    }
-////  );
-////  const siteData = {
-////  "KR-11": [
-////    { name: "현장A", address: "서울 강남구" },
-////    { name: "현장B", address: "서울 마포구" },
-////  ],
-////  "KR-26": [
-////    { name: "부산현장1", address: "부산 해운대구" },
-////  ],
-////  // 나머지도 필요 시 추가
-////};
-////
-////  const regionData = {
-////    "KR-11": { name: "서울특별시", emission: 25000, ranks: ["폐콘크리트", "폐목재"] },
-////    "KR-26": { name: "부산광역시", emission: 18000, ranks: ["혼합건설폐기물", "폐금속류"] },
-////    "KR-27": { name: "대구광역시", emission: 15000, ranks: ["폐목재", "석면"] },
-////    "KR-28": { name: "인천광역시", emission: 22000, ranks: ["플라스틱", "유리"] },
-////    "KR-29": { name: "광주광역시", emission: 12000, ranks: ["폐콘크리트", "기타"] },
-////    "KR-30": { name: "대전광역시", emission: 14000, ranks: ["금속", "벽돌"] },
-////    "KR-41": { name: "경기도", emission: 19000, ranks: ["폐콘크리트", "폐유리"] },
-////    "KR-42": { name: "강원도", emission: 9000, ranks: ["플라스틱", "벽돌"] },
-////    "KR-43": { name: "충청북도", emission: 16000, ranks: ["목재", "기타"] },
-////    "KR-44": { name: "충청남도", emission: 13000, ranks: ["석면", "철근"] },
-////    "KR-45": { name: "전라북도", emission: 11000, ranks: ["금속", "유리"] },
-////    "KR-46": { name: "전라남도", emission: 8000, ranks: ["벽돌", "기타"] },
-////    "KR-47": { name: "경상북도", emission: 17000, ranks: ["콘크리트", "목재"] },
-////    "KR-48": { name: "경상남도", emission: 14500, ranks: ["폐콘크리트", "플라스틱"] },
-////    "KR-49": { name: "제주특별자치도", emission: 9500, ranks: ["혼합폐기물", "기타"] },
-////    "KR-50": { name: "세종특별자치시",emission: 7200, ranks: ["건축폐기물", "유리"] },
-////    "KR-31": { name: "울산광역시", emission: 6800, ranks: ["금속", "플라스틱"]}
-////
-////  };
-////
-////  document.querySelectorAll("#korea-map path").forEach(region => {
-////    const id = region.id;
-////    const data = regionData[id];
-////    if (data) {
-////      region.setAttribute("fill", getEmissionColor(data.emission));
-////    }
-////  });
-////
-////
-////  document.querySelectorAll("#korea-map path").forEach(region => {
-////    region.addEventListener("click", () => {
-////      const id = region.id;
-////      const data = regionData[id];
-////      if (data) {
-////        console.log(`클릭된 지역: ${data.name}`);
-////        document.getElementById("siteCarbonTitle").innerText = `${data.name}의 탄소 배출량`;
-////        updateSiteCarbonChart(data);
-////
-////        document.querySelectorAll("#korea-map path").forEach(region => {
-////    region.addEventListener("click", () => {
-////      const id   = region.id;
-////      const data = regionData[id];
-////      if (data) {
-////        console.log(`클릭된 지역: ${data.name}`);
-////        document.getElementById("siteCarbonTitle").innerText = `${data.name}의 탄소 배출량`;
-////        updateSiteCarbonChart(data);
-////
-////        // ← 여기에 붙여넣기
-////        // ─── construction-list 업데이트 & 토글 ──────────────────────
-////        const listBox = document.querySelector(".construction-list");
-////        const sites   = siteData[id] || [];
-////
-////        let html = `<h3>${data.name} 현장 list</h3>`;
-////        if (sites.length) {
-////          html += "<ul>" +
-////                    sites.map(s => `<li>${s.name} (${s.address})</li>`).join("") +
-////                  "</ul>";
-////        } else {
-////          html += `<p style="margin-top:8px;color:#666;">등록된 현장이 없습니다.</p>`;
-////        }
-////
-////        listBox.innerHTML = html;
-////        listBox.classList.add("active");
-////        // ────────────────────────────────────────────────────────────
-////      }
-////    });
-////  });
-////
-////
-////
-////
-////      }
-////    });
-////  });
-////});
-////
-////// ✅ 지역 차트 업데이트 함수 정의
-////function updateSiteCarbonChart(data) {
-////  if (!siteCarbonChart) return;
-////  siteCarbonChart.data.labels = data.ranks;
-////  siteCarbonChart.data.datasets[0].data = data.ranks.map(() => Math.floor(Math.random() * 100 + 10));
-////  siteCarbonChart.update();
-////}
-//// analytics_and_statistics.js
-//
-//function getEmissionColor(emission) {
-//  if (emission > 22000) return "#e53935";   // 빨강
-//  if (emission > 18000) return "#fb8c00";   // 주황
-//  if (emission > 14000) return "#fdd835";   // 노랑
-//  if (emission > 10000) return "#43a047";   // 초록
-//  return "#1e88e5";                         // 파랑
-//}
-//
-//Chart.defaults.maintainAspectRatio = false;
-//Chart.register(ChartDataLabels);
-//
-//let siteCarbonChart;
-//
-//document.addEventListener("DOMContentLoaded", () => {
-//  // 1. 도넛 차트
-//  new Chart(
-//    document.getElementById("wasteChart").getContext("2d"),
-//    {
-//      type: "doughnut",
-//      data: {
-//        labels: ["플라스틱", "벽돌", "목재", "콘크리트"],
-//        datasets: [{
-//          data: [25,25,25,25],
-//          backgroundColor: ["#3f51b5","#ffeb3b","#ff5722","#00bcd4"],
-//          cutout: "70%",
-//          borderWidth: 0
-//        }]
-//      },
-//      options: {
-//        plugins: {
-//          legend: { display:false },
-//          tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}` } }
-//        }
-//      },
-//      plugins: [{
-//        id: "centerText",
-//        beforeDraw(chart) {
-//          const { width, height, ctx } = chart;
-//          ctx.restore();
-//          ctx.font = "bold 16px sans-serif";
-//          ctx.fillStyle = "#fff";
-//          ctx.textAlign = "center";
-//          ctx.textBaseline = "middle";
-//          ctx.fillText("Total", width/2, height/2 - 10);
-//          ctx.fillText("100",   width/2, height/2 + 15);
-//          ctx.save();
-//        }
-//      }]
-//    }
-//  );
-//
-//  // 2. 세로 막대 차트
-//  new Chart(
-//    document.getElementById("wasteTypeChart").getContext("2d"),
-//    {
-//      type: "bar",
-//      data: {
-//        labels: ["철근","플라스틱","목재","기타","석면","콘크리트"],
-//        datasets: [{
-//          data: [20,40,55,25,65,75],
-//          backgroundColor: "#ffeb3b",
-//          borderRadius: 10,
-//          barThickness: 30
-//        }]
-//      },
-//      options: {
-//        scales: {
-//          x: { ticks:{ color:"#fff" }, grid:{ display:false } },
-//          y: { beginAtZero:true, ticks:{ color:"#fff" }, grid:{ color:"rgba(255,255,255,0.1)" } }
+//const ctx1 = document.getElementById('carbonChart').getContext('2d');
+//new Chart(ctx1, {
+//  type: 'doughnut',
+//  data: {
+//    labels: ['플라스틱', '벽돌', '목재', '콘크리트'],
+//    datasets: [{
+//      data: [25, 20, 30, 25],
+//      backgroundColor: [
+//        '#6366F1', // 플라스틱 (보라색)
+//        '#FACC15', // 벽돌 (노란색)
+//        '#FB923C', // 목재 (주황색)
+//        '#22D3EE'  // 콘크리트 (민트색)
+//      ],
+//      borderWidth: 0
+//    }]
+//  },
+//  options: {
+//    cutout: '70%',
+//    plugins: {
+//      title: { // ✅ 여기만 새로 추가한 부분
+//        display: true,
+//        text: '폐기물별 탄소 배출량',
+//        color: 'white',
+//        font: {
+//          size: 17,
+//          weight: 'bold'
 //        },
+//        align: 'start',
+//        padding: {
+//          bottom: 20
+//        }
+//      },
+//      legend: {
+//        display: true,
+//        position: 'bottom',
+//        align: 'center',
+//        labels: {
+//          color: 'white',
+//          boxWidth: 10,
+//          padding: 40,
+//          font: {
+//            size: 14
+//          },
+//          usePointStyle: true,
+//          pointStyle: 'circle'
+//        }
+//      },
+//      tooltip: {
+//        backgroundColor: '#333',
+//        bodyColor: '#fff',
+//        borderColor: '#555',
+//        borderWidth: 1
+//      }
+//    }
+//  }
+//});
+//
+//const ctx2 = document.getElementById('wasteChart').getContext('2d');
+//    new Chart(ctx2, {
+//      type: 'bar',
+//      data: {
+//        labels: ['섬유', '플라스틱', '벽돌', '유리', '목재', '콘크리트'],
+//        datasets: [{
+//          label: '배출량',
+//          data: [10, 20, 30, 12, 25, 35], // 데이터는 원하는 대로 수정 가능
+//          backgroundColor: '#FACC15', // 노란색
+//          borderRadius: 20, // ✅ 끝을 둥글게
+//          barPercentage: 0.5, // 막대 굵기 조절
+//          categoryPercentage: 0.5
+//        }]
+//      },
+//      options: {
+//        responsive: true,
+//        maintainAspectRatio: false,
 //        plugins: {
-//          legend:{ display:false },
-//          tooltip:{ callbacks:{ label: ctx=>`${ctx.raw} kg` } }
+//          legend: {
+//            display: false
+//          },
+//          title: {
+//            display: true,
+//            text: '폐기물 종류별 배출량',
+//            color: 'white',
+//            font: {
+//              size: 24,
+//              weight: 'bold'
+//            },
+//            align: 'start',
+//            padding: {
+//              bottom: 30
+//            }
+//          }
+//        },
+//        scales: {
+//          x: {
+//            ticks: {
+//              color: 'white',
+//              font: {
+//                size: 14
+//              }
+//            },
+//            grid: {
+//              display: false
+//            }
+//          },
+//          y: {
+//            ticks: {
+//              color: 'white',
+//              font: {
+//                size: 14
+//              },
+//              stepSize: 10
+//            },
+//            grid: {
+//              color: '#333'
+//            }
+//          }
+//        }
+//      }
+// });
+//
+//const ctx3 = document.getElementById('monthlyCompareChart').getContext('2d');
+//new Chart(ctx3, {
+//  type: 'bar',
+//  data: {
+//    labels: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'],
+//    datasets: [
+//      {
+//        label: '폐기물 배출량',
+//        data: [30, 32, 35, 28, 40, 20],  // ❗ 여기는 실제 데이터로 수정 가능
+//        backgroundColor: '#fbbf24', // 노란색
+//        borderRadius: 6
+//      },
+//      {
+//        label: '탄소 배출량',
+//        data: [28, 30, 33, 26, 38, 18],  // ❗ 여기도 수정 가능
+//        backgroundColor: '#3b82f6', // 보라색
+//        borderRadius: 6
+//      }
+//    ]
+//  },
+//  options: {
+//    responsive: true,
+//    maintainAspectRatio: false,
+//    plugins: {
+//      legend: {
+//        display: true,
+//        labels: {
+//          color: 'white',
+//          font: {
+//            size: 14
+//          }
+//        }
+//      },
+//      title: {
+//        display: true,
+//        text: '월별 탄소량과 폐기물량 비교',
+//        color: 'white',
+//        font: {
+//          size: 20,
+//          weight: 'bold'
+//        },
+//        padding: {
+//          bottom: 20
+//        }
+//      }
+//    },
+//    scales: {
+//      x: {
+//        ticks: {
+//          color: 'white',
+//          font: {
+//            size: 14
+//          }
+//        },
+//        grid: {
+//          display: false
+//        }
+//      },
+//      y: {
+//        beginAtZero: true,
+//        ticks: {
+//          color: 'white',
+//          font: {
+//            size: 14
+//          }
+//        },
+//        grid: {
+//          color: 'rgba(255, 255, 255, 0.1)'
 //        }
 //      }
 //    }
-//  );
+//  }
+//});
 //
-//  // 3. 가로 막대 (계열사별 순위)
-//  const ctx = document.getElementById("carbonLineChart").getContext("2d");
-//  const data = {
-//    labels: ['계룡건설', '태영건설', '한화건설', 'GS건설', '현대건설'],
+//const ctx4 = document.getElementById('marchWasteChart').getContext('2d');
+//new Chart(ctx4, {
+//  type: 'bar',
+//  data: {
+//    labels: ['플라스틱', '콘크리트', '목재', '벽돌'],
+//    datasets: [{
+//      label: '배출량 (%)',
+//      data: [46, 17, 19, 29],
+//      backgroundColor: [
+//        '#f5a623', '#80deea', '#42a5f5', '#ce93d8'
+//      ],
+//      borderRadius: 10,
+//      barThickness: 20
+//    }]
+//  },
+//  options: {
+//    indexAxis: 'y',
+//    responsive: true,
+//    maintainAspectRatio: false,
+//    plugins: {
+//      // ✅ 여기에 title 추가
+//      title: {
+//        display: true,
+//        text: '3월 폐기물 배출량 순위',
+//        color: 'white',
+//        font: {
+//          size: 20,
+//          weight: 'bold'
+//        },
+//        align: 'start',
+//        padding: {
+//          bottom: 30
+//        }
+//      },
+//      legend: {
+//        display: false
+//      },
+//      datalabels: {
+//        color: '#fff',
+//        backgroundColor: function(context) {
+//          const colors = [
+//            'rgba(245, 166, 35, 0.2)',
+//            'rgba(128, 222, 234, 0.2)',
+//            'rgba(66, 165, 245, 0.2)',
+//            'rgba(206, 147, 216, 0.2)'
+//          ];
+//          return colors[context.dataIndex];
+//        },
+//        borderColor: function(context) {
+//          const borderColors = ['#f5a623', '#80deea', '#42a5f5', '#ce93d8'];
+//          return borderColors[context.dataIndex];
+//        },
+//        borderWidth: 1,
+//        borderRadius: 8,
+//        padding: 8,
+//        anchor: 'end',
+//        align: 'end',
+//        formatter: (value) => `${value}%`,
+//        font: {
+//          weight: 'bold',
+//          size: 12
+//        },
+//        clamp: true
+//      },
+//      tooltip: {
+//        callbacks: {
+//          label: ctx => `${ctx.raw}%`
+//        }
+//      }
+//    },
+//    scales: {
+//      x: {
+//        beginAtZero: true,
+//        max: 100,
+//        ticks: {
+//          color: '#ccc',
+//          callback: val => `${val}%`
+//        },
+//        grid: {
+//          color: 'rgba(255, 255, 255, 0.05)'
+//        }
+//      },
+//      y: {
+//        ticks: {
+//          color: 'white'
+//        },
+//        grid: {
+//          display: false
+//        }
+//      }
+//    }
+//  },
+//  plugins: [ChartDataLabels]
+//});
+//
+//
+//const ctx5 = document.getElementById('companyCarbonChart').getContext('2d');
+//new Chart(ctx5, {
+//  type: 'line', // ✅ 타입은 'line'
+//  data: {
+//    labels: ['현대건설', 'GS건설', '태영건설', '한화건설', '대림건설'],
 //    datasets: [{
 //      label: '탄소 배출량 (톤)',
-//      data: [120, 95, 80, 60, 40],
-//      backgroundColor: ['#ff9800', '#4caf50', '#2196f3', '#9c27b0', '#f44336'],
-//      borderRadius: 8
+//      data: [120, 95, 80, 70, 60],
+//      borderColor: '#4fc3f7',  // 밝은 하늘색 선
+//      backgroundColor: 'rgba(79, 195, 247, 0.2)', // 영역 채우기(투명한 하늘색)
+//      fill: true,  // ✅ 선 아래 영역 채움
+//      tension: 0.4, // ✅ 곡선 부드럽게 (0이면 직선)
+//      pointBackgroundColor: '#4fc3f7',
+//      pointBorderColor: '#fff',
+//      pointRadius: 6,
+//      pointHoverRadius: 8
 //    }]
-//  };
-//  const config = {
-//    type: 'bar',
-//    data: data,
-//    options: {
-//      indexAxis: 'y',
-//      plugins: {
-//        legend: { display: false },
-//        tooltip: { callbacks: { label: ctx => `${ctx.raw}톤` } }
+//  },
+//  options: {
+//    responsive: true,
+//    maintainAspectRatio: false,
+//    plugins: {
+//      title: { // ✅ 제목 추가
+//        display: true,
+//        text: '건설사별 탄소 배출량',
+//        color: 'white',
+//        font: {
+//          size: 20,
+//          weight: 'bold'
+//        },
+//        align: 'start',
+//        padding: {
+//          bottom: 30
+//        }
 //      },
-//      scales: { x: { beginAtZero: true } }
+//      legend: {
+//        labels: {
+//          color: 'white'
+//        }
+//      },
+//      tooltip: {
+//        callbacks: {
+//          label: ctx => `${ctx.dataset.label}: ${ctx.raw}톤`
+//        }
+//      }
+//    },
+//    scales: {
+//      x: {
+//        ticks: {
+//          color: 'white',
+//          font: {
+//            size: 14
+//          }
+//        },
+//        grid: {
+//          color: 'rgba(255,255,255,0.1)'
+//        }
+//      },
+//      y: {
+//        beginAtZero: true,
+//        ticks: {
+//          color: 'white',
+//          font: {
+//            size: 14
+//          }
+//        },
+//        grid: {
+//          color: 'rgba(255,255,255,0.1)'
+//        }
+//      }
 //    }
-//  };
-//  new Chart(ctx, config);
+//  }
+//});
+//const ctx6 = document.getElementById('topCompanyChart').getContext('2d');
 //
-//  // 4. 3월 배출 순위
-//  const ctx2 = document.getElementById("rankChart").getContext("2d");
-//  new Chart(ctx2, {
-//    type: 'bar',
+//new Chart(ctx6, {
+//  type: 'doughnut',
+//  data: {
+//    labels: ['탄소 배출량', '나머지'],
+//    datasets: [{
+//      data: [70, 30], // 70% 배출, 30% 남은 부분
+//      backgroundColor: [
+//        '#FACC15', // 탄소 배출량 (노란색)
+//        '#222'     // 나머지 빈공간 (어두운 회색)
+//      ],
+//      borderWidth: 0,
+//      cutout: '70%' // 도넛 안쪽 비율
+//    }]
+//  },
+//  options: {
+//    responsive: true,
+//    maintainAspectRatio: false,
+//    plugins: {
+//      legend: {
+//        display: false // 범례 숨김
+//      },
+//      tooltip: {
+//        enabled: false // 툴팁 비활성화
+//      },
+//      title: {
+//        display: true,
+//        text: '미래건설 탄소 배출량',
+//        color: 'white',
+//        font: {
+//          size: 20,
+//          weight: 'bold'
+//        },
+//        padding: {
+//          top: 20,
+//          bottom: 20
+//        }
+//      }
+//    }
+//  },
+//  plugins: [{
+//    id: 'centerText',
+//    beforeDraw(chart) {
+//      const { width, height, ctx } = chart;
+//      ctx.save();
+//      ctx.font = 'bold 30px sans-serif';
+//      ctx.fillStyle = '#fff';
+//      ctx.textAlign = 'center';
+//      ctx.textBaseline = 'middle';
+//      ctx.fillText('70%', width / 2, height / 2 + 30);
+//      ctx.restore();
+//    }
+//  }]
+//});
+//
+//const ctx7  = document.getElementById('siteCarbonChart').getContext('2d');
+//
+//// 그라데이션 만들기
+//const gradient1 = ctx7.createLinearGradient(0, 0, 0, 300);
+//gradient1.addColorStop(0, 'rgba(34, 211, 238, 0.5)'); // 밝은 민트
+//gradient1.addColorStop(1, 'rgba(34, 211, 238, 0.05)'); // 거의 투명
+//
+//const gradient2 = ctx7.createLinearGradient(0, 0, 0, 300);
+//gradient2.addColorStop(0, 'rgba(236, 72, 153, 0.5)'); // 연한 핑크
+//gradient2.addColorStop(1, 'rgba(236, 72, 153, 0.05)'); // 거의 투명
+//
+//new Chart(ctx7, {
+//  type: 'line',
+//  data: {
+//    labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월'],
+//    datasets: [
+//      {
+//        label: '현장 A',
+//        data: [30, 25, 35, 28, 33, 30, 40, 38, 35, 50],
+//        fill: true,
+//        backgroundColor: gradient1,
+//        borderColor: '#22D3EE',
+//        tension: 0.4,
+//        pointBackgroundColor: '#22D3EE',
+//        pointBorderColor: '#fff',
+//        pointRadius: 5,
+//        pointHoverRadius: 7
+//      },
+//      {
+//        label: '현장 B',
+//        data: [20, 18, 25, 22, 25, 24, 28, 27, 30, 40],
+//        fill: true,
+//        backgroundColor: gradient2,
+//        borderColor: '#EC4899',
+//        tension: 0.4,
+//        pointBackgroundColor: '#EC4899',
+//        pointBorderColor: '#fff',
+//        pointRadius: 5,
+//        pointHoverRadius: 7
+//      }
+//    ]
+//  },
+//  options: {
+//    responsive: true,
+//    maintainAspectRatio: false,
+//    plugins: {
+//      title: {
+//        display: true,
+//        text: '현장 탄소 배출량',
+//        color: 'white',
+//        font: {
+//          size: 18,
+//          weight: 'bold'
+//        },
+//        padding: {
+//          bottom: 20
+//        }
+//      },
+//      legend: {
+//        labels: {
+//          color: 'white',
+//          font: {
+//            size: 14
+//          }
+//        }
+//      },
+//      tooltip: {
+//        callbacks: {
+//          label: ctx => `${ctx.dataset.label}: ${ctx.raw}톤`
+//        }
+//      }
+//    },
+//    scales: {
+//      x: {
+//        ticks: {
+//          color: 'white'
+//        },
+//        grid: {
+//          color: 'rgba(255,255,255,0.05)'
+//        }
+//      },
+//      y: {
+//        ticks: {
+//          color: 'white'
+//        },
+//        grid: {
+//          color: 'rgba(255,255,255,0.05)'
+//        },
+//        beginAtZero: true
+//      }
+//    }
+//  }
+//});
+//
+//const ctx8 = document.getElementById('wastePopularityChart').getContext('2d');
+//new Chart(ctx8, {
+//  type: 'bar',
+//  data: {
+//    labels: ['플라스틱', '콘크리트', '목재', '벽돌'],
+//    datasets: [{
+//      label: '배출량 (%)',
+//      data: [46, 17, 19, 29],
+//      backgroundColor: [
+//        '#f5a623', '#80deea', '#42a5f5', '#ce93d8'
+//      ],
+//      borderRadius: 10,
+//      barThickness: 20
+//    }]
+//  },
+//  options: {
+//    indexAxis: 'y',
+//    responsive: true,
+//    maintainAspectRatio: false,
+//    plugins: {
+//      // ✅ 여기에 title 추가
+//      title: {
+//        display: true,
+//        text: '현장 폐기물 배출량 순위',
+//        color: 'white',
+//        font: {
+//          size: 20,
+//          weight: 'bold'
+//        },
+//        align: 'start',
+//        padding: {
+//          bottom: 30
+//        }
+//      },
+//      legend: {
+//        display: false
+//      },
+//      datalabels: {
+//        color: '#fff',
+//        backgroundColor: function(context) {
+//          const colors = [
+//            'rgba(245, 166, 35, 0.2)',
+//            'rgba(128, 222, 234, 0.2)',
+//            'rgba(66, 165, 245, 0.2)',
+//            'rgba(206, 147, 216, 0.2)'
+//          ];
+//          return colors[context.dataIndex];
+//        },
+//        borderColor: function(context) {
+//          const borderColors = ['#f5a623', '#80deea', '#42a5f5', '#ce93d8'];
+//          return borderColors[context.dataIndex];
+//        },
+//        borderWidth: 1,
+//        borderRadius: 8,
+//        padding: 8,
+//        anchor: 'end',
+//        align: 'end',
+//        formatter: (value) => `${value}%`,
+//        font: {
+//          weight: 'bold',
+//          size: 12
+//        },
+//        clamp: true
+//      },
+//      tooltip: {
+//        callbacks: {
+//          label: ctx => `${ctx.raw}%`
+//        }
+//      }
+//    },
+//    scales: {
+//      x: {
+//        beginAtZero: true,
+//        max: 100,
+//        ticks: {
+//          color: '#ccc',
+//          callback: val => `${val}%`
+//        },
+//        grid: {
+//          color: 'rgba(255, 255, 255, 0.05)'
+//        }
+//      },
+//      y: {
+//        ticks: {
+//          color: 'white'
+//        },
+//        grid: {
+//          display: false
+//        }
+//      }
+//    }
+//  },
+//  plugins: [ChartDataLabels]
+//});
+//
+//let siteLineChart;
+//const siteLineCanvas = document.getElementById("siteLineChart");
+//if (siteLineCanvas) {
+//  siteLineCanvas.width = siteLineCanvas.offsetWidth;
+//  siteLineCanvas.height = 300;
+//
+//  siteLineChart = new Chart(siteLineCanvas.getContext("2d"), {
+//    type: "line",
 //    data: {
-//      labels: ['플라스틱','콘크리트','목재','벽돌'],
+//      labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월'],
 //      datasets: [{
-//        label: '배출량 (%)',
-//        data: [48,17,19,26],
-//        backgroundColor: ['#ffa726','#80deea','#42a5f5','#ce93d8'],
-//        borderRadius: 10,
-//        barThickness: 20
+//        label: "탄소 배출량",
+//        data: [],
+//        borderColor: "#4fc3f7",
+//        backgroundColor: "rgba(79,195,247,0.2)",
+//        fill: true,
+//        tension: 0.4
 //      }]
 //    },
 //    options: {
-//      indexAxis: 'y',
 //      responsive: true,
 //      maintainAspectRatio: false,
 //      scales: {
-//        x: {
-//          beginAtZero:true,
-//          max:100,
-//          ticks:{ color:"#fff", callback: v=>`${v}%` },
-//          grid:{ color:"rgba(255,255,255,0.1)" }
-//        },
-//        y: { ticks:{ color:"#fff" }, grid:{ display:false } }
+//        x: { ticks: { color: "#fff" }, grid: { color: "rgba(255,255,255,0.1)" } },
+//        y: { beginAtZero: true, ticks: { color: "#fff" }, grid: { color: "rgba(255,255,255,0.1)" } }
 //      },
 //      plugins: {
-//        legend:{ display:false },
-//        tooltip:{ callbacks:{ label: ctx=>`${ctx.label}: ${ctx.raw}%` } },
-//        datalabels:{
-//          anchor:'end', align:'right', color:'#fff', formatter:v=>`${v}%`
-//        }
-//      }
-//    },
-//    plugins: [ChartDataLabels]
-//  });
-//
-//  // 5. 미래건설 진행률
-//  const ctx3 = document.getElementById("progressChart").getContext("2d");
-//  new Chart(ctx3, {
-//    type: 'doughnut',
-//    data: {
-//      labels:['탄소 배출량'],
-//      datasets:[{
-//        data:[70,30],
-//        backgroundColor:['#ffcc00','#222'],
-//        borderWidth:0,
-//        cutout:'75%'
-//      }]
-//    },
-//    options:{
-//      plugins:{ legend:false, tooltip:false }
-//    },
-//    plugins:[{
-//      id:'centerText',
-//      beforeDraw(chart){
-//        const { width, height, ctx } = chart;
-//        ctx.save();
-//        ctx.font = 'bold 24px sans-serif';
-//        ctx.fillStyle = '#fff';
-//        ctx.textAlign = 'center';
-//        ctx.textBaseline = 'middle';
-//        ctx.fillText('70%', width/2, height/2);
-//      }
-//    }]
-//  });
-//
-//  // 6. 월별 비교 그룹형 막대
-//  new Chart(
-//    document.getElementById("monthlyCompareChart").getContext("2d"),
-//    {
-//      type:"bar",
-//      data:{
-//        labels:["Nov","Dec","Jan","Feb","Mar","Apr"],
-//        datasets:[
-//          { label:"폐기물 배출량", data:[30,32,35,28,40,20], backgroundColor:"#ffeb3b" },
-//          { label:"탄소 배출량",   data:[28,30,33,26,38,18], backgroundColor:"#b388ff" }
-//        ]
-//      },
-//      options:{
-//        scales:{
-//          x:{ ticks:{color:"#fff"}, grid:{display:false} },
-//          y:{ beginAtZero:true, ticks:{color:"#fff"}, grid:{color:"rgba(255,255,255,0.1)"} }
-//        },
-//        plugins:{
-//          legend:{ labels:{ color:"#fff" } },
-//          tooltip:{ callbacks:{ label: ctx=>`${ctx.dataset.label}: ${ctx.raw}` } }
+//        legend: { labels: { color: "#fff" } },
+//        title: {
+//          display: true,
+//          text: "월별 탄소 배출량",
+//          color: "#fff",
+//          font: { size: 18, weight: "bold" },
+//          padding: { bottom: 20 }
 //        }
 //      }
 //    }
-//  );
-//
-//  // 7. 인기 폐기물 수평 막대
-//  const ctx4 = document.getElementById("popularityChart").getContext("2d");
-//  new Chart(ctx4, {
-//    type:'bar',
-//    data:{
-//      labels:['플라스틱','목재','철근','벽돌'],
-//      datasets:[{
-//        label:'퍼센트',
-//        data:[48,17,19,29],
-//        backgroundColor:['#f5a623','#a3e6dc','#3a9bd9','#d5a3e6'],
-//        borderRadius:8,
-//        barThickness:14
-//      }]
-//    },
-//    options:{
-//      indexAxis:'y',
-//      scales:{
-//        x:{ beginAtZero:true, max:100, ticks:{color:"#ccc"}, grid:{color:"rgba(255,255,255,0.05)"} },
-//        y:{ ticks:{color:"#fff"}, grid:{display:false} }
-//      },
-//      plugins:{
-//        legend:{display:false},
-//        tooltip:{ callbacks:{ label: ctx=>`${ctx.raw}%` } }
-//      }
-//    }
 //  });
-//
-//  // 8. 지역별 차트 초기화 (빈 차트)
-//  const siteCarbonCanvas = document.getElementById("siteCarbonChart");
-//  siteCarbonCanvas.width  = siteCarbonCanvas.offsetWidth;
-//  siteCarbonCanvas.height = 300;
-//  siteCarbonChart = new Chart(
-//    siteCarbonCanvas.getContext("2d"),
-//    {
-//      type:"bar",
-//      data:{ labels:[], datasets:[{ label:"폐기물 비율", data:[], backgroundColor:"#4caf50" }] },
-//      options:{
-//        responsive:true,
-//        maintainAspectRatio:false,
-//        scales:{
-//          x:{ ticks:{color:"#fff"}, grid:{display:false} },
-//          y:{ beginAtZero:true, ticks:{color:"#fff"}, grid:{color:"rgba(255,255,255,0.1)"} }
-//        },
-//        plugins:{
-//          legend:{display:false},
-//          tooltip:{ callbacks:{ label: ctx=>`${ctx.raw} kg` } }
-//        }
-//      }
-//    }
-//  );
-//
-//  // 샘플 현장‐주소 데이터
-//  const siteData = {
-//    "KR-11":[{name:"현장A",address:"서울 강남구"},{name:"현장B",address:"서울 마포구"}],
-//    "KR-26":[{name:"부산현장1",address:"부산 해운대구"}],
-//    // …필요시 추가…
-//  };
-//
-//  // 지역별 메타정보
-//  const regionData = {
-//    "KR-11":{ name:"서울특별시",  emission:25000, ranks:["폐콘크리트","폐목재"] },
-//    "KR-26":{ name:"부산광역시",  emission:18000, ranks:["혼합건설폐기물","폐금속류"] },
-//    "KR-27":{ name:"대구광역시",  emission:15000, ranks:["폐목재","석면"] },
-//    "KR-28":{ name:"인천광역시",  emission:22000, ranks:["플라스틱","유리"] },
-//    "KR-29":{ name:"광주광역시",  emission:12000, ranks:["폐콘크리트","기타"] },
-//    "KR-30":{ name:"대전광역시",  emission:14000, ranks:["금속","벽돌"] },
-//    "KR-41":{ name:"경기도",      emission:19000, ranks:["폐콘크리트","폐유리"] },
-//    "KR-42":{ name:"강원도",      emission:9000,  ranks:["플라스틱","벽돌"] },
-//    "KR-43":{ name:"충청북도",    emission:16000, ranks:["목재","기타"] },
-//    "KR-44":{ name:"충청남도",    emission:13000, ranks:["석면","철근"] },
-//    "KR-45":{ name:"전라북도",    emission:11000, ranks:["금속","유리"] },
-//    "KR-46":{ name:"전라남도",    emission:8000,  ranks:["벽돌","기타"] },
-//    "KR-47":{ name:"경상북도",    emission:17000, ranks:["콘크리트","목재"] },
-//    "KR-48":{ name:"경상남도",    emission:14500, ranks:["폐콘크리트","플라스틱"] },
-//    "KR-49":{ name:"제주특별자치도",emission:9500, ranks:["혼합폐기물","기타"] },
-//    "KR-50":{ name:"세종특별자치시",emission:7200, ranks:["건축폐기물","유리"] },
-//    "KR-31":{ name:"울산광역시",  emission:6800,  ranks:["금속","플라스틱"] }
-//  };
-//
-//  // 지도에 색 채우기
-//  document.querySelectorAll("#korea-map path").forEach(region => {
-//    const d = regionData[region.id];
-//    if (d) region.setAttribute("fill", getEmissionColor(d.emission));
-//  });
-//
-//  // 클릭 이벤트: 차트 & 팝업 열기/닫기
-//  document.querySelectorAll("#korea-map path").forEach(region => {
-//    region.addEventListener("click", () => {
-//      const id   = region.id;
-//      const d    = regionData[id];
-//      if (!d) return;
-//
-//      // 차트 제목 & 데이터 업데이트
-//      document.getElementById("siteCarbonTitle").innerText = `${d.name}의 탄소 배출량`;
-//      updateSiteCarbonChart(d);
-//
-//      // 팝업 내용 생성
-//      const listBox = document.querySelector(".construction-list");
-//      const sites   = siteData[id] || [];
-//      let html = `<button class="close-btn" id="closeConstructionList">✖</button>
-//                  <h3>${d.name} 현장 list</h3>`;
-//      if (sites.length) {
-//        html += `<ul>${sites.map(s=>`<li>${s.name} (${s.address})</li>`).join("")}</ul>`;
-//      } else {
-//        html += `<p style="margin-top:8px;color:#666;">등록된 현장이 없습니다.</p>`;
-//      }
-//      listBox.innerHTML = html;
-//      listBox.classList.add("active");
-//
-//      // 닫기 버튼에 이벤트 붙이기
-//      document
-//        .getElementById("closeConstructionList")
-//        .addEventListener("click", () => {
-//          listBox.classList.remove("active");
-//        });
-//    });
-//  });
-//});
-//
-//// 지역 차트 데이터 업데이트 함수
-//function updateSiteCarbonChart(data) {
-//  if (!siteCarbonChart) return;
-//  siteCarbonChart.data.labels = data.ranks;
-//  siteCarbonChart.data.datasets[0].data = data.ranks.map(() =>
-//    Math.floor(Math.random() * 100 + 10)
-//  );
-//  siteCarbonChart.update();
 //}
-
-
-// analytics_and_statistics.js
-
-function getEmissionColor(emission) {
-  if (emission > 22000) return "#e53935";   // 빨강
-  if (emission > 18000) return "#fb8c00";   // 주황
-  if (emission > 14000) return "#fdd835";   // 노랑
-  if (emission > 10000) return "#43a047";   // 초록
-  return "#1e88e5";                         // 파랑
-}
-
-Chart.defaults.maintainAspectRatio = false;
-Chart.register(ChartDataLabels);
-
-let siteCarbonChart;
-
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. 도넛 차트
-  new Chart(
-    document.getElementById("wasteChart").getContext("2d"),
-    {
-      type: "doughnut",
-      data: {
-        labels: ["플라스틱", "벽돌", "목재", "콘크리트"],
-        datasets: [{
-          data: [25, 25, 25, 25],
-          backgroundColor: ["#3f51b5", "#ffeb3b", "#ff5722", "#00bcd4"],
-          cutout: "70%",
-          borderWidth: 0
-        }]
+//
+//
+//
+const ctx1 = document.getElementById('carbonChart').getContext('2d');
+new Chart(ctx1, {
+  type: 'doughnut',
+  data: {
+    labels: ['플라스틱', '벽돌', '목재', '콘크리트'],
+    datasets: [{
+      data: [25, 20, 30, 25],
+      backgroundColor: [
+        '#6366F1', '#FACC15', '#FB923C', '#22D3EE'
+      ],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    cutout: '70%',
+    plugins: {
+      title: {
+        display: true,
+        text: '폐기물별 탄소 배출량',
+        color: 'white',
+        font: { size: 17, weight: 'bold' },
+        align: 'start',
+        padding: { bottom: 20 }
       },
-      options: {
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}` } }
+      legend: {
+        display: true,
+        position: 'bottom',
+        align: 'center',
+        labels: {
+          color: 'white',
+          boxWidth: 10,
+          padding: 40,
+          font: { size: 14 },
+          usePointStyle: true,
+          pointStyle: 'circle'
         }
       },
-      plugins: [{
-        id: "centerText",
-        beforeDraw(chart) {
-          const { width, height, ctx } = chart;
-          ctx.restore();
-          ctx.font = "bold 16px sans-serif";
-          ctx.fillStyle = "#fff";
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText("Total", width/2, height/2 - 10);
-          ctx.fillText("100",   width/2, height/2 + 15);
-          ctx.save();
-        }
-      }]
-    }
-  );
-
-  // 2. 세로 막대 차트
-  new Chart(
-    document.getElementById("wasteTypeChart").getContext("2d"),
-    {
-      type: "bar",
-      data: {
-        labels: ["철근","플라스틱","목재","기타","석면","콘크리트"],
-        datasets: [{
-          data: [20,40,55,25,65,75],
-          backgroundColor: "#ffeb3b",
-          borderRadius: 10,
-          barThickness: 30
-        }]
-      },
-      options: {
-        scales: {
-          x: { ticks:{ color:"#fff" }, grid:{ display:false } },
-          y: { beginAtZero:true, ticks:{ color:"#fff" }, grid:{ color:"rgba(255,255,255,0.1)" } }
-        },
-        plugins: {
-          legend:{ display:false },
-          tooltip:{ callbacks:{ label: ctx=>`${ctx.raw} kg` } }
-        }
+      tooltip: {
+        backgroundColor: '#333',
+        bodyColor: '#fff',
+        borderColor: '#555',
+        borderWidth: 1
       }
     }
-  );
-
-  // 3. 수평 바 차트 (건설사 탄소 배출량 순위)
-  {
-    const ctx = document.getElementById("carbonLineChart").getContext("2d");
-    const data = {
-      labels: ['계룡건설', '태영건설', '한화건설', 'GS건설', '현대건설'],
-      datasets: [{
-        label: '탄소 배출량 (톤)',
-        data: [120, 95, 80, 60, 40],
-        backgroundColor: ['#ff9800', '#4caf50', '#2196f3', '#9c27b0', '#f44336'],
-        borderRadius: 8
-      }]
-    };
-    const config = {
-      type: 'bar',
-      data: data,
-      options: {
-        indexAxis: 'y',
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: ctx => `${ctx.raw}톤` } }
-        },
-        scales: { x: { beginAtZero: true } }
-      }
-    };
-    new Chart(ctx, config);
   }
-
-  // 4. 폐기물 종류별 배출량 순위
-  {
-    const ctx2 = document.getElementById('rankChart').getContext('2d');
-    new Chart(ctx2, {
-      type: 'bar',
-      data: {
-        labels: ['플라스틱', '콘크리트', '목재', '벽돌'],
-        datasets: [{
-          label: '배출량 (%)',
-          data: [48, 17, 19, 26],
-          backgroundColor: ['#ffa726', '#80deea', '#42a5f5', '#ce93d8'],
-          borderRadius: 10,
-          barThickness: 20
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            beginAtZero: true,
-            max: 100,
-            ticks: { color: "#fff", callback: val => `${val}%` },
-            grid: { color: "rgba(255,255,255,0.1)" }
-          },
-          y: { ticks: { color: "#fff" }, grid: { display: false } }
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}%` } },
-          datalabels: {
-            anchor: 'end',
-            align: 'right',
-            color: '#fff',
-            formatter: value => `${value}%`
-          }
-        }
-      },
-      plugins: [ChartDataLabels]
-    });
-  }
-
-  // 5. 진행률 도넛 차트
-  {
-    const ctx3 = document.getElementById('progressChart').getContext('2d');
-    new Chart(ctx3, {
-      type: 'doughnut',
-      data: {
-        labels: ['탄소 배출량'],
-        datasets: [{
-          data: [70, 30],
-          backgroundColor: ['#ffcc00', '#222'],
-          borderWidth: 0,
-          cutout: '75%'
-        }]
-      },
-      options: {
-        plugins: { legend: { display: false }, tooltip: { enabled: false } }
-      },
-      plugins: [{
-        id: 'centerText',
-        beforeDraw(chart) {
-          const { width, height, ctx } = chart;
-          ctx.save();
-          ctx.font = 'bold 24px sans-serif';
-          ctx.fillStyle = '#fff';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('70%', width / 2, height / 2);
-        }
-      }]
-    });
-  }
-
-  // 6. 월별 폐기물 vs 탄소 배출량 비교
-  new Chart(
-    document.getElementById("monthlyCompareChart").getContext("2d"),
-    {
-      type: "bar",
-      data: {
-        labels: ["Nov","Dec","Jan","Feb","Mar","Apr"],
-        datasets: [
-          { label:"폐기물 배출량", data:[30,32,35,28,40,20], backgroundColor:"#ffeb3b" },
-          { label:"탄소 배출량",   data:[28,30,33,26,38,18], backgroundColor:"#b388ff" }
-        ]
-      },
-      options: {
-        scales: {
-          x: { ticks:{ color:"#fff" }, grid:{ display:false } },
-          y: { beginAtZero:true, ticks:{ color:"#fff" }, grid:{ color:"rgba(255,255,255,0.1)" } }
-        },
-        plugins: {
-          legend:{ labels:{ color:"#fff" } },
-          tooltip:{ callbacks:{ label: ctx=>`${ctx.dataset.label}: ${ctx.raw}` } }
-        }
-      }
-    }
-  );
-
-  // 7. 인기 폐기물 수평 바 차트
-  {
-    const ctx4 = document.getElementById("popularityChart").getContext("2d");
-    new Chart(ctx4, {
-      type: 'bar',
-      data: {
-        labels: ['플라스틱', '목재', '철근', '벽돌'],
-        datasets: [{
-          label: '퍼센트',
-          data: [48, 17, 19, 29],
-          backgroundColor: ['#f5a623','#a3e6dc','#3a9bd9','#d5a3e6'],
-          borderRadius: 8,
-          barThickness: 14
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: ctx => `${ctx.raw}%` } }
-        },
-        scales: {
-          x: {
-            beginAtZero: true,
-            max: 100,
-            ticks: { color: "#ccc" },
-            grid: { color: "rgba(255,255,255,0.05)" }
-          },
-          y: { ticks: { color: "#fff" }, grid: { display: false } }
-        }
-      }
-    });
-  }
-
-  // 8. 지역별 차트 초기화 (빈 차트)
-  const siteCarbonCanvas = document.getElementById("siteCarbonChart");
-  siteCarbonCanvas.width  = siteCarbonCanvas.offsetWidth;
-  siteCarbonCanvas.height = 300;
-  siteCarbonChart = new Chart(
-    siteCarbonCanvas.getContext("2d"),
-    {
-      type: "bar",
-      data: {
-        labels: [],
-        datasets: [{ label: "폐기물 비율", data: [], backgroundColor: "#4caf50" }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { ticks:{ color:"#fff" }, grid:{ display:false } },
-          y: { beginAtZero:true, ticks:{ color:"#fff" }, grid:{ color:"rgba(255,255,255,0.1)" } }
-        },
-        plugins: {
-          legend:{ display:false },
-          tooltip:{ callbacks:{ label: ctx=>`${ctx.raw} kg` } }
-        }
-      }
-    }
-  );
-
-  // 샘플 현장 데이터
-  const siteData = {
-    "KR-11": [
-      { name: "현장A", address: "서울 강남구" },
-      { name: "현장B", address: "서울 마포구" },
-    ],
-    "KR-26": [
-      { name: "부산현장1", address: "부산 해운대구" },
-    ],
-    // …필요시 추가…
-  };
-
-  // 샘플 지역 데이터
-  const regionData = {
-    "KR-11": { name: "서울특별시", emission: 25000, ranks: ["폐콘크리트", "폐목재"] },
-    "KR-26": { name: "부산광역시", emission: 18000, ranks: ["혼합건설폐기물", "폐금속류"] },
-    "KR-27": { name: "대구광역시", emission: 15000, ranks: ["폐목재", "석면"] },
-    "KR-28": { name: "인천광역시", emission: 22000, ranks: ["플라스틱", "유리"] },
-    "KR-29": { name: "광주광역시", emission: 12000, ranks: ["폐콘크리트", "기타"] },
-    "KR-30": { name: "대전광역시", emission: 14000, ranks: ["금속", "벽돌"] },
-    "KR-41": { name: "경기도", emission: 19000, ranks: ["폐콘크리트", "폐유리"] },
-    "KR-42": { name: "강원도", emission: 9000,  ranks: ["플라스틱", "벽돌"] },
-    "KR-43": { name: "충청북도", emission: 16000, ranks: ["목재", "기타"] },
-    "KR-44": { name: "충청남도", emission: 13000, ranks: ["석면", "철근"] },
-    "KR-45": { name: "전라북도", emission: 11000, ranks: ["금속", "유리"] },
-    "KR-46": { name: "전라남도", emission: 8000,  ranks: ["벽돌", "기타"] },
-    "KR-47": { name: "경상북도", emission: 17000, ranks: ["콘크리트", "목재"] },
-    "KR-48": { name: "경상남도", emission: 14500, ranks: ["폐콘크리트", "플라스틱"] },
-    "KR-49": { name: "제주특별자치도", emission: 9500,  ranks: ["혼합폐기물", "기타"] },
-    "KR-50": { name: "세종특별자치시", emission: 7200,  ranks: ["건축폐기물", "유리"] },
-    "KR-31": { name: "울산광역시", emission: 6800,  ranks: ["금속", "플라스틱"] }
-  };
-
-  // 지도 채우기
-  document.querySelectorAll("#korea-map path").forEach(region => {
-    const d = regionData[region.id];
-    if (d) region.setAttribute("fill", getEmissionColor(d.emission));
-  });
-
-  // 클릭 이벤트
-  document.querySelectorAll("#korea-map path").forEach(region => {
-    region.addEventListener("click", () => {
-      const id   = region.id;
-      const data = regionData[id];
-      const listBox = document.querySelector(".construction-list");
-      if (!data || !listBox) return;
-
-      // 차트 타이틀 & 업데이트
-      document.getElementById("siteCarbonTitle").innerText = `${data.name}의 탄소 배출량`;
-      updateSiteCarbonChart(data);
-
-      // 팝업 내용 생성
-      const sites = siteData[id] || [];
-      let html = `
-        <button class="close-btn" id="closeConstructionList">✖</button>
-        <h3>${data.name} 현장 list</h3>
-      `;
-      if (sites.length) {
-        html += `<ul>${sites.map(s => `<li>${s.name} (${s.address})</li>`).join("")}</ul>`;
-      } else {
-        html += `<p style="margin-top:8px;color:#666;">등록된 현장이 없습니다.</p>`;
-      }
-
-      listBox.innerHTML = html;
-      listBox.classList.add("active");
-
-      // 닫기 버튼 이벤트
-      document.getElementById("closeConstructionList")
-        .addEventListener("click", () => listBox.classList.remove("active"));
-    });
-  });
 });
 
-// 지역별 차트 데이터 갱신 함수
-function updateSiteCarbonChart(data) {
-  if (!siteCarbonChart) return;
-  siteCarbonChart.data.labels = data.ranks;
-  siteCarbonChart.data.datasets[0].data = data.ranks.map(
-    () => Math.floor(Math.random() * 90 + 10)
-  );
-  siteCarbonChart.update();
+const ctx2 = document.getElementById('wasteChart').getContext('2d');
+new Chart(ctx2, {
+  type: 'bar',
+  data: {
+    labels: ['섬유', '플라스틱', '벽돌', '유리', '목재', '콘크리트'],
+    datasets: [{
+      label: '배출량',
+      data: [10, 20, 30, 12, 25, 35],
+      backgroundColor: '#FACC15',
+      borderRadius: 20,
+      barPercentage: 0.5,
+      categoryPercentage: 0.5
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      title: {
+        display: true,
+        text: '폐기물 종류별 배출량',
+        color: 'white',
+        font: { size: 24, weight: 'bold' },
+        align: 'start',
+        padding: { bottom: 30 }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: 'white', font: { size: 14 } },
+        grid: { display: false }
+      },
+      y: {
+        ticks: { color: 'white', font: { size: 14 }, stepSize: 10 },
+        grid: { color: '#333' }
+      }
+    }
+  }
+});
+
+const ctx3 = document.getElementById('monthlyCompareChart').getContext('2d');
+new Chart(ctx3, {
+  type: 'bar',
+  data: {
+    labels: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'],
+    datasets: [
+      {
+        label: '폐기물 배출량',
+        data: [30, 32, 35, 28, 40, 20],
+        backgroundColor: '#fbbf24',
+        borderRadius: 6
+      },
+      {
+        label: '탄소 배출량',
+        data: [28, 30, 33, 26, 38, 18],
+        backgroundColor: '#3b82f6',
+        borderRadius: 6
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        labels: { color: 'white', font: { size: 14 } }
+      },
+      title: {
+        display: true,
+        text: '월별 탄소량과 폐기물량 비교',
+        color: 'white',
+        font: { size: 20, weight: 'bold' },
+        padding: { bottom: 20 }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: 'white', font: { size: 14 } },
+        grid: { display: false }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { color: 'white', font: { size: 14 } },
+        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+      }
+    }
+  }
+});
+
+const ctx4 = document.getElementById('marchWasteChart').getContext('2d');
+new Chart(ctx4, {
+  type: 'bar',
+  data: {
+    labels: ['플라스틱', '콘크리트', '목재', '벽돌'],
+    datasets: [{
+      label: '배출량 (%)',
+      data: [46, 17, 19, 29],
+      backgroundColor: ['#f5a623', '#80deea', '#42a5f5', '#ce93d8'],
+      borderRadius: 10,
+      barThickness: 20
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: '3월 폐기물 배출량 순위',
+        color: 'white',
+        font: { size: 20, weight: 'bold' },
+        align: 'start',
+        padding: { bottom: 30 }
+      },
+      legend: { display: false },
+      datalabels: {
+        color: '#fff',
+        backgroundColor: function(context) {
+          const colors = [
+            'rgba(245, 166, 35, 0.2)', 'rgba(128, 222, 234, 0.2)',
+            'rgba(66, 165, 245, 0.2)', 'rgba(206, 147, 216, 0.2)'
+          ];
+          return colors[context.dataIndex];
+        },
+        borderColor: function(context) {
+          const borderColors = ['#f5a623', '#80deea', '#42a5f5', '#ce93d8'];
+          return borderColors[context.dataIndex];
+        },
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: 8,
+        anchor: 'end',
+        align: 'end',
+        formatter: value => `${value}%`,
+        font: { weight: 'bold', size: 12 },
+        clamp: true
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.raw}%`
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          color: '#ccc',
+          callback: val => `${val}%`
+        },
+        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+      },
+      y: {
+        ticks: { color: 'white' },
+        grid: { display: false }
+      }
+    }
+  },
+  plugins: [ChartDataLabels]
+});
+
+const ctx5 = document.getElementById('companyCarbonChart').getContext('2d');
+new Chart(ctx5, {
+  type: 'line',
+  data: {
+    labels: ['현대건설', 'GS건설', '태영건설', '한화건설', '대림건설'],
+    datasets: [{
+      label: '탄소 배출량 (톤)',
+      data: [120, 95, 80, 70, 60],
+      borderColor: '#4fc3f7',
+      backgroundColor: 'rgba(79, 195, 247, 0.2)',
+      fill: true,
+      tension: 0.4,
+      pointBackgroundColor: '#4fc3f7',
+      pointBorderColor: '#fff',
+      pointRadius: 6,
+      pointHoverRadius: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: '건설사별 탄소 배출량',
+        color: 'white',
+        font: { size: 20, weight: 'bold' },
+        align: 'start',
+        padding: { bottom: 30 }
+      },
+      legend: { labels: { color: 'white' } },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.dataset.label}: ${ctx.raw}톤`
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: 'white', font: { size: 14 } },
+        grid: { color: 'rgba(255,255,255,0.1)' }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { color: 'white', font: { size: 14 } },
+        grid: { color: 'rgba(255,255,255,0.1)' }
+      }
+    }
+  }
+});
+const ctx6 = document.getElementById('topCompanyChart').getContext('2d');
+new Chart(ctx6, {
+  type: 'doughnut',
+  data: {
+    labels: ['탄소 배출량', '나머지'],
+    datasets: [{
+      data: [70, 30],
+      backgroundColor: ['#FACC15', '#222'],
+      borderWidth: 0,
+      cutout: '70%'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false },
+      title: {
+        display: true,
+        text: '미래건설 탄소 배출량',
+        color: 'white',
+        font: { size: 20, weight: 'bold' },
+        padding: { top: 20, bottom: 20 }
+      }
+    }
+  },
+  plugins: [{
+    id: 'centerText',
+    beforeDraw(chart) {
+      const { width, height, ctx } = chart;
+      ctx.save();
+      ctx.font = 'bold 30px sans-serif';
+      ctx.fillStyle = '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('70%', width / 2, height / 2 + 30);
+      ctx.restore();
+    }
+  }]
+});
+
+const ctx7  = document.getElementById('siteCarbonChart').getContext('2d');
+const gradient1 = ctx7.createLinearGradient(0, 0, 0, 300);
+gradient1.addColorStop(0, 'rgba(34, 211, 238, 0.5)');
+gradient1.addColorStop(1, 'rgba(34, 211, 238, 0.05)');
+
+const gradient2 = ctx7.createLinearGradient(0, 0, 0, 300);
+gradient2.addColorStop(0, 'rgba(236, 72, 153, 0.5)');
+gradient2.addColorStop(1, 'rgba(236, 72, 153, 0.05)');
+
+new Chart(ctx7, {
+  type: 'line',
+  data: {
+    labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월'],
+    datasets: [
+      {
+        label: '현장 A',
+        data: [30, 25, 35, 28, 33, 30, 40, 38, 35, 50],
+        fill: true,
+        backgroundColor: gradient1,
+        borderColor: '#22D3EE',
+        tension: 0.4,
+        pointBackgroundColor: '#22D3EE',
+        pointBorderColor: '#fff',
+        pointRadius: 5,
+        pointHoverRadius: 7
+      },
+      {
+        label: '현장 B',
+        data: [20, 18, 25, 22, 25, 24, 28, 27, 30, 40],
+        fill: true,
+        backgroundColor: gradient2,
+        borderColor: '#EC4899',
+        tension: 0.4,
+        pointBackgroundColor: '#EC4899',
+        pointBorderColor: '#fff',
+        pointRadius: 5,
+        pointHoverRadius: 7
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: '현장 탄소 배출량',
+        color: 'white',
+        font: { size: 18, weight: 'bold' },
+        padding: { bottom: 20 }
+      },
+      legend: {
+        labels: { color: 'white', font: { size: 14 } }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.dataset.label}: ${ctx.raw}톤`
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: 'white' },
+        grid: { color: 'rgba(255,255,255,0.05)' }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { color: 'white' },
+        grid: { color: 'rgba(255,255,255,0.05)' }
+      }
+    }
+  }
+});
+
+const ctx8 = document.getElementById('wastePopularityChart').getContext('2d');
+new Chart(ctx8, {
+  type: 'bar',
+  data: {
+    labels: ['플라스틱', '콘크리트', '목재', '벽돌'],
+    datasets: [{
+      label: '배출량 (%)',
+      data: [46, 17, 19, 29],
+      backgroundColor: ['#f5a623', '#80deea', '#42a5f5', '#ce93d8'],
+      borderRadius: 10,
+      barThickness: 20
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: '현장 폐기물 배출량 순위',
+        color: 'white',
+        font: { size: 20, weight: 'bold' },
+        align: 'start',
+        padding: { bottom: 30 }
+      },
+      legend: { display: false },
+      datalabels: {
+        color: '#fff',
+        backgroundColor: function(context) {
+          const colors = [
+            'rgba(245, 166, 35, 0.2)', 'rgba(128, 222, 234, 0.2)',
+            'rgba(66, 165, 245, 0.2)', 'rgba(206, 147, 216, 0.2)'
+          ];
+          return colors[context.dataIndex];
+        },
+        borderColor: function(context) {
+          const borderColors = ['#f5a623', '#80deea', '#42a5f5', '#ce93d8'];
+          return borderColors[context.dataIndex];
+        },
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: 8,
+        anchor: 'end',
+        align: 'end',
+        formatter: value => `${value}%`,
+        font: { weight: 'bold', size: 12 },
+        clamp: true
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.raw}%`
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          color: '#ccc',
+          callback: val => `${val}%`
+        },
+        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+      },
+      y: {
+        ticks: { color: 'white' },
+        grid: { display: false }
+      }
+    }
+  },
+  plugins: [ChartDataLabels]
+});
+
+let siteLineChart;
+const siteLineCanvas = document.getElementById("siteLineChart");
+if (siteLineCanvas) {
+  siteLineCanvas.width = siteLineCanvas.offsetWidth;
+  siteLineCanvas.height = 300;
+  siteLineChart = new Chart(siteLineCanvas.getContext("2d"), {
+    type: "line",
+    data: {
+      labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월'],
+      datasets: [{
+        label: "탄소 배출량",
+        data: [],
+        borderColor: "#4fc3f7",
+        backgroundColor: "rgba(79,195,247,0.2)",
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { ticks: { color: "#fff" }, grid: { color: "rgba(255,255,255,0.1)" } },
+        y: { beginAtZero: true, ticks: { color: "#fff" }, grid: { color: "rgba(255,255,255,0.1)" } }
+      },
+      plugins: {
+        legend: { labels: { color: "#fff" } },
+        title: {
+          display: true,
+          text: "월별 탄소 배출량",
+          color: "#fff",
+          font: { size: 18, weight: "bold" },
+          padding: { bottom: 20 }
+        }
+      }
+    }
+  });
 }
 
+// ✅ SVG Hover로 지역별 현장 리스트 띄우기 추가
+
+
+const siteData = {
+  "Seoul": ["서울 현장 1", "서울 현장 2"],
+  "Busan": ["부산 현장 1"],
+  "Daegu": ["대구 현장 1", "대구 현장 2"],
+  "Incheon": ["인천 현장 1"],
+  "Gwangju": ["광주 현장 1"]
+};
+
+const idToRegionName = {
+  "KR-11": "Seoul",
+  "KR-26": "Busan",
+  "KR-27": "Daegu",
+  "KR-28": "Incheon",
+  "KR-29": "Gwangju"
+};
+
+document.querySelectorAll("#korea-map path").forEach(region => {
+  region.addEventListener("mouseenter", () => {
+    const regionName = region.getAttribute("id");
+    const sites = siteData[regionName] || [];
+    let siteListHTML = `<h3>${regionName} 건설현장</h3><ul>`;
+    sites.forEach(site => {
+      siteListHTML += `<li>${site}</li>`;
+    });
+    siteListHTML += "</ul>";
+    const popup = document.getElementById("construction-list");
+    popup.innerHTML = siteListHTML;
+    popup.classList.add("active");
+  });
+
+  region.addEventListener("mouseleave", () => {
+    const popup = document.getElementById("construction-list");
+    popup.classList.remove("active");
+  });
+});
 
