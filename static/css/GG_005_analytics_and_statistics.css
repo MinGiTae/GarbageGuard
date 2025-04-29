@@ -1,198 +1,189 @@
-:root {
-  --bg: #212121;
-  --card-bg: #1f1f1f;
-  --text: #fff;
-  --gap: 20px;
-  --radius: 12px;
-  --navbar-height: 60px;
+#character {
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 40px;
+  pointer-events: none;
+  transition: transform 0.1s linear;
+  z-index: 9999;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-.settings-icon {
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* ── 대시보드 래퍼 ───────────────────────────────── */
-.dashboard {
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: calc(var(--navbar-height) + 20px) var(--gap) 40px;
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-}
-
-/* ── 각 행(row) ─────────────────────────────────── */
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap);
-}
-
-/* row-4: 지도 + container-2 배치 */
-.row-4 {
-  display: flex;
-  flex-direction: row;
-  gap: var(--gap);
-  align-items: flex-start;
-}
-.container2{
-
-    display:flex;
-    width: 1000px;
-
-
-
-}
-/* ── 카드 공통 ───────────────────────────────────── */
-.card {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 calc(48% - var(--gap));
-  min-width: 280px;
-  height: auto;
-  overflow: visible;
-}
-.card h3 {
-  margin-bottom: 8px;
-  font-size: 1rem;
-}
-.card canvas {
-  width: 100% !important;
-  height: 180px !important;
-  object-fit: contain;
-  flex: none;
-}
-
-/* ── 지도 카드 ─────────────────────────────────── */
-.map-card {
-  flex: 2 1 70%;
-  max-width: 100%;
-  position: relative;        /* 팝업 위치 기준 */
-}
-
-/* ── container1: SVG+팝업+그래프 묶는 박스 ───────── */
 .container1 {
-  display: flex;
-  position: relative;        /* 내부 절대위치 기준 */
-  width: 700px;
+  gap:30px;
+  display: flex; /* ✅ 추가: 중앙 정렬 */
+  align-items: center;      /* ✅ 추가: 수직 중앙 정렬 */
+  margin:40px;
+  justify-content: center;
+  align-items: flex-start;
+   padding-right: 100px;              /* ✅ 추가: 그래프 간 간격 */
 }
 
-/* ── construction-list 팝업 박스 ────────────────── */
-.construction-list {
-  position: absolute;        /* container1 기준 절대위치 */
-  top: 16px;
-  right: 16px;
-  background-color: lightblue;
-  padding: var(--gap);
+.container2{
+  display: flex;/* ✅ 추가: 중앙 정렬 */
+  align-items: center;      /* ✅ 추가: 수직 중앙 정렬 */
+  margin:40px;
+  gap:30px;
+  justify-content: center;
+  align-items: flex-start;
+   padding-right: 100px;            /* ✅ 추가: 그래프 간 간격 */
+}
+
+.container3{
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin:40px;
+  gap:40px;
+  padding-right: 100px;
+}
+
+.container4{
+  display: flex;/* ✅ 추가: 중앙 정렬 */
+  align-items: center;      /* ✅ 추가: 수직 중앙 정렬 */
+  margin:40px;
+  gap:150px;/* ✅ 추가: 그래프 간 간격 */
+}
+
+.container4-1{}
+.chart-container{
   width: 300px;
-  max-height: 300px;
-  overflow-y: auto;
-  border-radius: var(--radius);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  display: none;             /* 기본 숨김 */
-  z-index: 200;
-}
-.construction-list.active {
-  display: block;
-}
-.construction-list h3 {
-  margin-top: 0;
-  font-size: 1.1rem;
-}
-.construction-list ul {
-  list-style: disc;
-  margin: 8px 0 0 16px;
-  padding: 0;
-}
-.construction-list ul li {
-  margin-bottom: 4px;
-  font-size: 0.9rem;
+  height: 300px;
+  padding:30px;
+  background-color:#191917;
+  border-radius: 8px;
+
 }
 
-/* ── 닫기 버튼 위치 조정 ─────────────────────────── */
-.construction-list .close-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: transparent;
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-  color: #333;
+.chart-container2 {
+  width: 1090px;
+  height: 300px;
+  padding:30px;
+  background-color:#191917;
+  border-radius: 8px;
 }
 
-/* ── 팝업 우측에 그래프 두 개 배치 ────────────────── */
-.container1 .construction-graphs {
-  position: absolute;        /* container1 기준 절대위치 */
-  top: 16px;
-  left: calc(100% + var(--gap));
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-  z-index: 200;
-}
-.container1 .construction-graphs .card {
-  flex: none;
-  width: 300px;
+.chart-container3{
+  width:1000px;
+  height: 300px;
+  padding:30px;
+  background-color:#191917;
+  border-radius: 8px;
+
 }
 
-/* ── wide/narrow 비율 유지 ─────────────────────── */
-.row-2 .wide,
-.row-3 .wide,
-.row-4 .map-card {
-  flex: 2 1 calc(66% - var(--gap));
-}
-.row-2 .narrow,
-.row-3 .narrow,
-.row-4 .stack {
-  flex: 1 1 calc(32% - var(--gap));
+.chart-container4{
+  width: 400px;
+  height: 300px;
+  padding:30px;
+  background-color:#191917;
+  border-radius: 8px;
 }
 
-/* ── stack (우측 여러 개 카드) ───────────────────── */
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
+
+.chart-container5{
+  width: 1050px;
+  height: 400px;
+  padding:20px;
+  background-color:#191917;
+  border-radius: 8px;
 }
 
-/* ── SVG 지도 ─────────────────────────────────── */
-#korea-map {
+.chart-container6{
+  width: 400px;
+  height:400px;
+  padding:20px;
+  background-color:#191917;
+  border-radius: 8px;
+}
+
+
+.chart-container7{
   width: 600px;
-  height: auto;
-  max-width: 100%;
+  height: 400px;
+  padding:20px;
+  margin: 10px;
+  background-color:#191917;
+  border-radius: 8px;
 }
-#korea-map path {
-  transition: fill 0.3s ease;
-}
-#korea-map path:hover {
-  fill: #ffcc00 !important;
-  cursor: pointer;
+.chart-container8{
+  width: 600px;
+  height: 400px;
+  padding:20px;
+  margin: 15px;
+  background-color:#191917;
+  border-radius: 8px;
 }
 
-/* ── 반응형 (모바일) ───────────────────────────── */
-@media (max-width: 768px) {
-  .card {
-    flex: 1 1 100%;
-  }
-  .card canvas,
-  .card img,
-  .container1 canvas {
-    height: 300px !important;
-  }
-  .row-4 {
-    flex-direction: column;
-  }
+
+#korea-map{
+
+    width: 500px;
+    margin:200px;
+
+
+
+
+
+}
+
+#korea-map path {
+  fill: #111; /* 평상시 색 (어두운 배경용) */
+  stroke: #444; /* 외곽선 */
+  stroke-width: 0.5;
+  transition: fill 0.3s ease; /* 부드럽게 색상 전환 */
+}
+
+#korea-map path:hover {
+  fill: #ffcc00; /* 호버할 때 밝은 노란색으로 변경 */
+  cursor: pointer; /* 마우스 포인터 모양 변경 */
+}
+
+canvas#siteCarbonChart {
+  width: 100%;
+  height: 100%;
+}
+
+
+
+canvas#carbonChart {
+  width: 100%;
+  height: 100%;
+}
+
+canvas#wasteChart {
+  width: 100%;
+  height: 100%;
+}
+
+
+canvas#monthlyCompareChart {
+  width: 100%;
+  height: 100%;
+}
+
+canvas#marchWasteChart {
+  width: 100%;
+  height: 100%;
+}
+
+canvas#companyCarbonChart {
+  width: 80%;
+  height: 80%;
+}
+canvas#topCompanyChart{
+  width: 60%;
+  height: 60%;
+}
+
+
+.construction-list{
+  position: absolute;
+  top: 120px;
+  left: 50px;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  display: none;
+  z-index: 9999;
 }
