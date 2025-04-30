@@ -28,6 +28,7 @@ def result_file(subpath):
 
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
 def allowed_file(fn):
     return '.' in fn and fn.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -36,12 +37,12 @@ def waste_disposal():
     company_list = get_all_companies()
     site_list    = get_all_sites()
 
-    # 1) Collect parameters from GET or POST
+    # 1) GET/POST 파라미터 수집
     pre_site_id    = request.values.get('site_id','').strip()
     pre_date       = request.values.get('site_date','').strip() or date.today().isoformat()
     result_img     = request.values.get('result_img','').strip() or None
 
-    # ↳ Fallback: if no site_id but gallery passed site_name, convert it
+    # 1-1) gallery 링크에서 site_name 으로만 넘어온 경우 처리
     if not pre_site_id:
         param_site_name = request.values.get('site_name','').strip()
         if param_site_name:
@@ -52,7 +53,7 @@ def waste_disposal():
     pre_company_name = ''
     detected_objects_dict = {}
 
-    # 2) Lookup site & company by ID
+    # 2) site_id 로 site_name, company 조회
     pre_site_name = ''
     if pre_site_id.isdigit():
         site_info = get_site_by_id(int(pre_site_id))
@@ -62,7 +63,7 @@ def waste_disposal():
             comp = get_company_by_id(pre_company_id)
             pre_company_name = comp['company_name'] if comp else ''
 
-    # 3) If result_img passed (e.g. gallery), load its summary
+    # 3) gallery 에서 넘어온 result_img 가 있으면 요약 불러오기
     if result_img and pre_site_id.isdigit():
         summary = get_detection_summary(int(pre_site_id), os.path.basename(result_img))
         if summary:
@@ -70,7 +71,7 @@ def waste_disposal():
                 name, cnt = part.strip().split(' ')
                 detected_objects_dict[name] = int(cnt.replace('개',''))
 
-    # 4) Handle file upload & YOLO on POST
+    # 4) POST 에서 파일 업로드 → YOLO 실행
     if request.method == 'POST':
         file         = request.files.get('photo')
         form_site_id = request.form.get('site_id','').strip()
@@ -81,7 +82,7 @@ def waste_disposal():
         if form_date:
             pre_date = form_date
 
-        # re-lookup after form override
+        # 재조회
         if pre_site_id.isdigit():
             info = get_site_by_id(int(pre_site_id))
             if info:
@@ -108,7 +109,7 @@ def waste_disposal():
             if result_img:
                 result_img = f"{folder}/{save_name}"
 
-    # 5) After POST, if summary still empty but we have result_img, reload
+    # 5) POST 후에도 summary 비어있으면 다시 불러오기
     if result_img and not detected_objects_dict and pre_site_id.isdigit():
         summary = get_detection_summary(int(pre_site_id), os.path.basename(result_img))
         if summary:
@@ -116,7 +117,7 @@ def waste_disposal():
                 name, cnt = part.strip().split(' ')
                 detected_objects_dict[name] = int(cnt.replace('개',''))
 
-    # 6) Render the template with all prefilled values
+    # 6) 템플릿 렌더링 (⭐ site_id 파라미터 추가!)
     return render_template(
         'GG_002_waste_disposal.html',
         company_list=company_list,
@@ -127,7 +128,8 @@ def waste_disposal():
         prefilled_company_name=pre_company_name,
         prefilled_site_id=pre_site_id,
         prefilled_site_name=pre_site_name,
-        prefilled_date=pre_date
+        prefilled_date=pre_date,
+        **{'site_id': pre_site_id}   # ← 이 줄이 핵심입니다
     )
 
 @upload_bp.route('/save_result', methods=['POST'])
@@ -189,5 +191,8 @@ def save_result():
 def waste_monthly_stats():
     sid  = request.args.get('site_id', type=int)
     rows = get_monthly_stats(sid)
-    result = [{'month':r['month'], 'total_waste':r['total_waste'], 'total_emission':r['total_emission']} for r in rows]
+    result = [
+        {'month':r['month'], 'total_waste':r['total_waste'], 'total_emission':r['total_emission']}
+        for r in rows
+    ]
     return jsonify(result)
