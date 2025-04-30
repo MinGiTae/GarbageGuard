@@ -47,6 +47,22 @@ def get_company_by_id(company_id):
     conn.close()
     return result
 
+# ✅ 회사명으로 company_id 조회 및 해당 회사의 건설현장 리스트 조회
+def get_sites_by_company(company_name):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        sql = """
+            SELECT cs.site_name
+              FROM construction_sites cs
+              JOIN companies c ON cs.company_id = c.company_id
+             WHERE c.company_name = %s
+        """
+        cursor.execute(sql, (company_name,))
+        rows = cursor.fetchall()
+    conn.close()
+    # rows: [{'site_name': ...}, ...]
+    return [row['site_name'] for row in rows]
+
 # ===================== Construction Site 관련 =====================
 # ✅ 건설 현장 등록
 def upload_construction_site(site_name, address, manager_name, latitude=None, longitude=None, company_id=None):
@@ -101,7 +117,8 @@ def get_all_construction_sites():
     return result
 
 # alias for site list
-get_all_sites = get_all_construction_sites
+def get_all_sites():
+    return get_all_construction_sites()
 
 # ✅ 특정 현장 ID로 현장 정보 조회
 def get_site_by_id(site_id):
@@ -213,7 +230,7 @@ def get_monthly_stats(site_id=None):
         if site_id:
             cursor.execute(
                 """
-                    SELECT DATE_FORMAT(disposal_date,'%%Y-%%m') AS month,
+                    SELECT DATE_FORMAT(disposal_date,'%Y-%m') AS month,
                            SUM(waste_amount) AS total_waste,
                            SUM(carbon_emission) AS total_emission
                       FROM waste_management
@@ -225,7 +242,7 @@ def get_monthly_stats(site_id=None):
         else:
             cursor.execute(
                 """
-                    SELECT DATE_FORMAT(disposal_date,'%%Y-%%m') AS month,
+                    SELECT DATE_FORMAT(disposal_date,'%Y-%m') AS month,
                            SUM(waste_amount) AS total_waste,
                            SUM(carbon_emission) AS total_emission
                       FROM waste_management
