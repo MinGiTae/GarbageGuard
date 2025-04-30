@@ -7,29 +7,25 @@
 {% endblock %}
 
 {% block content %}
-<br>
-<br>
-
-
+<br><br>
 <h1>📸 저장된 탐지 결과 갤러리</h1>
 
 <div class="gallery-wrapper">
-  <!-- 필터 영역 -->
+  <!-- 필터 -->
   <div class="gallery-controls">
     <form method="get" action="{{ url_for('gallery_bp.show_gallery') }}">
       <label for="site_id">현장:</label>
       <select name="site_id" id="site_id" required>
         <option value="">-- 선택 --</option>
         {% for s in sites %}
-          <option value="{{ s.site_id }}"
-            {% if s.site_id|string == selected_site %}selected{% endif %}>
+          <option value="{{ s.site_id }}" {% if s.site_id|string == selected_site %}selected{% endif %}>
             {{ s.site_name }}
           </option>
         {% endfor %}
       </select>
 
       <label for="date">날짜 (선택):</label>
-      <input type="date" name="date" id="date" value="{{ selected_date or '' }}">
+      <input type="date" name="date" id="date" value="{{ selected_date }}">
 
       <button type="submit">조회</button>
     </form>
@@ -37,27 +33,28 @@
 
   <!-- 이미지 그리드 -->
   <div class="gallery-grid">
-    {% for photo in photos %}
-      <div class="image-card">
-        <!-- 클릭 시 분석 페이지로 복귀 -->
-        <a
-          href="{{ url_for('upload_bp.waste_disposal') }}"
-          onclick="event.preventDefault();
-            window.location.href = this.href
-              + '?site_name={{ selected_name }}'
-              + '&site_date={{ photo.uploaded_at.strftime('%Y-%m-%d') }}'
-              + '&result_img={{ selected_name }}/{{ photo.image_filename }}';">
-          <img
-            src="{{ url_for('main_bp.result_file', filename=selected_name ~ '/' ~ photo.image_filename) }}"
-            alt="탐지 이미지">
-        </a>
-        <div class="image-info">
-          <p><strong>업로드일:</strong> {{ photo.uploaded_at.strftime('%Y-%m-%d') }}</p>
-          <p><strong>탐지 요약:</strong> {{ photo.detection_summary }}</p>
+    {% if photos %}
+      {% for photo in photos %}
+        <div class="image-card">
+          <!-- 수정: site_id와 site_name(=selected_name)을 모두 전달 -->
+          <a href="{{ url_for('upload_bp.waste_disposal',
+                                site_id=photo.site_id,
+                                site_name=selected_name,
+                                site_date=photo.uploaded_at.strftime('%Y-%m-%d'),
+                                result_img=selected_folder ~ '/' ~ photo.image_filename
+                              ) }}">
+            <img
+              src="{{ url_for('upload_bp.result_file', subpath=selected_folder ~ '/' ~ photo.image_filename) }}"
+              alt="탐지 이미지"
+            />
+          </a>
+          <div class="image-info">
+            <p><strong>업로드일:</strong> {{ photo.uploaded_at.strftime('%Y-%m-%d') }}</p>
+            <p><strong>탐지 요약:</strong> {{ photo.detection_summary }}</p>
+          </div>
         </div>
-      </div>
-    {% endfor %}
-    {% if photos|length == 0 %}
+      {% endfor %}
+    {% else %}
       <p style="color:#ccc; text-align:center; width:100%;">저장된 이미지가 없습니다.</p>
     {% endif %}
   </div>

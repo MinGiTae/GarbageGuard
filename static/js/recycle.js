@@ -3,7 +3,7 @@
 // =========================
 
 // 기본 weight 데이터
-const data = { weight: 3500 };
+window.data = { weight: 0 };
 
 // 단위별 순환골재 사용량 (kg)
 const ROAD_KG_PER_M        = 1200;   // 도로 1m

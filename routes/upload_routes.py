@@ -1,143 +1,198 @@
-from flask import Blueprint, render_template, request, jsonify
+# routes/upload_routes.py
+
+from flask import Blueprint, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
-from datetime import datetime
+from datetime import datetime, date
 import os
-# from services.predict_yolo import run_yolo_and_save_result
 
 from db.db_manager import (
+    get_all_companies,
+    get_all_sites,
+    get_company_by_id,
     get_site_id_by_name,
+    get_site_by_id,
     get_object_id_by_name,
     insert_waste_photo,
     insert_waste_management,
-    get_detection_summary
+    get_detection_summary,
+    get_monthly_stats
 )
 from services.predict_yolo import run_yolo_and_save_result
 
 upload_bp = Blueprint('upload_bp', __name__)
 
+@upload_bp.route('/result/<path:subpath>')
+def result_file(subpath):
+    base = os.path.join(os.getcwd(), 'runs', 'detect')
+    return send_from_directory(base, subpath)
+
 UPLOAD_FOLDER = os.path.join(os.getcwd(), 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+def allowed_file(fn):
+    return '.' in fn and fn.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
 
 @upload_bp.route('/waste_disposal', methods=['GET', 'POST'])
 def waste_disposal():
-    result_img = None
+    company_list = get_all_companies()
+    site_list    = get_all_sites()
+
+    # 1) GET/POST 파라미터 수집
+    pre_site_id    = request.values.get('site_id','').strip()
+    pre_date       = request.values.get('site_date','').strip() or date.today().isoformat()
+    result_img     = request.values.get('result_img','').strip() or None
+
+    # 1-1) gallery 링크에서 site_name 으로만 넘어온 경우 처리
+    if not pre_site_id:
+        param_site_name = request.values.get('site_name','').strip()
+        if param_site_name:
+            sid = get_site_id_by_name(param_site_name)
+            pre_site_id = str(sid) if sid else ''
+
+    pre_company_id   = ''
+    pre_company_name = ''
     detected_objects_dict = {}
-    prefilled_site_name = ''
-    prefilled_date = ''
-    site_id = None
 
-    # ─── 1) 갤러리에서 GET 요청으로 결과 불러오기 ───
-    if request.method == 'GET':
-        site_arg   = request.args.get('site_name')
-        date_arg   = request.args.get('site_date')
-        result_arg = request.args.get('result_img')
+    # 2) site_id 로 site_name, company 조회
+    pre_site_name = ''
+    if pre_site_id.isdigit():
+        site_info = get_site_by_id(int(pre_site_id))
+        if site_info:
+            pre_site_name    = site_info['site_name']
+            pre_company_id   = site_info['company_id']
+            comp = get_company_by_id(pre_company_id)
+            pre_company_name = comp['company_name'] if comp else ''
 
-        if site_arg and date_arg and result_arg:
-            prefilled_site_name = site_arg
-            prefilled_date = date_arg
-            result_img = result_arg
-            site_id = get_site_id_by_name(site_arg)
+    # 3) gallery 에서 넘어온 result_img 가 있으면 요약 불러오기
+    if result_img and pre_site_id.isdigit():
+        summary = get_detection_summary(int(pre_site_id), os.path.basename(result_img))
+        if summary:
+            for part in summary.split(','):
+                name, cnt = part.strip().split(' ')
+                detected_objects_dict[name] = int(cnt.replace('개',''))
 
-            if site_id:
-                summary = get_detection_summary(site_id, os.path.basename(result_arg))
-                if summary:
-                    for part in summary.split(','):
-                        name, cnt = part.strip().split(' ')
-                        detected_objects_dict[name] = int(cnt.rstrip('개'))
-
-    # ─── 2) POST 요청으로 이미지 업로드 및 분석 ───
+    # 4) POST 에서 파일 업로드 → YOLO 실행
     if request.method == 'POST':
-        file = request.files.get('photo')
-        site_name = request.form.get('site_name','').strip()
-        date_str = request.form.get('site_date','uploaded_image').strip()
-        prefilled_site_name = site_name
-        prefilled_date = date_str
-        site_id = get_site_id_by_name(site_name)
+        file         = request.files.get('photo')
+        form_site_id = request.form.get('site_id','').strip()
+        form_date    = request.form.get('site_date','').strip()
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            filepath = os.path.join(UPLOAD_FOLDER, filename)
-            file.save(filepath)
+        if form_site_id:
+            pre_site_id = form_site_id
+        if form_date:
+            pre_date = form_date
 
-            save_dir = os.path.join("runs", "detect", site_name.replace(' ', '_'))
-            save_name = f"{date_str}.jpg"
+        # 재조회
+        if pre_site_id.isdigit():
+            info = get_site_by_id(int(pre_site_id))
+            if info:
+                pre_site_name    = info['site_name']
+                pre_company_id   = info['company_id']
+                comp             = get_company_by_id(pre_company_id)
+                pre_company_name = comp['company_name'] if comp else ''
+
+        if file and allowed_file(file.filename) and pre_site_name:
+            filename    = secure_filename(file.filename)
+            upload_path = os.path.join(UPLOAD_FOLDER, filename)
+            file.save(upload_path)
+
+            folder   = pre_site_name.replace(' ','_')
+            save_dir = os.path.join('runs','detect',folder)
+            os.makedirs(save_dir, exist_ok=True)
+            save_name = f"{folder}_{pre_date}.jpg"
+
             result_img, detected_objects_dict = run_yolo_and_save_result(
-                input_img_path=filepath,
+                input_img_path=upload_path,
                 save_dir=save_dir,
                 save_name=save_name
             )
-
             if result_img:
-                result_img = os.path.join(
-                    site_name.replace(' ', '_'),
-                    save_name
-                ).replace('\\', '/')
+                result_img = f"{folder}/{save_name}"
 
+    # 5) POST 후에도 summary 비어있으면 다시 불러오기
+    if result_img and not detected_objects_dict and pre_site_id.isdigit():
+        summary = get_detection_summary(int(pre_site_id), os.path.basename(result_img))
+        if summary:
+            for part in summary.split(','):
+                name, cnt = part.strip().split(' ')
+                detected_objects_dict[name] = int(cnt.replace('개',''))
+
+    # 6) 템플릿 렌더링 (⭐ site_id 파라미터 추가!)
     return render_template(
         'GG_002_waste_disposal.html',
+        company_list=company_list,
+        site_list=site_list,
         result_img=result_img,
         detected_objects_dict=detected_objects_dict,
-        prefilled_site_name=prefilled_site_name,
-        prefilled_date=prefilled_date,
-        site_id=site_id
+        prefilled_company_id=pre_company_id,
+        prefilled_company_name=pre_company_name,
+        prefilled_site_id=pre_site_id,
+        prefilled_site_name=pre_site_name,
+        prefilled_date=pre_date,
+        **{'site_id': pre_site_id}   # ← 이 줄이 핵심입니다
     )
 
 @upload_bp.route('/save_result', methods=['POST'])
 def save_result():
-    data = request.get_json()
-    site_name = data.get('site_name','').strip()
-    date_str = data.get('site_date','').strip()
-    result_img_path = data.get('result_img','')
-    detected = data.get('detected', {})
+    data         = request.get_json() or {}
+    company_id   = data.get('company_id')
+    site_id      = data.get('site_id')
+    site_name    = data.get('site_name','').strip()
+    date_str     = data.get('site_date','').strip()
+    result_img_p = data.get('result_img','').strip()
+    detected     = data.get('detected',{})
 
-    if not site_name or not date_str or not result_img_path or not detected:
-        return jsonify({'message':'❌ 누락된 정보가 있어 저장할 수 없습니다.'}), 400
+    if not all([company_id, site_id, site_name, date_str, result_img_p, detected]):
+        return jsonify({'message':'❌ 누락된 정보'}),400
 
-    site_id = get_site_id_by_name(site_name)
-    if not site_id:
-        return jsonify({'message':f"❌ '{site_name}'은(는) 등록된 현장이 아닙니다."}), 400
+    site_info = get_site_by_id(int(site_id))
+    if not site_info or str(site_info['company_id'])!=str(company_id):
+        return jsonify({'message':'❌ 잘못된 현장'}),400
 
     summary = ', '.join(f"{k} {v}개" for k,v in detected.items())
-
     try:
-        main_object = max(detected, key=detected.get)
-    except (ValueError, TypeError):
-        return jsonify({'message':'❌ 탐지된 객체가 없습니다.'}), 400
+        main_obj = max(detected, key=detected.get)
+    except:
+        return jsonify({'message':'❌ 객체 없음'}),400
 
-    object_id = get_object_id_by_name(main_object)
+    object_id = get_object_id_by_name(main_obj)
     if not object_id:
-        return jsonify({'message':f"❌ '{main_object}' 객체를 찾을 수 없습니다."}), 400
+        return jsonify({'message':f"❌ '{main_obj}' 없음"}),400
 
     try:
-        upload_dt = datetime.strptime(date_str, '%Y-%m-%d')
-    except ValueError:
-        upload_dt = datetime.now()
+        dt = datetime.strptime(date_str,'%Y-%m-%d')
+    except:
+        dt = datetime.now()
 
-    filename = os.path.basename(result_img_path)
-
+    fn = os.path.basename(result_img_p)
     try:
         insert_waste_photo(
-            site_id=site_id,
+            site_id=site_info['site_id'],
             object_id=object_id,
-            image_filename=filename,
+            image_filename=fn,
             detection_summary=summary,
-            uploaded_at=upload_dt
+            uploaded_at=dt
         )
-
-        amount = detected[main_object]
-        carbon = amount * 0.5
+        amt = detected[main_obj]
         insert_waste_management(
-            site_id=site_id,
-            waste_type=main_object,
-            waste_amount=amount,
-            carbon_emission=carbon,
+            site_id=site_info['site_id'],
+            waste_type=main_obj,
+            waste_amount=amt,
+            carbon_emission=amt*0.5,
             disposal_date=date_str
         )
-
-        return jsonify({'message':'✅ 저장 완료!'})
     except Exception as e:
-        print("[❌ DB 저장 오류]", e)
-        return jsonify({'message':'❌ 저장 중 오류가 발생했습니다.'}), 500
+        print('[DB❌]',e)
+        return jsonify({'message':'❌ 저장 실패'}),500
+
+    return jsonify({'message':'✅ 저장 완료!'})
+
+@upload_bp.route('/monthly_stats', methods=['GET'])
+def waste_monthly_stats():
+    sid  = request.args.get('site_id', type=int)
+    rows = get_monthly_stats(sid)
+    result = [
+        {'month':r['month'], 'total_waste':r['total_waste'], 'total_emission':r['total_emission']}
+        for r in rows
+    ]
+    return jsonify(result)
