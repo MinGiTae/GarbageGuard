@@ -4,12 +4,6 @@ window.addEventListener('mousemove', (e) => {
   character.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
 });
 
-
-
-
-
-
-
 const text = document.getElementById('scrollText1');
 const text2 = document.getElementById('scrollText2');
 const text3 = document.getElementById('scrollText3');
