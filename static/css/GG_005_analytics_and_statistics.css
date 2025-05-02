@@ -176,7 +176,7 @@ canvas#topCompanyChart{
 }
 
 
-.construction-list{
+#construction-list{
   position: absolute;
   top: 120px;
   left: 50px;
@@ -186,4 +186,60 @@ canvas#topCompanyChart{
   border-radius: 10px;
   display: none;
   z-index: 9999;
+}
+
+#construction-list.popup {
+  position: absolute;
+  display: none;
+  background-color: #1f1f1f;
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #444;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  min-width: 180px;
+  z-index: 9999;
+}
+
+#construction-list.popup.active {
+  display: block;
+}
+
+
+#construction-list.popup h3 {
+  margin-top: 0;
+  font-size: 16px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+#construction-list.popup ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#construction-list.popup ul li {
+  font-size: 14px;
+  padding: 2px 0;
+}
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.popup-close {
+  cursor: pointer;
+  font-size: 16px;
+  color: #f87171;
+  padding: 0 8px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.popup-close:hover {
+  background: #333;
 }
