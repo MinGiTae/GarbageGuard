@@ -493,25 +493,96 @@ if (siteLineCanvas) {
 
 
 const siteData = {
-    Seoul: {
-    sites: ["서울 현장 1", "서울 현장 2"],
-    carbonData: [30, 25, 40, 50, 45, 60, 70, 65, 55, 60],  // 예: 월별 탄소량
-    wasteData: [40, 25, 20, 15]  // 플라스틱, 콘크리트, 목재, 벽돌
+  "Seoul": {
+    "sites": ["Seoul 현장 1"],
+    "carbonData": [22, 48, 22, 39, 40, 53, 39, 53, 52, 38],
+    "wasteData": [37, 25, 10, 31]
   },
-    Busan: {
-    sites: ["부산 현장 1"],
-    carbonData: [20, 15, 30, 35, 40, 38, 42, 40, 37, 45],
-    wasteData: [35, 30, 20, 15]
+  "Busan": {
+    "sites": ["Busan 현장 1"],
+    "carbonData": [39, 26, 34, 60, 32, 55, 39, 25, 55, 38],
+    "wasteData": [33, 26, 29, 26]
   },
-
-  Daejeon: {
-  sites: ["대전 현장 1", "대전 현장 2"],
-  carbonData: [22, 28, 35, 30, 38, 42, 40, 39, 41, 45],
-  wasteData: [32, 22, 18, 28]
-}
-
-
+  "Daegu": {
+    "sites": ["Daegu 현장 1"],
+    "carbonData": [44, 22, 49, 35, 56, 39, 58, 53, 27, 42],
+    "wasteData": [33, 27, 40, 39]
+  },
+  "Incheon": {
+    "sites": ["Incheon 현장 1", "Incheon 현장 2", "Incheon 현장 3"],
+    "carbonData": [26, 33, 37, 40, 23, 60, 16, 29, 49, 56],
+    "wasteData": [12, 13, 33, 26]
+  },
+  "Gwangju": {
+    "sites": ["Gwangju 현장 1"],
+    "carbonData": [39, 25, 47, 33, 17, 47, 53, 28, 17, 55],
+    "wasteData": [30, 33, 16, 15]
+  },
+  "Daejeon": {
+    "sites": ["Daejeon 현장 1", "Daejeon 현장 2"],
+    "carbonData": [32, 35, 23, 45, 59, 30, 46, 49, 31, 60],
+    "wasteData": [20, 15, 22, 16]
+  },
+  "Ulsan": {
+    "sites": ["Ulsan 현장 1"],
+    "carbonData": [20, 27, 31, 59, 18, 24, 27, 53, 59, 27],
+    "wasteData": [34, 21, 16, 17]
+  },
+  "Sejong": {
+    "sites": ["Sejong 현장 1", "Sejong 현장 2"],
+    "carbonData": [45, 23, 47, 56, 43, 19, 43, 54, 30, 55],
+    "wasteData": [18, 10, 33, 35]
+  },
+  "Gyeonggi": {
+    "sites": ["Gyeonggi 현장 1"],
+    "carbonData": [31, 31, 42, 33, 35, 34, 59, 23, 31, 37],
+    "wasteData": [34, 36, 33, 17]
+  },
+  "Gangwon": {
+    "sites": ["Gangwon 현장 1"],
+    "carbonData": [17, 23, 45, 31, 16, 47, 47, 31, 59, 23],
+    "wasteData": [30, 27, 37, 11]
+  },
+  "Chungbuk": {
+    "sites": ["Chungbuk 현장 1", "Chungbuk 현장 2"],
+    "carbonData": [54, 28, 27, 20, 39, 20, 58, 25, 29, 49],
+    "wasteData": [35, 21, 30, 13]
+  },
+  "Chungnam": {
+    "sites": ["Chungnam 현장 1", "Chungnam 현장 2", "Chungnam 현장 3"],
+    "carbonData": [57, 51, 45, 28, 19, 53, 24, 32, 17, 23],
+    "wasteData": [20, 37, 14, 27]
+  },
+  "Jeonbuk": {
+    "sites": ["Jeonbuk 현장 1", "Jeonbuk 현장 2", "Jeonbuk 현장 3"],
+    "carbonData": [58, 60, 57, 33, 53, 29, 45, 56, 50, 27],
+    "wasteData": [18, 32, 11, 34]
+  },
+  "Jeonnam": {
+    "sites": ["Jeonnam 현장 1", "Jeonnam 현장 2"],
+    "carbonData": [50, 56, 58, 39, 50, 40, 24, 48, 49, 43],
+    "wasteData": [26, 19, 22, 31]
+  },
+  "Gyeongbuk": {
+    "sites": ["Gyeongbuk 현장 1", "Gyeongbuk 현장 2", "Gyeongbuk 현장 3"],
+    "carbonData": [47, 39, 24, 15, 59, 48, 19, 33, 28, 54],
+    "wasteData": [23, 21, 13, 34]
+  },
+  "Gyeongnam": {
+    "sites": ["Gyeongnam 현장 1"],
+    "carbonData": [33, 57, 49, 39, 23, 46, 23, 49, 42, 56],
+    "wasteData": [33, 34, 38, 27]
+  },
+  "Jeju": {
+    "sites": ["Jeju 현장 1", "Jeju 현장 2"],
+    "carbonData": [47, 32, 60, 56, 23, 59, 17, 29, 53, 51],
+    "wasteData": [21, 11, 15, 36]
+  }
 };
+
+
+
+
 
 const idToRegionName = {
   "KR-11": "Seoul",
@@ -532,6 +603,51 @@ const idToRegionName = {
   "KR-49": "Jeju",        // 제주특별자치도
   "KR-50": "Sejong"
 };
+
+const regionEmission = {};
+for (const region in siteData) {
+  const carbonList = siteData[region].carbonData || [];
+  const totalCarbon = carbonList.reduce((a, b) => a + b, 0);
+  regionEmission[region] = totalCarbon;
+}
+
+const getStep = (value) => {
+  if (value > 300) return 3;
+  if (value > 150) return 2;
+  return 1;
+};
+
+const getColorByStep = (step) => {
+  if (step === 3) return "#d73027";  // 빨강
+  if (step === 2) return "#fc8d59";  // 주황
+  return "#fee08b";                  // 노랑
+};
+
+document.querySelectorAll("#korea-map path").forEach(region => {
+  const regionId = region.getAttribute("id");
+  const regionName = idToRegionName[regionId];
+  const emission = regionEmission[regionName];
+
+  console.log(regionId, regionName, emission);
+
+  if (emission !== undefined) {
+    const step = getStep(emission);
+    region.style.fill = getColorByStep(step);
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 document.querySelectorAll("#korea-map path").forEach(region => {
   region.addEventListener("click", (e) => {
