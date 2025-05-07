@@ -1,3 +1,21 @@
+@font-face {
+    font-family: 'Paperlogy-8ExtraBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'Cafe24Ohsquare';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/Cafe24Ohsquare.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
 
 #character {
   position: fixed;
@@ -22,7 +40,7 @@
   position: fixed;
   left: 52%;
   top : 5%;
-  z-index: 9998;
+  z-index: 99;
 }
 
 
@@ -35,8 +53,9 @@
 
 
 .scroll-text {
+    font-family: 'Paperlogy-8ExtraBold';
 	position: fixed;
-  z-index: 10;
+    z-index: 10;
 	top: 18%;
 	left: 30%;
 	transform: translate(-50%, -50%);
@@ -45,8 +64,9 @@
 }
 
 .scroll-text2 {
+	font-family: 'Cafe24Ohsquare';
 	position: fixed;
-  z-index: 10;
+    z-index: 10;
 	top: 55%;
 	left: 35%;
 	transform: translate(-50%, -50%);
@@ -55,7 +75,7 @@
 }
 .scroll-text3 {
 	position: fixed;
-  z-index: 10;
+    z-index: 10;
 	top: 72%;
 	left: 31%;
 	transform: translate(-50%, -50%);
@@ -135,7 +155,7 @@
     bottom: 100px;
     right: 1000px;
     padding: 15px 30px;
-    background-color: #ffcc00;
+    background-color: #FEBC01;
     color: #212121;
     border: none;
     border-radius: 10px;
@@ -153,7 +173,7 @@
     bottom: 100px;
     right: 750px;
     padding: 15px 30px;
-    background-color: #ffcc00;
+    background-color: #FEBC01;
     color: #212121;
     border: none;
     border-radius: 10px;
@@ -162,6 +182,7 @@
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     transition: background-color 0.3s ease;
+    z-index : 100;
   }
 
   #Button2:hover {
@@ -174,7 +195,7 @@
     top: 16%;
     left: 20%;
     padding: 15px 30px;
-    background-color: #ffcc00;
+    background-color: #FEBC01;
     color: #212121;
     border: none;
     border-radius: 10px;
@@ -193,7 +214,7 @@
     top: 16%;
     left: 35%;
     padding: 15px 30px;
-    background-color: #ffcc00;
+    background-color: #FEBC01;
     color: #212121;
     border: none;
     border-radius: 10px;

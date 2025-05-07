@@ -1,4 +1,4 @@
-html, body{margin: 0;padding: 0;background-color: #212121; height: 285vh; scrollbar-width: none;-ms-overflow-style: none;}
+html, body{margin: 0;padding: 0;background-color: #212121; height: 285vh; scrollbar-width: none;-ms-overflow-style: none;font-family: 'paybooc-Bold';}
 body::-webkit-scrollbar {display: none;}
 header{width: 100%;height: 0%;background-color: #2e2e2e;}
 nav{width: 100%;height: 30px;float: left;background-color: #2e2e2e;position: fixed;}
@@ -14,14 +14,25 @@ footer{width: 100%;height: 1%;clear: both;background-color:;}
 
 #menu1 ul {display: flex;gap: 50px;}
 #menu1 ul li a {color : white;}
-#menu1 ul li a:hover{color: yellow; background-color: #333333}
+#menu1 ul li a:hover{color: #FEBC01; background-color: #333333}
 #menu1 ul li:hover{background-color: #333333;position: relative; border-radius: 20px;}
 
+@font-face {
+    font-family: 'OTWelcomeRA';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/OTWelcomeRA.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
 
-
-
+@font-face {
+    font-family: 'paybooc-Bold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
 #menubar {
+  font-family: 'OTWelcomeRA';
   display: flex;
   justify-content: center; /* center-box를 가운데에 */
   align-items: center;

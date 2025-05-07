@@ -28,20 +28,29 @@
   <!-- 지도 영역 -->
   <div id="map" style="width:1100px; height:750px; background-color:white; position:relative;">
     <input id="search-input4" placeholder="현장명 검색" />
-    <div id="autocomplete-results"
-         style="display:none; position:absolute; top:30px; left:10px; z-index:100; background:white; border:1px solid #ccc; max-height:150px; overflow-y:auto;">
+    <div id="autocomplete-results">
     </div>
     <button type="button" id="Button5">현장으로 이동</button>
   </div>
 
   <!-- 등록/수정/삭제 폼 영역 -->
   <div class="container">
-    <div class="title-container">
-      <h1 style="color:white;">건설 현장 등록·수정·삭제</h1>
-    </div>
 
     <div class="div1">
       <form id="siteForm" method="POST" action="/csr/register_site">
+
+        <div class="title-container">
+          <h1>건설 현장 등록·수정·삭제</h1>
+        </div>
+        <label>회사 선택</label><br>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <select name="company_id" id="companySelect">
+            {% for company in companies %}
+              <option value="{{ company.company_id }}">{{ company.company_name }}</option>
+            {% endfor %}
+          </select>
+          <button type="button" id="openCompanyModal">+ 회사 추가</button>
+        </div>
         <div id="search-box">
           <label>현장명</label><br>
           <input type="text" name="site_name" id="search-input1" placeholder="건설현장이름을 입력하세요" required /><br>
@@ -58,15 +67,6 @@
           <input type="hidden" name="latitude" id="latitude" />
           <input type="hidden" name="longitude" id="longitude" />
 
-          <label>회사 선택</label><br>
-          <div style="display:flex; gap:10px; align-items:center;">
-            <select name="company_id" id="companySelect">
-              {% for company in companies %}
-                <option value="{{ company.company_id }}">{{ company.company_name }}</option>
-              {% endfor %}
-            </select>
-            <button type="button" id="openCompanyModal">+ 회사 추가</button>
-          </div>
         </div>
 
         <div class="div2">

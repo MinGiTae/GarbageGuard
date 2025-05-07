@@ -13,6 +13,11 @@ window.addEventListener('DOMContentLoaded', () => {
   });
   const geocoder = new kakao.maps.services.Geocoder();
 
+  setTimeout(() => {
+  map.relayout();
+  map.setCenter(new kakao.maps.LatLng(36.348504088450035, 127.38215399734425));
+  }, 100);
+
   // 입력 폼 요소
   const inputSiteId    = document.getElementById('site_id');
   const inputName      = document.getElementById('search-input1');
@@ -219,3 +224,7 @@ window.addEventListener('DOMContentLoaded', () => {
     resultsBox.style.display = 'none';
   });
 });
+  setTimeout(() => {
+    const flash = document.querySelector('.flash-message-wrapper');
+    if (flash) flash.style.display = 'none';
+  }, 3000);  // 3초 후 사라짐

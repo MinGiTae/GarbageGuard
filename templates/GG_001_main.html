@@ -11,7 +11,7 @@
 
 <img id="crain" src="/static/img/crain.png" alt="crain"/>
 
-<h1 class="scroll-text" id="scrollText1" style="font-size: 150px; color: #f8f858; line-height: 0.9;">
+<h1 class="scroll-text" id="scrollText1" style="font-size: 150px; color: #FEBC01; line-height: 0.9;">
   Garbage<br>Guard
 </h1>
 <h1 class="scroll-text2" id="scrollText2" style="font-size: 80px; color: white;">건설현장 폐기물<br>똑똑하게 처리하자</h1>
@@ -20,7 +20,7 @@
 
 
 
-<h3 class="scroll-text4" id="scrollText4" style="font-size: 50px; color: yellow;"><a style="font-size: 70px;">왜</a> 이 서비스가 필요한가요?</h3>
+<h3 class="scroll-text4" id="scrollText4" style="font-size: 50px; color: #FEBC01;"><a style="font-size: 70px;">왜</a> 이 서비스가 필요한가요?</h3>
 <h3 class="scroll-text5" id="scrollText5" style="font-size: 30px; color: white;">건설 산업의 폐기물과 탄소 문제, 지금 해결해야 할 때입니다.</h3>
 <img class="scroll-text6" id="scrollText6" src="/static/img/why.png" alt="why"/>
 <h3 class="scroll-text7" id="scrollText7" style="font-size: 30px; color: white;">전 세계 폐기물의 38%는 건설현장에서 발생합니다. <br>
@@ -35,11 +35,11 @@
 
 
 
-<button id="Button1">사진 업로드 시작</button>
-<button id="Button2">현장 등록하기</button>
+<a href="/upload/waste_disposal"><button id="Button1">사진 업로드 시작</button></a>
+<a href="{{ url_for('csr.show_csr') }}"><button id="Button2">현장 등록하기</button></a>
 
-<button id="Button3">사진 업로드 시작</button>
-<button id="Button4">현장 등록하기</button>
+<a href="/upload/waste_disposal"><button id="Button3">사진 업로드 시작</button></a>
+<a href="{{ url_for('csr.show_csr') }}"><button id="Button4">현장 등록하기</button></a>
 
 <!-- JS 연결 -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/GG_001_main.js') }}"></script>
