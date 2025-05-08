@@ -121,8 +121,8 @@ html, body{
 .scroll-text5 {
   position: fixed;
   z-index: 10;
-  top: 30%;
-  left: 14%;
+  top: 25%;
+  left: 25%;
   transform: translateX(-100%);
   white-space: nowrap;
   transition: transform 0.5s ease-out, opacity 0.5s ease-out;
@@ -341,3 +341,99 @@ to {
     transform: translateY(0);
     }
    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#AnimationImage {
+  position: absolute;
+  margin-top: 105vw;
+  margin-left: 18vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#AnimationImage2 {
+  position: absolute;
+  margin-top: 105vw;
+  margin-left: 30vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#AnimationImage3 {
+  position: absolute;
+  margin-top: 105vw;
+  margin-left: 42vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#AnimationImage4 {
+  position: absolute;
+  margin-top: 105vw;
+  margin-left: 55vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#AnimationImage5 {
+  position: absolute;
+  margin-top: 117vw;
+  margin-left: 43vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#AnimationImage6 {
+  position: absolute;
+  margin-top: 120vw;
+  margin-left: 32vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#AnimationImage7 {
+  position: absolute;
+  margin-top: 120vw;
+  margin-left: 38vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#AnimationImage8 {
+  position: absolute;
+  margin-top: 120vw;
+  margin-left: 48vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+#AnimationImage9 {
+  position: absolute;
+  margin-top: 120vw;
+  margin-left: 57vw;
+  z-index: 9999;
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.hidden {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.show {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -141,3 +141,45 @@ window.addEventListener('scroll', function () {
       button2.style.pointerEvents = 'auto';
     }
 });
+
+
+
+
+
+
+
+
+window.addEventListener('DOMContentLoaded', () => {
+  const images = [];
+  const totalImages = 9;
+  const startDelay = 1000; // 첫 이미지 딜레이
+  const delayStep = 500; // 각 이미지 간의 딜레이 간격
+  const triggerOffset = 950; // 스크롤 트리거 위치
+
+  for (let i = 1; i <= totalImages; i++) {
+    const id = i === 1 ? 'AnimationImage' : `AnimationImage${i}`;
+    const el = document.getElementById(id);
+    if (el) {
+      el.classList.add('hidden');
+      images.push(el);
+    }
+  }
+
+  function triggerAnimation() {
+    const shouldShow = window.scrollY >= triggerOffset;
+
+    images.forEach((img, index) => {
+      setTimeout(() => {
+        if (shouldShow) {
+          img.classList.remove('hidden');
+          img.classList.add('show');
+        } else {
+          img.classList.remove('show');
+          img.classList.add('hidden');
+        }
+      }, startDelay + index * delayStep);
+    });
+  }
+
+  window.addEventListener('scroll', triggerAnimation);
+});
