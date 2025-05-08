@@ -490,118 +490,268 @@ if (siteLineCanvas) {
 }
 
 // ✅ SVG Hover로 지역별 현장 리스트 띄우기 추가
+// ✅ 1. API 연동 후 siteData 생성
+window.addEventListener('DOMContentLoaded', () => {
+  fetch('/api/sites')
+    .then(res => res.json())
+    .then(data => {
 
 
-const siteData = {
-  "Seoul": {
-    "sites": ["Seoul 현장 1"],
-    "carbonData": [22, 48, 22, 39, 40, 53, 39, 53, 52, 38],
-    "wasteData": [37, 25, 10, 31]
-  },
-  "Busan": {
-    "sites": ["Busan 현장 1"],
-    "carbonData": [39, 26, 34, 60, 32, 55, 39, 25, 55, 38],
-    "wasteData": [33, 26, 29, 26]
-  },
-  "Daegu": {
-    "sites": ["Daegu 현장 1"],
-    "carbonData": [44, 22, 49, 35, 56, 39, 58, 53, 27, 42],
-    "wasteData": [33, 27, 40, 39]
-  },
-  "Incheon": {
-    "sites": ["Incheon 현장 1", "Incheon 현장 2", "Incheon 현장 3"],
-    "carbonData": [26, 33, 37, 40, 23, 60, 16, 29, 49, 56],
-    "wasteData": [12, 13, 33, 26]
-  },
-  "Gwangju": {
-    "sites": ["Gwangju 현장 1"],
-    "carbonData": [39, 25, 47, 33, 17, 47, 53, 28, 17, 55],
-    "wasteData": [30, 33, 16, 15]
-  },
-  "Daejeon": {
-    "sites": ["Daejeon 현장 1", "Daejeon 현장 2"],
-    "carbonData": [32, 35, 23, 45, 59, 30, 46, 49, 31, 60],
-    "wasteData": [20, 15, 22, 16]
-  },
-  "Ulsan": {
-    "sites": ["Ulsan 현장 1"],
-    "carbonData": [20, 27, 31, 59, 18, 24, 27, 53, 59, 27],
-    "wasteData": [34, 21, 16, 17]
-  },
-  "Sejong": {
-    "sites": ["Sejong 현장 1", "Sejong 현장 2"],
-    "carbonData": [45, 23, 47, 56, 43, 19, 43, 54, 30, 55],
-    "wasteData": [18, 10, 33, 35]
-  },
-  "Gyeonggi": {
-    "sites": ["Gyeonggi 현장 1"],
-    "carbonData": [31, 31, 42, 33, 35, 34, 59, 23, 31, 37],
-    "wasteData": [34, 36, 33, 17]
-  },
-  "Gangwon": {
-    "sites": ["Gangwon 현장 1"],
-    "carbonData": [17, 23, 45, 31, 16, 47, 47, 31, 59, 23],
-    "wasteData": [30, 27, 37, 11]
-  },
-  "Chungbuk": {
-    "sites": ["Chungbuk 현장 1", "Chungbuk 현장 2"],
-    "carbonData": [54, 28, 27, 20, 39, 20, 58, 25, 29, 49],
-    "wasteData": [35, 21, 30, 13]
-  },
-  "Chungnam": {
-    "sites": ["Chungnam 현장 1", "Chungnam 현장 2", "Chungnam 현장 3"],
-    "carbonData": [57, 51, 45, 28, 19, 53, 24, 32, 17, 23],
-    "wasteData": [20, 37, 14, 27]
-  },
-  "Jeonbuk": {
-    "sites": ["Jeonbuk 현장 1", "Jeonbuk 현장 2", "Jeonbuk 현장 3"],
-    "carbonData": [58, 60, 57, 33, 53, 29, 45, 56, 50, 27],
-    "wasteData": [18, 32, 11, 34]
-  },
-  "Jeonnam": {
-    "sites": ["Jeonnam 현장 1", "Jeonnam 현장 2"],
-    "carbonData": [50, 56, 58, 39, 50, 40, 24, 48, 49, 43],
-    "wasteData": [26, 19, 22, 31]
-  },
-  "Gyeongbuk": {
-    "sites": ["Gyeongbuk 현장 1", "Gyeongbuk 현장 2", "Gyeongbuk 현장 3"],
-    "carbonData": [47, 39, 24, 15, 59, 48, 19, 33, 28, 54],
-    "wasteData": [23, 21, 13, 34]
-  },
-  "Gyeongnam": {
-    "sites": ["Gyeongnam 현장 1"],
-    "carbonData": [33, 57, 49, 39, 23, 46, 23, 49, 42, 56],
-    "wasteData": [33, 34, 38, 27]
-  },
-  "Jeju": {
-    "sites": ["Jeju 현장 1", "Jeju 현장 2"],
-    "carbonData": [47, 32, 60, 56, 23, 59, 17, 29, 53, 51],
-    "wasteData": [21, 11, 15, 36]
+      data.forEach(site => {
+        if (!site.latitude || !site.longitude) return; // 위경도 없는 건 무시
+        const region = (site.latitude && site.longitude)
+        ? getRegionFromLatLng(site.latitude, site.longitude): getRegionFromAddress(site.address);
+
+        if (!siteData[region]) {
+          siteData[region] = { sites: [], carbonData: [], wasteData: [] };
+        }
+
+        siteData[region].sites.push(site.site_name);
+//        siteData[region].carbonData.push(Math.random() * 100);  // 예시용 더미 데이터
+        siteData[region].carbonData.push(Array.from({ length: 10 }, () => Math.floor(Math.random() * 50) + 10)); // 🔼 10개월용 데이터 배열로 변경됨
+
+        siteData[region].wasteData.push(Math.random() * 100);
+      });
+
+      window.siteData = siteData;
+      updateMapColors(siteData); // 지도 채색 함수 호출
+      updateMapColorsFromExcel(excelCarbonData);
+    });
+});
+
+// ✅ 2. getRegionFromLatLng 함수는 위경도를 통해 행정구역명 리턴
+function getRegionFromLatLng(lat, lng) {
+  if (lat >= 37.4 && lat <= 37.7 && lng >= 126.8 && lng <= 127.2) return '서울특별시';
+  if (lat >= 35.0 && lat <= 35.3 && lng >= 128.8 && lng <= 129.2) return '부산광역시';
+  if (lat >= 35.7 && lat <= 36.0 && lng >= 128.4 && lng <= 128.8) return '대구광역시';
+  if (lat >= 37.3 && lat <= 37.6 && lng >= 126.5 && lng <= 126.9) return '인천광역시';
+  if (lat >= 35.0 && lat <= 35.3 && lng >= 126.7 && lng <= 127.0) return '광주광역시';
+  if (lat >= 36.2 && lat <= 36.5 && lng >= 127.2 && lng <= 127.5) return '대전광역시';
+  if (lat >= 35.4 && lat <= 35.7 && lng >= 129.1 && lng <= 129.4) return '울산광역시';
+  if (lat >= 36.4 && lat <= 36.7 && lng >= 127.1 && lng <= 127.4) return '세종특별자치시';
+  if (lat >= 36.8 && lat <= 38.3 && lng >= 126.5 && lng <= 127.8) return '경기도';
+  if (lat >= 37.0 && lat <= 38.5 && lng >= 127.5 && lng <= 129.3) return '강원도';
+  if (lat >= 36.3 && lat <= 37.3 && lng >= 127.3 && lng <= 128.3) return '충청북도';
+  if (lat >= 36.0 && lat <= 36.9 && lng >= 126.5 && lng <= 127.4) return '충청남도';
+  if (lat >= 35.3 && lat <= 36.1 && lng >= 126.5 && lng <= 127.4) return '전라북도';
+  if (lat >= 34.4 && lat <= 35.3 && lng >= 126.2 && lng <= 127.3) return '전라남도';
+  if (lat >= 35.8 && lat <= 37.0 && lng >= 128.0 && lng <= 129.5) return '경상북도';
+  if (lat >= 34.8 && lat <= 35.7 && lng >= 127.8 && lng <= 129.4) return '경상남도';
+  if (lat >= 33.1 && lat <= 33.6 && lng >= 126.2 && lng <= 126.8) return '제주특별자치도';
+  return '기타';
+}
+
+
+
+
+// ✅ 3. 지도 색상 업데이트 함수
+function updateMapColors(siteData) {
+  const regionEmission = {};
+  for (const region in siteData) {
+    const carbonList = siteData[region].carbonData || [];
+    const totalCarbon = carbonList.reduce((a, b) => a + b, 0);
+    regionEmission[region] = totalCarbon;
   }
+
+  const emissions = Object.values(regionEmission);
+  const sorted = [...emissions].sort((a, b) => a - b);
+  const t1 = sorted[Math.floor(sorted.length * 0.33)];
+  const t2 = sorted[Math.floor(sorted.length * 0.66)];
+
+  const getStep = (value) => {
+    if (value >= t2) return 3;
+    if (value >= t1) return 2;
+    return 1;
+  };
+
+  const getColorByStep = (step) => {
+    if (step === 3) return "#0f766e";
+    if (step === 2) return "#34d399";
+    return "#a7f3d0";
+  };
+
+  document.querySelectorAll("#korea-map path").forEach(region => {
+    const regionId = region.getAttribute("id");
+    const regionName = idToRegionName[regionId];
+    const emission = regionEmission[regionName];
+    if (emission !== undefined) {
+      const step = getStep(emission);
+      region.style.fill = getColorByStep(step);
+    }
+  });
+}
+
+
+function updateMapColorsFromExcel(excelData) {
+  const emissions = Object.values(excelData);
+  const sorted = [...emissions].sort((a, b) => a - b);
+  const t1 = sorted[Math.floor(sorted.length * 0.33)];
+  const t2 = sorted[Math.floor(sorted.length * 0.66)];
+
+  const getStep = (value) => {
+    if (value >= t2) return 3;
+    if (value >= t1) return 2;
+    return 1;
+  };
+
+  const getColorByStep = (step) => {
+    if (step === 3) return "#0f766e";
+    if (step === 2) return "#34d399";
+    return "#a7f3d0";
+  };
+
+  document.querySelectorAll("#korea-map path").forEach(region => {
+    const regionId = region.getAttribute("id");
+    const regionName = idToRegionName[regionId];
+    const emission = excelData[regionName];
+
+    if (emission !== undefined) {
+      const step = getStep(emission);
+      region.style.fill = getColorByStep(step);
+    }
+  });
+}
+
+// ✅ 4. 지역 클릭 시 팝업 리스트 갱신
+
+document.querySelectorAll("#korea-map path").forEach(region => {
+  region.addEventListener("click", (e) => {
+    const regionId = region.getAttribute("id");
+    const regionName = idToRegionName[regionId];
+    const regionData = window.siteData?.[regionName];
+
+    const popup = document.getElementById("construction-list");
+
+    let siteListHTML = `
+   <div class="popup-header">
+    <h3>${regionName} 건설현장</h3>
+    <span class="popup-close" onclick="closePopup()">✕</span>
+  </div>
+  <ul>
+ `;
+
+    if (regionData?.sites?.length > 0) {
+      regionData.sites.forEach(site => {
+        siteListHTML += `<li>${site}</li>`;
+      });
+    } else {
+      siteListHTML += `<li>등록된 건설현장이 없습니다</li>`;
+    }
+
+    siteListHTML += "</ul>";
+    popup.innerHTML = siteListHTML;
+    popup.classList.add("active");
+
+    popup.style.left = `${e.pageX + 15}px`;
+    popup.style.top = `${e.pageY - 50}px`;
+
+//    if (regionData) {
+//      siteCarbonChart.data.datasets[0].data = regionData.carbonData;
+//      siteCarbonChart.update();
+//
+//      wastePopularityChart.data.datasets[0].data = regionData.wasteData;
+//      wastePopularityChart.update();
+//    }
+siteCarbonChart.data.datasets = []; // 기존 데이터 제거
+regionData.carbonData.forEach((carbonArr, index) => {
+  siteCarbonChart.data.datasets.push({
+    label: regionData.sites[index] || `현장 ${index + 1}`, // 건설현장 이름 반영
+    data: carbonArr,
+    fill: true,
+    backgroundColor: index % 2 === 0 ? gradient1 : gradient2,
+    borderColor: index % 2 === 0 ? '#22D3EE' : '#EC4899',
+    tension: 0.4,
+    pointBackgroundColor: index % 2 === 0 ? '#22D3EE' : '#EC4899',
+    pointBorderColor: '#fff',
+    pointRadius: 5,
+    pointHoverRadius: 7
+  });
+});
+siteCarbonChart.update();
+
+  });
+});
+
+// ✅ 5. 지도 바깥 클릭 시 팝업 제거
+
+document.addEventListener("click", (e) => {
+  const popup = document.getElementById("construction-list");
+  const isMapPath = e.target.closest("#korea-map path");
+  const isPopup = e.target.closest("#construction-list");
+  if (!isMapPath && !isPopup) {
+    popup.classList.remove("active");
+  }
+});
+
+function closePopup() {
+  const popup = document.getElementById("construction-list");
+  popup.classList.remove("active");
+}
+
+// ✅ 기타 기존 차트 등 코드 아래 유지
+
+
+const siteData = {};
+function getRegionFromAddress(address) {
+  if (!address) return "기타";
+  if (address.includes("서울")) return "서울특별시";
+  if (address.includes("부산")) return "부산광역시";
+  if (address.includes("대구")) return "대구광역시";
+  if (address.includes("인천")) return "인천광역시";
+  if (address.includes("광주")) return "광주광역시";
+  if (address.includes("대전")) return "대전광역시";
+  if (address.includes("울산")) return "울산광역시";
+  if (address.includes("세종")) return "세종특별자치시";
+  if (address.includes("경기")) return "경기도";
+  if (address.includes("강원")) return "강원도";
+  if (address.includes("충북")) return "충청북도";
+  if (address.includes("충남")) return "충청남도";
+  if (address.includes("전북")) return "전라북도";
+  if (address.includes("전남")) return "전라남도";
+  if (address.includes("경북")) return "경상북도";
+  if (address.includes("경남")) return "경상남도";
+  if (address.includes("제주")) return "제주특별자치도";
+  return "기타";
+}
+const excelCarbonData = {
+  '서울특별시': 194195717.67,
+  '부산광역시': 111389268.12,
+  '대구광역시': 68451056.07,
+  '인천광역시': 101747460.87,
+  '광주광역시': 52323444.37,
+  '대전광역시': 46349842.99,
+  '울산광역시': 46377438.76,
+  '세종특별자치시': 28039838.23,
+  '경기도': 289137143.75,
+  '강원도': 73129346.10,
+  '충청북도': 72855850.81,
+  '충청남도': 96639696.34,
+  '전라북도': 73538030.99,
+  '전라남도': 70181621.94,
+  '경상북도': 120016352.27,
+  '경상남도': 116087012.18,
+  '제주특별자치도': 21376490.53
 };
 
 
-
-
-
 const idToRegionName = {
-  "KR-11": "Seoul",
-  "KR-26": "Busan",
-  "KR-27": "Daegu",
-  "KR-28": "Incheon",
-  "KR-29": "Gwangju",
-  "KR-30": "Daejeon",     // 대전광역시
-  "KR-31": "Ulsan",       // 울산광역시
-  "KR-41": "Gyeonggi",    // 경기도
-  "KR-42": "Gangwon",     // 강원도
-  "KR-43": "Chungbuk",    // 충청북도
-  "KR-44": "Chungnam",    // 충청남도
-  "KR-45": "Jeonbuk",     // 전라북도
-  "KR-46": "Jeonnam",     // 전라남도
-  "KR-47": "Gyeongbuk",   // 경상북도
-  "KR-48": "Gyeongnam",   // 경상남도
-  "KR-49": "Jeju",        // 제주특별자치도
-  "KR-50": "Sejong"
+  "KR-11": "서울특별시",
+  "KR-26": "부산광역시",
+  "KR-27": "대구광역시",
+  "KR-28": "인천광역시",
+  "KR-29": "광주광역시",
+  "KR-30": "대전광역시",
+  "KR-31": "울산광역시",
+  "KR-41": "경기도",
+  "KR-42": "강원도",
+  "KR-43": "충청북도",
+  "KR-44": "충청남도",
+  "KR-45": "전라북도",
+  "KR-46": "전라남도",
+  "KR-47": "경상북도",
+  "KR-48": "경상남도",
+  "KR-49": "제주특별자치도",
+  "KR-50": "세종특별자치시"
 };
 
 const regionEmission = {};
@@ -611,21 +761,29 @@ for (const region in siteData) {
   regionEmission[region] = totalCarbon;
 }
 
+
+const emissions = Object.values(regionEmission);
+const sorted = [...emissions].sort((a, b) => a - b);
+const t1 = sorted[Math.floor(sorted.length * 0.33)];
+const t2 = sorted[Math.floor(sorted.length * 0.66)];
+
+
+
 const getStep = (value) => {
-  if (value > 300) return 3;
-  if (value > 150) return 2;
+  if (value >= t2) return 3;
+  if (value >= t1)  return 2;
   return 1;
 };
 
 const getColorByStep = (step) => {
-  if (step === 3) return "#d73027";  // 빨강
-  if (step === 2) return "#fc8d59";  // 주황
-  return "#fee08b";                  // 노랑
+  if (step === 3) return "#0f766e";  // 빨강
+  if (step === 2) return "#34d399";  // 주황
+  return "#a7f3d0";                  // 노랑
 };
 
 document.querySelectorAll("#korea-map path").forEach(region => {
   const regionId = region.getAttribute("id");
-  const regionName = idToRegionName[regionId];
+  const regionName = idToRegionName[regionId]?.trim();
   const emission = regionEmission[regionName];
 
   console.log(regionId, regionName, emission);
@@ -635,19 +793,6 @@ document.querySelectorAll("#korea-map path").forEach(region => {
     region.style.fill = getColorByStep(step);
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 document.querySelectorAll("#korea-map path").forEach(region => {
   region.addEventListener("click", (e) => {
@@ -686,16 +831,6 @@ document.querySelectorAll("#korea-map path").forEach(region => {
     wastePopularityChart.data.datasets[0].data = regionData.wasteData;
     wastePopularityChart.update();
 }
-
-
-
-
-
-
-
-
-
-
   });
 });
 

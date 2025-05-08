@@ -265,15 +265,17 @@ def insert_waste_management(site_id, waste_type, waste_amount, carbon_emission, 
         conn.commit()
     conn.close()
 
-#탄소 배출량 company_emissions 테이블에 저장하는 함수
-def save_company_emission(db, site_id, carbon_kg, recorded_month):
-    # site_id → company_id 매핑
-    result = db.execute("SELECT company_id FROM construction_sites WHERE site_id = %s", (site_id,))
-    company_id = result.fetchone()[0]
+#
 
-    query = """
-        INSERT INTO company_emissions (company_id, total_carbon_emission, recorded_month)
-        VALUES (%s, %s, %s)
-    """
-    db.execute(query, (company_id, carbon_kg, recorded_month))
+#탄소 배출량 company_emissions 테이블에 저장하는 함수
+# def save_company_emission(db, site_id, carbon_kg, recorded_month):
+#     # site_id → company_id 매핑
+#     result = db.execute("SELECT company_id FROM construction_sites WHERE site_id = %s", (site_id,))
+#     company_id = result.fetchone()[0]
+#
+#     query = """
+#         INSERT INTO company_emissions (company_id, total_carbon_emission, recorded_month)
+#         VALUES (%s, %s, %s)
+#     """
+#     db.execute(query, (company_id, carbon_kg, recorded_month))
 
