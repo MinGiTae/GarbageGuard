@@ -80,7 +80,7 @@ if (scrollY > triggerPoint) {
 
 window.addEventListener('scroll', function() {
   const scrollImage2 = document.getElementById('scrollImage2');
-  const scrollThreshold = 1200; // 원하는 위치(px)
+  const scrollThreshold = 950; // 원하는 위치(px)
 
   if (window.scrollY > scrollThreshold) {
     scrollImage2.style.opacity = 1;
@@ -90,7 +90,7 @@ window.addEventListener('scroll', function() {
 });
 
 
-const scrollThreshold = 1200;
+const scrollThreshold = 1600;
 
 window.addEventListener('scroll', function () {
   const scrollbutton1 = document.getElementById('Button3');
@@ -116,4 +116,28 @@ window.addEventListener('scroll', function () {
     scrollbutton2.style.pointerEvents = 'none';
     scrollbutton2.style.display = 'none';
   }
+});
+
+
+
+
+window.addEventListener('scroll', function () {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+
+    const button1 = document.getElementById('Button1');
+    const button2 = document.getElementById('Button2');
+
+    if (scrollY >= 950) {
+      button1.style.opacity = '0';
+      button1.style.pointerEvents = 'none';
+
+      button2.style.opacity = '0';
+      button2.style.pointerEvents = 'none';
+    } else {
+      button1.style.opacity = '1';
+      button1.style.pointerEvents = 'auto';
+
+      button2.style.opacity = '1';
+      button2.style.pointerEvents = 'auto';
+    }
 });
