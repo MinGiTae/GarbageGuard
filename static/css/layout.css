@@ -9,9 +9,9 @@ html, body{
     -ms-overflow-style: none;
     font-family: 'paybooc-Bold';
     background-image: url('/static/img/background.png');
-    background-size: cover;       /* 이미지가 화면 꽉 채우게 */
-    background-position: center;  /* 가운데 정렬 */
-    background-repeat: no-repeat; /* 반복 안 함 */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
 }
 
@@ -51,7 +51,7 @@ footer{width: 100%;height: 1%;clear: both;background-color:;}
 #menubar {
   font-family: 'OTWelcomeRA';
   display: flex;
-  justify-content: center; /* center-box를 가운데에 */
+  justify-content: center;
   align-items: center;
   height: 40px;
   background-color: #2e2e2e;

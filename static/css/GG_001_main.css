@@ -179,13 +179,15 @@ html, body{
 
 
 
+
+
 #buttons {
     position: fixed;
     bottom: 5vw;
     display: flex;
-    flex-direction: row; /* ✅ 가로 정렬 */
-    justify-content: center; /* ✅ 가로 방향 중앙 정렬 */
-    align-items: center; /* 세로 정렬 */
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     gap: 80px;
     width: 100%;
     z-index: 999;
@@ -193,7 +195,7 @@ html, body{
 
 
 
-  #Button1 {
+#Button1 {
     padding: 0.8vw 1.5vw;
     background-color: #FEBC01;
     color: #212121;
@@ -204,11 +206,25 @@ html, body{
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     transition: background-color 0.3s ease;
-  }
-  #Button1:hover {
+}
+#Button1:hover {
     background-color: #E6B864;
-  }
-  #Button2 {
+}
+
+#Button1:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+
+
+
+
+#Button2 {
     padding: 0.8vw 1.5vw;
     background-color: #FEBC01;
     color: #212121;
@@ -220,11 +236,31 @@ html, body{
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     transition: background-color 0.3s ease;
     z-index : 100;
-  }
+}
 
-  #Button2:hover {
+#Button2:hover {
     background-color: #E6B864;
-  }		  
+}
+
+#Button2:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #buttons2 {
@@ -232,12 +268,11 @@ html, body{
     top : 7vw;
     left : 25vw;
     display: flex;
-    flex-direction: row; /* ✅ 가로 정렬 */
+    flex-direction: row;
     gap: 80px;
     width: 100%;
     z-index: 999;
 }
-
 
 #Button3 {
     padding: 0.8vw 1.5vw;
@@ -249,15 +284,26 @@ html, body{
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    opacity: 0;           /* 처음엔 안 보이게 */
-    transform: translateY(30px); /* 약간 아래에 숨기기 */
-    pointer-events: none; /* 클릭도 안 되게 처리 */
+    opacity: 0;
+    pointer-events: none;
     transition: opacity 0.6s ease, transform 0.6s ease;
+
   }
-  #Button3:hover {
+#Button3:hover {
     background-color: #E6B864;
   }
-  #Button4 {
+#Button3:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+
+
+#Button4 {
     padding: 0.8vw 1.5vw;
     background-color: #FEBC01;
     color: #212121;
@@ -268,15 +314,18 @@ html, body{
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     opacity: 0;           /* 처음엔 안 보이게 */
-    transform: translateY(30px); /* 약간 아래에 숨기기 */
     pointer-events: none; /* 클릭도 안 되게 처리 */
     transition: opacity 0.6s ease, transform 0.6s ease;
     z-index : 100;
   }
 
-  #Button4:hover {
+#Button4:hover {
     background-color: #E6B864;
-  }
+}
+#Button4:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
 
 
 

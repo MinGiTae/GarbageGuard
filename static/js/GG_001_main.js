@@ -90,24 +90,30 @@ window.addEventListener('scroll', function() {
 });
 
 
-window.addEventListener('scroll', function() {
-  const scrollbutton1 = document.getElementById('Button3');
-  const scrollThreshold = 1200; // 원하는 위치(px)
+const scrollThreshold = 1200;
 
+window.addEventListener('scroll', function () {
+  const scrollbutton1 = document.getElementById('Button3');
   if (window.scrollY > scrollThreshold) {
-    scrollbutton1.style.opacity = 1;
+    scrollbutton1.style.opacity = '1';
+    scrollbutton1.style.pointerEvents = 'auto';
+    scrollbutton1.style.display = 'block'; // 또는 flex 등 원래값
   } else {
-    scrollbutton1.style.opacity = 0;
+    scrollbutton1.style.opacity = '0';
+    scrollbutton1.style.pointerEvents = 'none';
+    scrollbutton1.style.display = 'none';
   }
 });
 
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
   const scrollbutton2 = document.getElementById('Button4');
-  const scrollThreshold = 1200; // 원하는 위치(px)
-
   if (window.scrollY > scrollThreshold) {
-    scrollbutton2.style.opacity = 1;
+    scrollbutton2.style.opacity = '1';
+    scrollbutton2.style.pointerEvents = 'auto';
+    scrollbutton2.style.display = 'block';
   } else {
-    scrollbutton2.style.opacity = 0;
+    scrollbutton2.style.opacity = '0';
+    scrollbutton2.style.pointerEvents = 'none';
+    scrollbutton2.style.display = 'none';
   }
 });

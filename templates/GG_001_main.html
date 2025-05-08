@@ -36,12 +36,15 @@
 
 
 <div id="buttons">
-<a href="/upload/waste_disposal"><button id="Button1">사진 업로드 시작</button></a>
-<a href="{{ url_for('csr.show_csr') }}"><button id="Button2">현장 등록하기</button></a>
+  <button id="Button1" onclick="location.href='/upload/waste_disposal'">사진 업로드 시작</button>
+  <button id="Button2" onclick="location.href='{{ url_for('csr.show_csr') }}'">현장 등록하기</button>
 </div>
+
+
+
 <div id="buttons2">
-<a href="/upload/waste_disposal"><button id="Button3">사진 업로드 시작</button></a>
-<a href="{{ url_for('csr.show_csr') }}"><button id="Button4">현장 등록하기</button></a>
+  <button id="Button3" onclick="location.href='/upload/waste_disposal'">사진 업로드 시작</button>
+  <button id="Button4" onclick="location.href='{{ url_for('csr.show_csr') }}'">현장 등록하기</button>
 </div>
 <!-- JS 연결 -->
 <script type="text/javascript" src="{{ url_for('static', filename='js/GG_001_main.js') }}"></script>
