@@ -48,7 +48,15 @@ html, body{
 
 
 
-
+#logo2 {
+    position: fixed;
+    height : 4vw;
+    left : 45vw;
+    top : 19.5vw;
+    transform: translate(-50%, -50%);
+	white-space: nowrap;
+	transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
 
 
 

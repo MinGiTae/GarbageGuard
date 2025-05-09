@@ -5,6 +5,7 @@ window.addEventListener('mousemove', (e) => {
 });
 
 const text = document.getElementById('scrollText1');
+const logo2 = document.getElementById('logo2');
 const text2 = document.getElementById('scrollText2');
 const text3 = document.getElementById('scrollText3');
 const scrollText = document.getElementById('scrollText4');
@@ -18,6 +19,9 @@ const scrollY = window.scrollY;
 
 text.style.transform = `translate(calc(-50% - ${scrollY}px), -50%)`;
 text.style.opacity = `${1 - scrollY / 500}`;
+
+logo2.style.transform = `translate(calc(-50% - ${scrollY}px), -50%)`;
+logo2.style.opacity = `${1 - scrollY / 500}`;
 
 text2.style.transform = `translate(calc(-50% - ${scrollY}px), -50%)`;
 text2.style.opacity = `${1 - scrollY / 500}`;
